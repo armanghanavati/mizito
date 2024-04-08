@@ -6,16 +6,16 @@ import Header from '../layout/Header';
 
 const Dashbord = () => {
   return (
-    <div className="">
-        {/* content */}
-        <Col className="bg-whit-100">
-          <Header />
-          <Bords />
-        </Col>
-        {/* side bar */}
-        <Col className="sideCount" md="2">
-          <Sidebar />
-        </Col>
+    <div className="d-flex">
+      {/* content */}
+      <Col className="bg-whit-100">
+        <Header />
+        <Bords />
+      </Col>
+      {/* side bar */}
+      <Col className="sideCount" md="2">
+        <Sidebar />
+      </Col>
     </div>
   );
 };

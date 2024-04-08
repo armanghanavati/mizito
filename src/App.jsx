@@ -11,8 +11,6 @@ function App() {
       {/* sidebar */}
       {/* content */}
       {/* footer */}
-      <Button > شیییی </Button>
-      Hello world
     </>
   );
 }

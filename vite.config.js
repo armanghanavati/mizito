@@ -11,8 +11,12 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    // reactRefresh(),
     svgr({
       include: "**/*.svg?react",
     }),
   ],
+  // css: {
+  //   postcss: './postcss.config.cjs',
+  // },
 });

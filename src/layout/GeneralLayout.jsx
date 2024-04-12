@@ -7,14 +7,10 @@ const GeneralLayout = ({ children }) => {
   return (
     <>
       <div className="d-flex">
-        <Col className="bg-whit-100">
+        <Col className="position_relative bg-whit-100">
           <Header />
           {/* <Bords /> */}
-          <div className="position-relative bg-danger">
-            <div className="">
-              <div className="">{children}</div>
-            </div>
-          </div>
+          {children}
         </Col>
         <Col className="sideCount shadow-lg" md="2">
           <Sidebar />

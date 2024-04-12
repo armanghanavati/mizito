@@ -35,9 +35,17 @@ const Sidebar = () => {
         <span className="me-2 text-light">گزارش کار</span>
         <i className="font20 fw-bold bi bi-clipboard2-check" />
       </div>
-      <div className="bgGhost cursorPointer text_animate_side text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end">
-        <span className="me-2 text-light">ایجاد</span>
-        <i className="font20 fw-bold bi bi-pencil-square" />
+      <div className="my-2">
+        <NavLink
+          to="./create"
+          className={({ isActive }) =>
+            isActive
+              ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end'
+              : 'bgGhost text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end'
+          }>
+          <span className="me-2">ایجاد</span>
+          <i className="font20 fw-bold bi bi-pencil-square" />
+        </NavLink>
       </div>
       {/* <div className="bgGhost cursorPointer text_animate_side text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end">
         <span className="me-2 text-light">مسائل</span>

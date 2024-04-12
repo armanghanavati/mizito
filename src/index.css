@@ -7,8 +7,17 @@ body * {
   padding: 0;
 }
 
+.headerFit {
+  height: 100px;
+}
+
 .position_relative {
   position: relative !important;
+}
+
+.fitContent {
+  position: absolute;
+  top: 0;
 }
 
 .top-25 {
@@ -117,14 +126,16 @@ body * {
 }
 
 .bgDarkPrimary {
-  background-color: #0b2442;
-  /* background: linear-gradient(90deg, #f7ecf6 0%, #0b2442 100%); */
-  /* background: 
-  linear-gradient(90deg, #f7ecf6 0%, #0b2442 100%); */
+  background: rgb(11, 36, 66);
+  background: linear-gradient(270deg, rgba(11, 36, 66, 1) 0%, rgba(42, 87, 136, 1) 100%);
 }
 
 .bgGhost:hover {
   background-color: #f0b778;
+}
+
+.bgGhostHeader:hover {
+  background-color: #5d7794;
 }
 
 /* side bar */
@@ -163,4 +174,9 @@ body * {
 
 .z_9 {
   z-index: 9 !important;
+}
+
+/* input */
+.form-control {
+  background-color: #5d7794 !important;
 }

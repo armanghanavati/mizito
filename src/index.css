@@ -7,6 +7,94 @@ body * {
   padding: 0;
 }
 
+.position_relative {
+  position: relative !important;
+}
+
+.top-25 {
+  top: 25% !important ;
+}
+
+.top-15 {
+  top: 15% !important ;
+}
+
+.top-10 {
+  top: 10% !important ;
+}
+
+.font60 {
+  font-size: 60px !important;
+}
+
+.font8 {
+  font-size: 8px !important;
+}
+
+.font11 {
+  font-size: 11px !important;
+}
+
+.font12 {
+  font-size: 12px !important;
+}
+
+.font15 {
+  font-size: 15px !important;
+}
+
+.font18 {
+  font-size: 18px !important;
+}
+
+.font20 {
+  font-size: 20px !important;
+}
+
+.font24 {
+  font-size: 24px !important;
+}
+
+.font25 {
+  font-size: 25px !important;
+}
+
+.font30 {
+  font-size: 30px !important;
+}
+
+.font35 {
+  font-size: 35px !important;
+}
+
+.font40 {
+  font-size: 40px !important;
+}
+
+.font45 {
+  font-size: 45px !important;
+}
+
+.font70 {
+  font-size: 70px !important;
+}
+
+.font80 {
+  font-size: 80px !important;
+}
+
+.font90 {
+  font-size: 90px !important;
+}
+
+.font100 {
+  font-size: 100px !important;
+}
+
+.cursorPointer {
+  cursor: pointer !important ;
+}
+
 .maxW-100 {
   max-width: 100%;
 }
@@ -19,11 +107,60 @@ body * {
   color: #f7ecf6;
 }
 
+/* color */
+.tex-orange {
+  color: #f96332;
+}
+
+.text_DarkPrimary {
+  color: #0b2442;
+}
+
+.bgDarkPrimary {
+  background-color: #0b2442;
+  /* background: linear-gradient(90deg, #f7ecf6 0%, #0b2442 100%); */
+  /* background: 
+  linear-gradient(90deg, #f7ecf6 0%, #0b2442 100%); */
+}
+
 .bgGhost:hover {
   background-color: #f0b778;
 }
 
 /* side bar */
 .sideCount {
-  background: linear-gradient(0deg, #ec7d46 0%, #eca650 100%);
+  /* background: linear-gradient(0deg, #ec7d46 0%, #f96332 100%); */
+  background: #f96332;
+  /* background: #f96332; */
+}
+
+.sideAnimate {
+  transition: all 0.3s;
+}
+
+.sideAnimate:hover {
+  transition: all (-50px);
+  border-radius: 8px;
+  padding: 0 8px 0 0;
+}
+
+.text_animate_side {
+  transition: all 0.4s;
+  /* padding: 1px 3px 3px; */
+  border-radius: 8px;
+}
+
+.text_animate_side:hover {
+  transform: scale(1.1);
+}
+
+/* content */
+.content_Count {
+  position: absolute !important;
+  top: 10px !important;
+  left: 10px !important;
+}
+
+.z_9 {
+  z-index: 9 !important;
 }

@@ -3,18 +3,14 @@ import Header from './Header';
 import Sidebar from './Sidebar';
 import { Col } from 'react-bootstrap';
 
-const GeneralLayout = ({ children }) => {
+const PrivateLayout = ({ children }) => {
   return (
     <>
       <div className="d-flex">
         <Col className="bg-whit-100">
           <Header />
           {/* <Bords /> */}
-          <div className="position-relative bg-danger">
-            <div className="">
-              <div className="">{children}</div>
-            </div>
-          </div>
+          <div className="position-relative">{children}</div>
         </Col>
         <Col className="sideCount shadow-lg" md="2">
           <Sidebar />
@@ -24,4 +20,4 @@ const GeneralLayout = ({ children }) => {
   );
 };
 
-export default GeneralLayout;
+export default PrivateLayout;

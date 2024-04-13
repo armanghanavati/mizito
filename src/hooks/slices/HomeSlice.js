@@ -11,8 +11,8 @@ const initialState = {
 // );
 
 //  -> Slice overtime
-const HomeSlice = createSlice({
-    name: "homeSlice",
+const homeSlice = createSlice({
+    name: "home",
     initialState,
     reducers: {
         // RsetFormErrors: (state, { payload }) => {
@@ -22,9 +22,7 @@ const HomeSlice = createSlice({
 
 });
 
-
-
 export const {
     RsetFromDate,
-} = HomeSlice.actions;
-export default HomeSlice.reducer;
+} = homeSlice.actions;
+export default homeSlice.reducer;

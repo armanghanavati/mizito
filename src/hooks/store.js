@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 // import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 // import filesCloudSlice from "../components/slices/filesCloudSlice";
-import HomeSlice from "./slices/HomeSlice";
+import homeSlice from "./slices/homeSlice";
 import MainSlice from './slices/main'
+import createSlice from "./slices/createSlice";
 
 const rootReducer = {
-    HomeSlice: HomeSlice,
-    main: MainSlice
+    home: homeSlice,
+    main: MainSlice,
+    create: createSlice
 };
 
 

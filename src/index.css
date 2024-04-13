@@ -1,10 +1,17 @@
 body * {
-  /* font-family: iranSansFaNum; */
+  font-family: iranSansFaNum;
   /* background-color: #f7f7f8; */
   font-size: 14px;
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+@font-face {
+  font-family: 'iranSansFaNum';
+  src: url('./assets/fonts/IRANSansWeb_FaNum_Light.eot') format('eot');
+  src: url('./assets/fonts/IRANSansWeb_FaNum.ttf') format('ttf');
+  src: url('./assets/fonts/IRANSansWeb_FaNum.woff') format('woff');
 }
 
 .headerFit {

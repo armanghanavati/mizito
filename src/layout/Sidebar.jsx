@@ -1,8 +1,13 @@
 import React from 'react';
 import { Row } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'
+import { RsetShowCreateModal } from '../hooks/slices/createSlice';
 
 const Sidebar = () => {
+  const { create } = useSelector((state) => state)
+  const dispatch = useDispatch()
+
   return (
     <div className="m-3">
       <span> لوگو </span>
@@ -37,6 +42,7 @@ const Sidebar = () => {
       </div>
       <div className="my-2">
         <NavLink
+          onClick={() => dispatch(RsetShowCreateModal({ show: true }))}
           to="./create"
           className={({ isActive }) =>
             isActive

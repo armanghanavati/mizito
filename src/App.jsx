@@ -6,6 +6,7 @@ import PrivateRoutes from './routes/PrivateRoutes';
 import Login from './pages/login/Login';
 
 function App() {
+
   return (
     <div>
       {/* <Loading isLoading={main?.showLoading?.value ? true : false} /> */}

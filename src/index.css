@@ -184,6 +184,6 @@ body * {
 }
 
 /* input */
-.form-control {
+.form-control_bgPrimary {
   background-color: #5d7794 !important;
 }

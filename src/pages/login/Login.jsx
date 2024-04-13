@@ -5,19 +5,19 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input';
 import Btn from '../../components/Btn';
+import { login } from '../../services/masterServices'
 
 import logo from '../../assets/hostcolor2000-300x300.jpg';
 
-const Login = ({}) => {
+const Login = ({ }) => {
   const [showPass, setShowPass] = useState(false);
   const {
     control,
     handleSubmit,
     register,
-    // formState: { errors },
+    formState: { errors },
     getValues
   } = useForm({ reValidateMode: 'onChange' });
-  const [opratingSystem, setOpratingSystem] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -31,16 +31,22 @@ const Login = ({}) => {
   //   }
   // }, []);
 
-  // const submitData = (data) => {
-  //   dispatch(
-  //     handleLogin({
-  //       data: data,
-  //       navigate,
-  //       loadingName: 'login',
-  //       opratingSystem
-  //     })
-  //   );
-  // };
+  const submitData = async (data) => {
+    const postData = {
+      userName: data?.userName,
+      password: data?.password
+    }
+    try {
+      const res = await login(postData)
+      console.log(res);
+      if (res?.data?.res === 1) {
+        navigate("/users/home")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
 
   return (
     <Container fluid className="vh-100">
@@ -69,7 +75,6 @@ const Login = ({}) => {
                   xl={12}
                   errmsg="لطفا نام کاربری خود را وارد کنید"
                   label="نام کاربری:"
-                  type="number"
                   validation={{
                     required: 'لطفا نام کاربری را وارد کنید',
                     minLength: {
@@ -86,19 +91,19 @@ const Login = ({}) => {
                 />
                 <Input
                   errmsg="لطفا رمز عبور خود را وارد کنید"
-                  setEditStyle={() => {
-                    setShowPass(!showPass);
-                  }}
-                  showCharacter
-                  // // errors={errors}
+                  // setEditStyle={() => {
+                  //   setShowPass(!showPass);
+                  // }}
+                  // showCharacter
+                  errors={errors}
                   label="رمز عبور:"
                   xl={12}
                   important
                   validation={{
                     required: 'لطفا رمز عبور خود را وارد کنید',
                     minLength: {
-                      message: 'رمز عبور خود باید بیشتر از 8 حرف باشد',
-                      value: 8
+                      message: 'رمز عبور خود باید بیشتر از 4 حرف باشد',
+                      value: 4
                     }
                   }}
                   name="password"
@@ -111,7 +116,7 @@ const Login = ({}) => {
                 <Btn
                   xl={12}
                   title="ورود"
-                  // onClick={handleSubmit((data) => submitData(data))}
+                  onClick={handleSubmit((data) => submitData(data))}
                   loadingName="login"
                   className="mt-4 border bgDarkPrimary border-none text-white  py-2 fs-6  rounded-4 w-100 p-2"
                 />

@@ -8,6 +8,7 @@ import Btn from '../../components/Btn';
 import { login } from '../../services/masterServices'
 
 import logo from '../../assets/hostcolor2000-300x300.jpg';
+import { RsetShowLoading } from '../../hooks/slices/main';
 
 const Login = ({ }) => {
   const [showPass, setShowPass] = useState(false);
@@ -37,15 +38,16 @@ const Login = ({ }) => {
       password: data?.password
     }
     try {
+      dispatch(RsetShowLoading({ value: true, btnName: "login" }));
       const res = await login(postData)
       console.log(res);
+      dispatch(RsetShowLoading({ value: false }));
       if (res?.data?.res === 1) {
         navigate("/users/home")
       }
     } catch (error) {
       console.log(error);
     }
-
   };
 
   return (
@@ -74,7 +76,7 @@ const Login = ({ }) => {
                 <Input
                   xl={12}
                   errmsg="لطفا نام کاربری خود را وارد کنید"
-                  label="نام کاربری:"
+                  label=":نام کاربری"
                   validation={{
                     required: 'لطفا نام کاربری را وارد کنید',
                     minLength: {
@@ -96,7 +98,7 @@ const Login = ({ }) => {
                   // }}
                   // showCharacter
                   errors={errors}
-                  label="رمز عبور:"
+                  label=":رمز عبور"
                   xl={12}
                   important
                   validation={{
@@ -124,7 +126,7 @@ const Login = ({ }) => {
               <Row className="mt-4">
                 <Col sm="12" md="12" xl="12">
                   <p className="">
-                    <Link className="font12  text-decoration-none" to="#">
+                    <Link className="font12 d-flex justify-content-end  text-decoration-none" to="#">
                       رمز خود را فراموش کرده اید؟
                     </Link>
                   </p>

@@ -6,7 +6,6 @@ const initialState = {
     showModal: { showModal: false, typeModal: 0, showModal2: false, typeModal2: 0 },
     showQuestionModal: { show: false, answer: false },
     showLoading: { btnName: "", value: false },
-    showLoadingBtn: "",
 };
 
 //  -> Reset overtime form
@@ -28,9 +27,8 @@ const MainSlice = createSlice({
 
 });
 
-
-
 export const {
     RsetFromDate,
+    RsetShowLoading,
 } = MainSlice.actions;
 export default MainSlice.reducer;

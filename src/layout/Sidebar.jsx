@@ -20,8 +20,8 @@ const Sidebar = () => {
               ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end'
               : 'bgGhost text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-end align-items-center m-1 fw-sm rounded-pill text-end'
           }>
-          <span className="me-2 ">خانه</span>
           <i className="font20 fw-bold bi bi-house-door" />
+          <span className="me-2 ">خانه</span>
         </NavLink>
       </div>
       <div className="my-2">

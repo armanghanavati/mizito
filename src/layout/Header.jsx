@@ -7,17 +7,15 @@ const Header = () => {
 
   return (
     <header className=" ">
-      <Row className="justify-content-start bgDarkPrimary p-4">
-        <Col md="4" className="d-flex justify-content-start align-items-center">
-          <div className="me-4 d-flex">
-            <i className="text-white bi bi-person font25" />
-            <span className=" p-2 rounded-2 text-white">مهرداد امیری</span>
-          </div>
-          {/* <div className="me-4 text-white">
+      <div className="d-flex justify-content-end bgDarkPrimary p-4">
+        <div className="me-4 ">
+          <span className=" p-2 rounded-2 text-white">مهرداد امیری</span>
+          <i className="text-white bi bi-person font25" />
+        </div>
+        {/* <div className="me-4 text-white">
             <Input className="" />
           </div> */}
-        </Col>
-      </Row>
+      </div>
     </header>
   );
 };

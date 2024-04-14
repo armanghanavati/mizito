@@ -187,3 +187,12 @@ body * {
 .form-control_bgPrimary {
   background-color: #5d7794 !important;
 }
+
+.bg_transe {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5.7px);
+  -webkit-backdrop-filter: blur(5.7px);
+  border: 1px solid rgba(255, 255, 255, 0.23);
+}

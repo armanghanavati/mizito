@@ -53,7 +53,7 @@ const Input = ({
 }) => {
   return (
     <>
-      <Col className="mt-4" xs={xs} md={md} xl={xl}>
+      <Col className="my-4" xs={xs} md={md} xl={xl}>
         <Controller
           name={name}
           control={control}

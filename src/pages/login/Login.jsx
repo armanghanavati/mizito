@@ -60,9 +60,9 @@ const Login = ({ }) => {
             md="7"
             lg="6"
             xl="4"
-            className="bg-white shadow  mx-auto my-auto p-4 rounded-4 ">
-            <form className="justify-content-center bg-white">
-              <div className="bg-white">
+            className="bg_transe shadow  mx-auto my-auto p-4 rounded-4 ">
+            <form className="justify-content-center">
+              <div className="">
                 {/* <div className="d-flex  justify-content-center">
                   <Link className="" to="/">
                     <img

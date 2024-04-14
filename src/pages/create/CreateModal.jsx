@@ -27,35 +27,29 @@ const CreateModal = () => {
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="name@example.com"
-              autoFocus
-            />
-          </Form.Group>
           <Form.Group
             className="mb-3"
             controlId="exampleForm.ControlTextarea1"
           >
-
             <Datepicker
+              name='createDateTime'
               label="تاریخ ساخت:"
               control={control}
             />
             <Datepicker
+              name='dueDateTime'
               label="تاریخ شروع:"
               control={control}
             />
             <Datepicker
+              name='endDateTime'
               label="تاریخ پایان:"
               control={control}
             />
-            <ComboBox control={control} label='اولویت:' />
-            <ComboBox control={control} label='وضعیت:' />
-            <ComboBox control={control} label='نوع:' />
-            <SwitchCase range label="سرعت پروژه:" />
+            <ComboBox name='projectPriority' control={control} label='اولویت:' />
+            <ComboBox name='projectStatus' control={control} label='وضعیت:' />
+            <ComboBox name='projectType' control={control} label='نوع:' />
+            <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
             <SwitchCase label="وضعیت پیوست:" />
             <Row>
               <Input xl={6} label="ایجاد توسط:" control={control} />

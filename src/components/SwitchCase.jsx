@@ -27,6 +27,7 @@ const SwitchCase = ({
                         </label>
                         <Col className=" d-flex align-items-end">
                             <FormRange
+                                name={name}
                                 value={value}
                                 onChange={(event) => {
                                     setValue(event.target.value);

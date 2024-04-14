@@ -1,16 +1,15 @@
 import React from 'react';
-import { Container, Modal, Form, Row } from 'react-bootstrap';
-import Btn from '../../components/Btn';
-import { useSelector, useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
-import { Controller, useForm } from 'react-hook-form';
+import { Container, Form, Modal, Row } from 'react-bootstrap';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import { createProject } from '../../services/masterServices';
+import { Controller, useForm } from 'react-hook-form';
+import Btn from '../../components/Btn';
+import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { useDispatch, useSelector } from 'react-redux';``
 
-const CreateModal = () => {
+const EditProjectModal = () => {
   const { create } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
@@ -21,41 +20,6 @@ const CreateModal = () => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  const handleCreateProject = async (data) =>{
-    dispatch(RsetShowCreateModal({ show: false }))
-    console.log(data);
-    const postData = {
-      name: "",
-      description: "",
-      dueDateTime: "time",
-      projectPriority: 0,
-      projectStatus: 0,
-      projectType: 0,
-      sprintNumber: 0,
-      projectAssignedUsersViewModel: [
-        {
-          userId: "",
-          projectRoles: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
-      attachmentsCreateViewModel: [
-        {
-          id: "",
-          fileName: "",
-          filePath: "",
-          uploadDate: "",
-          attachCreatorId: ""
-        }
-      ]
-    }
-
-    // const resCreate = await createProject(postData)
-    // console.log(resCreate);
-  }
 
   return (
     <>
@@ -71,7 +35,7 @@ const CreateModal = () => {
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
             ایجاد وظیفه
           </span>
-        </Modal.Header> 
+        </Modal.Header>
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
@@ -85,8 +49,8 @@ const CreateModal = () => {
                 <Row className="mt-4">
                   <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
-                <SwitchCase className="mt-4 me-0"  label="وضعیت پیوست:" />
-                <Row> 
+                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
+                <Row>
                   <Input xl={6} label="ایجاد توسط:" control={control} />
                   <ComboBox xl={6} control={control} label="اختصاص به:" />
                 </Row>
@@ -114,7 +78,6 @@ const CreateModal = () => {
             variant="outline-primary"
             title="تایید"
             onClick={handleSubmit((data) => handleCreateProject(data))}
-            
           />
         </Modal.Footer>
       </Modal>
@@ -122,4 +85,4 @@ const CreateModal = () => {
   );
 };
 
-export default CreateModal;
+export default EditProjectModal;

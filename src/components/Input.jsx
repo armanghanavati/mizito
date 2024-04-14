@@ -68,7 +68,7 @@ const Input = ({
               <Row>
                 <Col className={`${isAbsentField && 'd-none'} positionRelative`}>
                   <Form.Label
-                    className={`d-flex ms-3 text-end justify-content-end ${important && 'star'}  align-items-center`}>
+                    className={`d-flex ms-3 text-start justify-content-start ${important && 'star'}  align-items-center`}>
                     {label}
                   </Form.Label>
                   <span className="">

@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker";
-import persianCalendar from "react-date-object/calendars/persian";
+import persian from "react-date-object/calendars/persian";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import persian_fa from "react-date-object/locales/persian_fa";
 import { Controller } from "react-hook-form";
@@ -31,7 +31,7 @@ const Datepicker = ({
     label,
     value,
     onChange = () => { },
-    persianType,
+    persianType = "per",
     minDate,
     maxDate,
     important,
@@ -95,7 +95,7 @@ const Datepicker = ({
                                 monthYearSeparator={" "}
                                 inputClass={`form-control dir-ltr  ${errors?.[name] && "border border-danger"
                                     } ${className}  `}
-                                calendar={persianType === "per" ? persianCalendar : undefined}
+                                calendar={persianType === "per" ? persian : undefined}
                                 locale={persianType === "per" ? persian_fa : undefined}
                             >
                                 {/* <Button

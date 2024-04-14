@@ -1,7 +1,7 @@
 import React from 'react';
 import Bords from '../pages/boards/Bords';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from '../pages/home/Home';
+import Home from '../pages/Home/Home';
 import CreateModal from '../pages/create/CreateModal';
 
 const PrivateRoutes = () => {

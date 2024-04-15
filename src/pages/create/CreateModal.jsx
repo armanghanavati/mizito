@@ -25,20 +25,36 @@ const CreateModal = () => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  const downloadFile = (DOC, Caption, Format) => {
-    const raw = window.atob(DOC);
-    const rawLength = raw.length;
-    let array = new Uint8Array(new ArrayBuffer(rawLength));
 
-    for (let i = 0; i < rawLength; i++) {
-      array[i] = raw.charCodeAt(i);
-    }
-    const file = new Blob([array], {
-      type: getExtentionType(`.${Format.toLowerCase()}`),
-    });
-    const fileURL = URL.createObjectURL(file);
-    window.open(fileURL);
-  }
+  // const upload = (e) => {
+  //   console.warn(e.target.files)
+  //   const files = e.target.files
+  //   const formData = new FormData()
+  //   formData.append('img', files[0])
+  //   fetch('http://127.0.0.1:8000/api/store', {
+  //     method: 'POST',
+  //     body: formData,
+  //   }).then((resp) => {
+  //     resp.json().then((result) => {
+  //       console.warn(result)
+  //     })
+  //   })
+  // }
+
+  // const downloadFile = (DOC, Caption, Format) => {
+  //   const raw = window.atob(DOC);
+  //   const rawLength = raw.length;
+  //   let array = new Uint8Array(new ArrayBuffer(rawLength));
+
+  //   for (let i = 0; i < rawLength; i++) {
+  //     array[i] = raw.charCodeAt(i);
+  //   }
+  //   const file = new Blob([array], {
+  //     type: getExtentionType(`.${Format.toLowerCase()}`),
+  //   });
+  //   const fileURL = URL.createObjectURL(file);
+  //   window.open(fileURL);
+  // }
 
   const handleCreateProject = async (data) => {
     dispatch(RsetShowCreateModal({ show: false }))
@@ -98,10 +114,18 @@ const CreateModal = () => {
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Form.Group controlId="formFile" className="mb-3">
-                  <Form.Label>آپلود فایل</Form.Label>
-                  <Form.Control onClick={downloadFile} type="file" />
-                </Form.Group>
+                <Controller
+                  name="attachmentsCreateViewModel"
+                  control={control}
+                  render={({ field }) => (
+                    <>
+                      <Form.Group controlId="attachmentsCreateViewModel" className="mb-3">
+                        <Form.Label>آپلود فایل</Form.Label>
+                        <Form.Control {...field} type="file" />
+                      </Form.Group>
+                    </>
+                  )}
+                />
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
@@ -109,6 +133,7 @@ const CreateModal = () => {
                 <ComboBox name="projectStatus" control={control} label="وضعیت:" />
                 <ComboBox name="projectType" control={control} label="نوع:" />
                 <Row className="mt-4">
+
                   <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
                 <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
@@ -117,12 +142,12 @@ const CreateModal = () => {
                   <ComboBox xl={6} control={control} label="اختصاص به:" />
                 </Row>
                 <Controller
-                  name={name}
+                  name="description"
                   control={control}
                   render={({ field }) => (
                     <>
                       <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
-                      <Form.Control as="textarea" rows={3} />
+                      <Form.Control {...field} name='description' as="textarea" rows={3} />
                     </>
                   )}
                 />

@@ -9,6 +9,10 @@ import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { createProject } from '../../services/masterServices';
+import gregorian_en from "react-date-object/locales/gregorian_en";
+import gregorian from "react-date-object/calendars/gregorian";
+import { DateObject } from 'react-multi-date-picker';
+import StringHelpers from '../../helpers/StringHelpers';
 
 const CreateModal = () => {
   const { create } = useSelector((state) => state);
@@ -21,9 +25,27 @@ const CreateModal = () => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  const handleCreateProject = async (data) =>{
+  const downloadFile = (DOC, Caption, Format) => {
+    const raw = window.atob(DOC);
+    const rawLength = raw.length;
+    let array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for (let i = 0; i < rawLength; i++) {
+      array[i] = raw.charCodeAt(i);
+    }
+    const file = new Blob([array], {
+      type: getExtentionType(`.${Format.toLowerCase()}`),
+    });
+    const fileURL = URL.createObjectURL(file);
+    window.open(fileURL);
+  }
+
+  const handleCreateProject = async (data) => {
     dispatch(RsetShowCreateModal({ show: false }))
     console.log(data);
+    console.log(StringHelpers.convertDateEn(data?.createDateTime));
+
+    // downloadFile()
     const postData = {
       name: "",
       description: "",
@@ -71,11 +93,15 @@ const CreateModal = () => {
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
             ایجاد وظیفه
           </span>
-        </Modal.Header> 
+        </Modal.Header>
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
               <Row>
+                <Form.Group controlId="formFile" className="mb-3">
+                  <Form.Label>آپلود فایل</Form.Label>
+                  <Form.Control onClick={downloadFile} type="file" />
+                </Form.Group>
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
@@ -85,8 +111,8 @@ const CreateModal = () => {
                 <Row className="mt-4">
                   <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
-                <SwitchCase className="mt-4 me-0"  label="وضعیت پیوست:" />
-                <Row> 
+                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
+                <Row>
                   <Input xl={6} label="ایجاد توسط:" control={control} />
                   <ComboBox xl={6} control={control} label="اختصاص به:" />
                 </Row>
@@ -114,7 +140,7 @@ const CreateModal = () => {
             variant="outline-primary"
             title="تایید"
             onClick={handleSubmit((data) => handleCreateProject(data))}
-            
+
           />
         </Modal.Footer>
       </Modal>

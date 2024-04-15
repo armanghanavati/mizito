@@ -26,7 +26,7 @@ const Sidebar = () => {
       </div>
       <div className="my-2">
         <NavLink
-          to="./boards"
+          to="./projects"
           className={({ isActive }) =>
             isActive
               ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
@@ -39,6 +39,18 @@ const Sidebar = () => {
       <div className="bgGhost cursorPointer text_animate_side text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start">
         <i className="font20 fw-bold bi bi-clipboard2-check" />
         <span className="me-2 text-light">گزارش کار</span>
+      </div>
+      <div className="my-2">
+        <NavLink
+          to="./boards"
+          className={({ isActive }) =>
+            isActive
+              ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
+              : 'bgGhost text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
+          }>
+          <i className="font20 fw-bold bi bi-clipboard-data" />
+          <span className="me-2 "> بورد</span>
+        </NavLink>
       </div>
       <div className="my-2">
         <NavLink

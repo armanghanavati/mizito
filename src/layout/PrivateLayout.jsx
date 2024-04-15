@@ -1,9 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { Col } from 'react-bootstrap';
+import { getAllUsers } from '../services/masterServices';
+import { useDispatch } from 'react-redux';
+import { RsetAllUsers } from '../hooks/slices/main';
 
 const PrivateLayout = ({ children }) => {
+  const dispatch = useDispatch();
+
+  const handleGetAllUsers = async () => {
+    try {
+      const res = await getAllUsers();
+      if (res?.data?.res === 1) {
+        dispatch(RsetAllUsers(res?.data?.userList));
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetAllUsers();
+  }, []);
+
   return (
     <>
       <div className="d-flex">

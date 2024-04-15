@@ -1,15 +1,17 @@
 import React from 'react';
-import Bords from '../pages/boards/Bords';
+import Boards from '../pages/boards/index';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from '../pages/home/Home';
-import CreateModal from '../pages/create/CreateModal';
+import CreateProjectModal from '../pages/create/CreateProjectModal';
+import ShowProjects from '../pages/project/ShowProjects';
 
 const PrivateRoutes = () => {
   return (
     <>
       <Routes>
-        <Route path="/boards" element={<Bords />} />
-        <Route path="/create" element={<CreateModal />} />
+        <Route path="/projects" element={<ShowProjects />} />
+        <Route path="/boards" element={<Boards />} />
+        <Route path="/create" element={<CreateProjectModal />} />
         <Route path="/home" element={<Home />} />
         {/* <Route
           path="/baseSubmitTaxReq"

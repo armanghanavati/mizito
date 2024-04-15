@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { serViceEditProject, serviceProjects } from '../../services/masterServices';
 import EditProjectModal from './EditProjectModal';
 
-const Bords = () => {
+const ShowProjects = () => {
   const [allProjectList, setAllProjectList] = useState([]);
 
   const handleGetProjects = async () => {
@@ -64,4 +64,4 @@ const Bords = () => {
   );
 };
 
-export default Bords;
+export default ShowProjects;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Modal, Form, Row } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,14 +8,25 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import { createProject } from '../../services/masterServices';
-import gregorian_en from "react-date-object/locales/gregorian_en";
-import gregorian from "react-date-object/calendars/gregorian";
+import {
+  createProject,
+  projectPriority,
+  projectRole,
+  projectStatus,
+  projectType
+} from '../../services/masterServices';
+import gregorian_en from 'react-date-object/locales/gregorian_en';
+import gregorian from 'react-date-object/calendars/gregorian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
 
-const CreateModal = () => {
-  const { create } = useSelector((state) => state);
+const CreateProjectModal = () => {
+  const { create, main } = useSelector((state) => state);
+  const [sprintNum, setSprintNum] = useState(50);
+  const [role, setRole] = useState([]);
+  const [priority, setPriority] = useState([]);
+  const [status, setStatus] = useState([]);
+  const [projType, setProjType] = useState([]);
   const dispatch = useDispatch();
   const {
     control,
@@ -25,6 +36,40 @@ const CreateModal = () => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
+  const addUsersFilter = main?.allUsers?.map((item) => {
+    return {
+      id: item?.id,
+      title: item?.fullName
+    };
+  });
+
+  const handleProjectRole = async () => {
+    try {
+      const resRole = await projectRole();
+      if (resRole?.data?.code === 1) {
+        setRole(resRole?.data?.data);
+      }
+      const resPriority = await projectPriority();
+      if (resPriority?.data?.code === 1) {
+        setPriority(resPriority?.data?.data);
+      }
+      const resStatus = await projectStatus();
+      if (resStatus?.data?.code === 1) {
+        setStatus(resStatus?.data?.data);
+      }
+      const resType = await projectType();
+      if (resType?.data?.code === 1) {
+        setProjType(resType?.data?.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // let addAllDepartment = []
+  // const objectAll = addAllDepartment.({ label: "همه", value: "" })
+
+  // const mapDeps = allDeps.map((dep) => addAllDepartment.push({ label: dep.label, value: dep.value }))
 
   // const upload = (e) => {
   //   console.warn(e.target.files)
@@ -57,22 +102,26 @@ const CreateModal = () => {
   // }
 
   const handleCreateProject = async (data) => {
-    dispatch(RsetShowCreateModal({ show: false }))
-    console.log(data);
+    const handleUsersAssgin = data?.assginTo?.map((item) => {
+      return {
+        id: item?.id
+      };
+    });
+    dispatch(RsetShowCreateModal({ show: false }));
+    console.log(handleUsersAssgin);
     console.log(StringHelpers.convertDateEn(data?.createDateTime));
-
     // downloadFile()
     const postData = {
-      name: "",
-      description: "",
-      dueDateTime: "time",
+      name: data?.projectName,
+      description: data?.description,
+      dueDateTime: StringHelpers.convertDateEn(data?.createDateTime),
       projectPriority: 0,
       projectStatus: 0,
       projectType: 0,
-      sprintNumber: 0,
+      sprintNumber: sprintNum,
       projectAssignedUsersViewModel: [
         {
-          userId: "",
+          userId: handleUsersAssgin,
           projectRoles: [
             {
               projectRole: 0
@@ -82,18 +131,22 @@ const CreateModal = () => {
       ],
       attachmentsCreateViewModel: [
         {
-          id: "",
-          fileName: "",
-          filePath: "",
-          uploadDate: "",
-          attachCreatorId: ""
+          id: '',
+          fileName: '',
+          filePath: '',
+          uploadDate: '',
+          attachCreatorId: ''
         }
       ]
-    }
+    };
 
     // const resCreate = await createProject(postData)
     // console.log(resCreate);
-  }
+  };
+
+  useEffect(() => {
+    handleProjectRole();
+  }, []);
 
   return (
     <>
@@ -114,6 +167,7 @@ const CreateModal = () => {
           <Form>
             <Container fluid className="mb-3">
               <Row>
+                <Input xl={6} label="نام پروژه:" name="projectName" control={control} />
                 <Controller
                   name="attachmentsCreateViewModel"
                   control={control}
@@ -129,17 +183,35 @@ const CreateModal = () => {
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
-                <ComboBox name="projectPriority" control={control} label="اولویت:" />
-                <ComboBox name="projectStatus" control={control} label="وضعیت:" />
-                <ComboBox name="projectType" control={control} label="نوع:" />
+                <ComboBox
+                  options={priority}
+                  name="projectPriority"
+                  control={control}
+                  label="اولویت:"
+                />
+                <ComboBox options={status} name="projectStatus" control={control} label="وضعیت:" />
+                <ComboBox options={projType} name="projTypeName" control={control} label="نوع:" />
                 <Row className="mt-4">
-
-                  <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
+                  <SwitchCase
+                    value={sprintNum}
+                    onChange={(e) => setSprintNum(e.target.value)}
+                    name="sprintNumber"
+                    range
+                    label="سرعت پروژه:"
+                  />
                 </Row>
                 <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
                 <Row>
                   <Input xl={6} label="ایجاد توسط:" control={control} />
-                  <ComboBox xl={6} control={control} label="اختصاص به:" />
+                  <ComboBox
+                    className="mt-2"
+                    isMulti
+                    name="assginTo"
+                    options={addUsersFilter}
+                    xl={6}
+                    control={control}
+                    label="اختصاص به:"
+                  />
                 </Row>
                 <Controller
                   name="description"
@@ -147,7 +219,7 @@ const CreateModal = () => {
                   render={({ field }) => (
                     <>
                       <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
-                      <Form.Control {...field} name='description' as="textarea" rows={3} />
+                      <Form.Control {...field} name="description" as="textarea" rows={3} />
                     </>
                   )}
                 />
@@ -165,7 +237,6 @@ const CreateModal = () => {
             variant="outline-primary"
             title="تایید"
             onClick={handleSubmit((data) => handleCreateProject(data))}
-
           />
         </Modal.Footer>
       </Modal>
@@ -173,4 +244,4 @@ const CreateModal = () => {
   );
 };
 
-export default CreateModal;
+export default CreateProjectModal;

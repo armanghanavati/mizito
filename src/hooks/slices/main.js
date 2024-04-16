@@ -6,7 +6,12 @@ const initialState = {
   showModal: { showModal: false, typeModal: 0, showModal2: false, typeModal2: 0 },
   showQuestionModal: { show: false, answer: false },
   allUsers: [],
-  showLoading: { btnName: '', value: false }
+  showLoading: { btnName: '', value: false },
+  allEnums: {},
+  projStatus: {},
+  projType: {},
+  projPriorty: {},
+  projRole: {}
 };
 
 //  -> Reset overtime form
@@ -26,9 +31,33 @@ const MainSlice = createSlice({
     },
     RsetAllUsers: (state, actions) => {
       return { ...state, allUsers: actions.payload };
+    },
+    RsetAllEnums: (state, { payload }) => {
+      return { ...state, allEnums: payload };
+    },
+    RsetProjPriorty: (state, { payload }) => {
+      return { ...state, projPriorty: payload };
+    },
+    RsetProjStatus: (state, { payload }) => {
+      return { ...state, projStatus: payload };
+    },
+    RsetProjType: (state, { payload }) => {
+      return { ...state, projType: payload };
+    },
+    RsetProjRole: (state, { payload }) => {
+      return { ...state, projRole: payload };
     }
   }
 });
 
-export const { RsetFromDate, RsetShowLoading, RsetAllUsers } = MainSlice.actions;
+export const {
+  RsetProjPriorty,
+  RsetProjType,
+  RsetProjStatus,
+  RsetAllEnums,
+  RsetFromDate,
+  RsetShowLoading,
+  RsetAllUsers,
+  RsetProjRole
+} = MainSlice.actions;
 export default MainSlice.reducer;

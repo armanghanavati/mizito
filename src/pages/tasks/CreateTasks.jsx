@@ -20,7 +20,7 @@ import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
 
-const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal }) => {
+const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
   const dispatch = useDispatch();
@@ -33,126 +33,49 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  console.log(main?.projType?.projType);
-
-  const addUsersFilter = main?.allUsers?.map((item) => {
-    return {
-      id: item?.id,
-      title: item?.fullName
-    };
-  });
-
-  // let addAllDepartment = []
-  // const objectAll = addAllDepartment.({ label: "همه", value: "" })
-
-  // const mapDeps = allDeps.map((dep) => addAllDepartment.push({ label: dep.label, value: dep.value }))
-
-  // const upload = (e) => {
-  //   console.warn(e.target.files)
-  //   const files = e.target.files
-  //   const formData = new FormData()
-  //   formData.append('img', files[0])
-  //   fetch('http://127.0.0.1:8000/api/store', {
-  //     method: 'POST',
-  //     body: formData,
-  //   }).then((resp) => {
-  //     resp.json().then((result) => {
-  //       console.warn(result)
-  //     })
-  //   })
-  // }
-
-  // const downloadFile = (DOC, Caption, Format) => {
-  //   const raw = window.atob(DOC);
-  //   const rawLength = raw.length;
-  //   let array = new Uint8Array(new ArrayBuffer(rawLength));
-
-  //   for (let i = 0; i < rawLength; i++) {
-  //     array[i] = raw.charCodeAt(i);
-  //   }
-  //   const file = new Blob([array], {
-  //     type: getExtentionType(`.${Format.toLowerCase()}`),
-  //   });
-  //   const fileURL = URL.createObjectURL(file);
-  //   window.open(fileURL);
-  // }
-
-  const handleCreateProject = async (data) => {
-    const handleUsersAssgin = data?.assginTo?.map((item) => {
-      return {
-        id: item?.id
-      };
-    });
-    setShowCreateProjectModal(false);
-    console.log(data);
-    console.log(StringHelpers.convertDateEn(data?.createDateTime));
-    // downloadFile()
+  const handleCreateTask = () => {
     const postData = {
-      name: data?.name,
-      description: data?.description,
-      dueDateTime: StringHelpers.convertDateEn(data?.createDateTime),
-      projectPriority: data?.projectPriority?.id,
-      projectStatus: data?.projectStatus?.id,
-      projectType: data?.projectType?.id,
-      sprintNumber: sprintNum,
-      projectAssignedUsersViewModel: [
+      name: 'string',
+      description: 'string',
+      priority: 0,
+      workFlow: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      dueDateTime: '2024-04-16T19:44:37.406Z',
+      remainderDateTime: '2024-04-16T19:44:37.406Z',
+      attachmentStatus: true,
+      boardId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      taskAssignedUsersId: ['string'],
+      taskVerifyUsersId: ['string'],
+      attachmentCreateViewModels: [
         {
-          userId: handleUsersAssgin,
-          projectRoles: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
-      attachmentsCreateViewModel: [
-        {
-          id: '',
-          fileName: '',
-          filePath: '',
-          uploadDate: '',
-          attachCreatorId: ''
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          fileName: 'string',
+          filePath: 'string',
+          uploadDate: 'string',
+          attachCreatorId: 'string'
         }
       ]
     };
-    const resCreate = await createProject(postData);
-    console.log(resCreate);
   };
-
-  // return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DD');
-  useEffect(() => {
-    console.log('Eres');
-    console.log(
-      StringHelpers?.convertEditFilterComboBox(
-        create?.fieldsEditProject?.addFields?.projectPriority
-      )
-    );
-    reset({ ...create?.fieldsEditProject?.addFields });
-  }, [create?.fieldsEditProject]);
-
-  useEffect(() => {
-    // handleProjectRole();
-  }, []);
-
   return (
     <>
+      {' '}
       <Modal
         className="p-0"
         size="lg"
-        show={showCreateProjectModal}
-        onHide={() => setShowCreateProjectModal(false)}>
+        show={showCreateIssuesModal}
+        onHide={() => setShowCreateIssuesModal(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-          className="d-flex bg-danger text-white justify-content-center"
+          className="d-flex bg-info text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد پروژه
+            ایجاد موضوع
           </span>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Row>
+            <Row>
                 <Input xl={6} label="نام پروژه:" name="name" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ ساخت:" control={control} />
                 <Controller
@@ -208,7 +131,7 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
                     className="mt-2"
                     isMulti
                     name="assginTo"
-                    options={addUsersFilter}
+                    // options={addUsersFilter}
                     xl={6}
                     control={control}
                     label="اختصاص به:"
@@ -232,12 +155,12 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
           <Btn
             variant="outline-warning"
             title="لغو"
-            onClick={() => setShowCreateProjectModal(false)}
+            onClick={() => setShowCreateIssuesModal(false)}
           />
           <Btn
-            variant="outline-primary"
+            variant="outline-info"
             title="تایید"
-            onClick={handleSubmit((data) => handleCreateProject(data))}
+            onClick={handleSubmit((data) => handleCreateTask(data))}
           />
         </Modal.Footer>
       </Modal>
@@ -245,4 +168,4 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
   );
 };
 
-export default CreateProjectModal;
+export default CreateTasks;

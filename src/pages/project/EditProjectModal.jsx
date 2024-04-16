@@ -7,7 +7,8 @@ import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
-import { useDispatch, useSelector } from 'react-redux'; ``
+import { useDispatch, useSelector } from 'react-redux';
+``;
 
 const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
   const { create } = useSelector((state) => state);
@@ -21,19 +22,20 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
   } = useForm({ reValidateMode: 'onChange' });
 
   const handleAcceptEditProject = async (data) => {
-    setAllProjectList(false)
+    console.log(data);
+    setAllProjectList(false);
     const postData = {
-      id: "",
-      name: "",
-      description: "",
-      dueDateTime: "time",
+      id: '',
+      name: data?.projectName,
+      description: '',
+      dueDateTime: 'time',
       projectPriority: 0,
       projectStatus: 0,
       projectType: 0,
       sprintNumber: 0,
       projectAssignedUsersViewModel: [
         {
-          userId: "",
+          userId: '',
           projectRoles: [
             {
               projectRole: 0
@@ -43,15 +45,15 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
       ],
       attachmentEditViewModels: [
         {
-          id: "",
-          fileName: "",
-          filePath: "",
-          uploadDate: "",
-          attachCreatorId: ""
+          id: '',
+          fileName: '',
+          filePath: '',
+          uploadDate: '',
+          attachCreatorId: ''
         }
       ]
-    }
-  }
+    };
+  };
 
   return (
     <>
@@ -72,7 +74,7 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
+              <Input xl={6} label="ایجاد توسط:" name="projectName" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
                 <ComboBox name="projectPriority" control={control} label="اولویت:" />
@@ -101,11 +103,7 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Btn
-            variant="outline-warning"
-            title="لغو"
-            onClick={() => setAllProjectList(false)}
-          />
+          <Btn variant="outline-warning" title="لغو" onClick={() => setAllProjectList(false)} />
           <Btn
             variant="outline-primary"
             title="تایید"

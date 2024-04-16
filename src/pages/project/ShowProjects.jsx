@@ -4,16 +4,19 @@ import { serViceEditProject, serviceProjects } from '../../services/masterServic
 import EditProjectModal from './EditProjectModal';
 import { RsetShowLoading } from '../../hooks/slices/main';
 import { useDispatch } from 'react-redux';
+import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
+import CreateProjectModal from '../create/CreateProjectModal';
 
 const ShowProjects = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [allProjectList, setAllProjectList] = useState([]);
-  const [showEditProject, setShowEditProject] = useState(false);
+  const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
 
   const handleGetProjects = async () => {
     try {
-      dispatch(RsetShowLoading({ value: true }))
+      dispatch(RsetShowLoading({ value: true }));
       const res = await serviceProjects();
+      dispatch(RsetShowLoading({ value: false }));
       if (res?.data?.code === 1) {
         console.log(res?.data?.data);
         setAllProjectList(res?.data?.data);
@@ -32,7 +35,8 @@ const ShowProjects = () => {
     try {
       const res = await serViceEditProject(id);
       if (res?.data?.code === 1) {
-        setShowEditProject(true)
+        setShowCreateProjectModal(true);
+        dispatch(RsetFieldsEditProject({ addFields: res?.data?.data }));
       }
       console.log(res);
     } catch (error) {
@@ -68,7 +72,12 @@ const ShowProjects = () => {
           ))}
         </div>
       </Container>
-      {showEditProject && <EditProjectModal showEditProject={showEditProject} setAllProjectList={setShowEditProject} />}
+      {showCreateProjectModal && (
+        <CreateProjectModal
+          showCreateProjectModal={showCreateProjectModal}
+          setShowCreateProjectModal={setShowCreateProjectModal}
+        />
+      )}
     </>
   );
 };

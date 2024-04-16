@@ -38,4 +38,8 @@ export const serViceEditProject = (postData) => {
     return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 }
 
+export const serCreateBoard = (postData) => {
+    return axios.get(`${baseURL}api/BoardController/CreateBoard`);
+}
+
 // www.auto.fanwebco.com/taskmanager_api/api/ProjectController/Projects

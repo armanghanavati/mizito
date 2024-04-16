@@ -1,7 +1,8 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
-    shoModal: { show: false },
+  shoModal: { show: false },
+  fieldsEditProject: {}
 };
 
 //  -> Reset overtime form
@@ -13,17 +14,17 @@ const initialState = {
 
 //  -> Slice overtime
 const createSl = createSlice({
-    name: "create",
-    initialState,
-    reducers: {
-        RsetShowCreateModal: (state, { payload }) => {
-            return { ...state, shoModal: payload };
-        },
+  name: 'create',
+  initialState,
+  reducers: {
+    RsetShowCreateModal: (state, { payload }) => {
+      return { ...state, shoModal: payload };
     },
-
+    RsetFieldsEditProject: (state, { payload }) => {
+      return { ...state, fieldsEditProject: payload };
+    }
+  }
 });
 
-export const {
-    RsetShowCreateModal,
-} = createSl.actions;
+export const { RsetShowCreateModal, RsetFieldsEditProject } = createSl.actions;
 export default createSl.reducer;

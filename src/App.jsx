@@ -4,11 +4,15 @@ import './services/axios';
 import PrivateLayout from './layout/PrivateLayout';
 import PrivateRoutes from './routes/PrivateRoutes';
 import Login from './pages/login/Login';
+import Loading from './components/Loading';
+import { useSelector } from 'react-redux';
 
 function App() {
+  const { main } = useSelector((state) => state);
 
   return (
     <div>
+      <Loading isLoading={main?.showLoading?.value ? true : false} />
       {/* <Loading isLoading={main?.showLoading?.value ? true : false} /> */}
       <Router>
         <Routes>

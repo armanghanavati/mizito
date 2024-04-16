@@ -2,15 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { serViceEditProject, serviceProjects } from '../../services/masterServices';
 import EditProjectModal from './EditProjectModal';
+import { RsetShowLoading } from '../../hooks/slices/main';
+import { useDispatch } from 'react-redux';
 
 const ShowProjects = () => {
+  const dispatch = useDispatch()
   const [allProjectList, setAllProjectList] = useState([]);
+  const [showEditProject, setShowEditProject] = useState(false);
 
   const handleGetProjects = async () => {
     try {
+      dispatch(RsetShowLoading({ value: true }))
       const res = await serviceProjects();
-      if (res?.data?.res === 1) {
-        setAllProjectList(res?.data?.projectsList);
+      if (res?.data?.code === 1) {
+        console.log(res?.data?.data);
+        setAllProjectList(res?.data?.data);
       }
     } catch (error) {
       console.log(error);
@@ -24,7 +30,10 @@ const ShowProjects = () => {
   const handleEditProject = async (id) => {
     console.log(id);
     try {
-      const res = await serViceEditProject();
+      const res = await serViceEditProject(id);
+      if (res?.data?.code === 1) {
+        setShowEditProject(true)
+      }
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -59,7 +68,7 @@ const ShowProjects = () => {
           ))}
         </div>
       </Container>
-      <EditProjectModal />
+      {showEditProject && <EditProjectModal showEditProject={showEditProject} setAllProjectList={setShowEditProject} />}
     </>
   );
 };

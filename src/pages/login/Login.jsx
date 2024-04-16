@@ -42,7 +42,7 @@ const Login = ({ }) => {
       const res = await login(postData)
       console.log(res);
       dispatch(RsetShowLoading({ value: false }));
-      if (res?.data?.res === 1) {
+      if (res?.data?.code === 1) {
         navigate("/users/home")
       }
     } catch (error) {

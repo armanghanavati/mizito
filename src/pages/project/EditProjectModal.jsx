@@ -7,9 +7,9 @@ import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
-import { useDispatch, useSelector } from 'react-redux';``
+import { useDispatch, useSelector } from 'react-redux'; ``
 
-const EditProjectModal = () => {
+const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
   const { create } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
@@ -20,20 +20,52 @@ const EditProjectModal = () => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
+  const handleAcceptEditProject = async (data) => {
+    setAllProjectList(false)
+    const postData = {
+      id: "",
+      name: "",
+      description: "",
+      dueDateTime: "time",
+      projectPriority: 0,
+      projectStatus: 0,
+      projectType: 0,
+      sprintNumber: 0,
+      projectAssignedUsersViewModel: [
+        {
+          userId: "",
+          projectRoles: [
+            {
+              projectRole: 0
+            }
+          ]
+        }
+      ],
+      attachmentEditViewModels: [
+        {
+          id: "",
+          fileName: "",
+          filePath: "",
+          uploadDate: "",
+          attachCreatorId: ""
+        }
+      ]
+    }
+  }
 
   return (
     <>
       <Modal
         className="p-0"
         size="lg"
-        show={create?.shoModal?.show}
-        onHide={() => dispatch(RsetShowCreateModal({ show: false }))}>
+        show={showEditProject}
+        onHide={() => setAllProjectList(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
           className="d-flex sideCount text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد وظیفه
+            ویرایش پروژه
           </span>
         </Modal.Header>
         <Modal.Body>
@@ -72,12 +104,12 @@ const EditProjectModal = () => {
           <Btn
             variant="outline-warning"
             title="لغو"
-            onClick={() => dispatch(RsetShowCreateModal({ show: false }))}
+            onClick={() => setAllProjectList(false)}
           />
           <Btn
             variant="outline-primary"
             title="تایید"
-            onClick={handleSubmit((data) => handleCreateProject(data))}
+            onClick={handleSubmit((data) => handleAcceptEditProject(data))}
           />
         </Modal.Footer>
       </Modal>

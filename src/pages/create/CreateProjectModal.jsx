@@ -20,7 +20,8 @@ import gregorian from 'react-date-object/calendars/gregorian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
 
-const CreateProjectModal = () => {
+const CreateProjectModal = ({ showCreateProjectModal
+  , setSowCreateProjectModal }) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
   const [role, setRole] = useState([]);
@@ -107,7 +108,7 @@ const CreateProjectModal = () => {
         id: item?.id
       };
     });
-    dispatch(RsetShowCreateModal({ show: false }));
+    setSowCreateProjectModal(false)
     console.log(handleUsersAssgin);
     console.log(StringHelpers.convertDateEn(data?.createDateTime));
     // downloadFile()
@@ -153,14 +154,14 @@ const CreateProjectModal = () => {
       <Modal
         className="p-0"
         size="lg"
-        show={create?.shoModal?.show}
-        onHide={() => dispatch(RsetShowCreateModal({ show: false }))}>
+        show={showCreateProjectModal}
+        onHide={() => setSowCreateProjectModal(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-          className="d-flex sideCount text-white justify-content-center"
+          className="d-flex bg-danger text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد وظیفه
+            ایجاد پروژه
           </span>
         </Modal.Header>
         <Modal.Body>
@@ -231,7 +232,7 @@ const CreateProjectModal = () => {
           <Btn
             variant="outline-warning"
             title="لغو"
-            onClick={() => dispatch(RsetShowCreateModal({ show: false }))}
+            onClick={() => setSowCreateProjectModal(false)}
           />
           <Btn
             variant="outline-primary"
@@ -239,7 +240,7 @@ const CreateProjectModal = () => {
             onClick={handleSubmit((data) => handleCreateProject(data))}
           />
         </Modal.Footer>
-      </Modal>
+      </Modal >
     </>
   );
 };

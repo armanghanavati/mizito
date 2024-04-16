@@ -42,6 +42,7 @@ const Sidebar = () => {
       </div>
       <div className="my-2">
         <NavLink
+          onClick={() => dispatch(RsetShowCreateModal({ show: true }))}
           to="./boards"
           className={({ isActive }) =>
             isActive
@@ -54,7 +55,6 @@ const Sidebar = () => {
       </div>
       <div className="my-2">
         <NavLink
-          onClick={() => dispatch(RsetShowCreateModal({ show: true }))}
           to="./create"
           className={({ isActive }) =>
             isActive

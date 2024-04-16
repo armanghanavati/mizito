@@ -10,7 +10,8 @@ import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
 ``;
 
-const Boards = () => {
+const CreateBoardModal = ({ showBoardModal
+  , setShowBoardModal }) => {
   const { create } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
@@ -22,6 +23,7 @@ const Boards = () => {
   } = useForm({ reValidateMode: 'onChange' });
 
   const handleCreateBoard = () => {
+    setShowBoardModal(false)
     const postData = {
       name: 'string',
       description: 'string',
@@ -48,14 +50,14 @@ const Boards = () => {
       <Modal
         className="p-0"
         size="lg"
-        show={create?.shoModal?.show}
-        onHide={() => dispatch(RsetShowCreateModal({ show: false }))}>
+        show={showBoardModal}
+        onHide={() => setShowBoardModal(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-          className="d-flex sideCount text-white justify-content-center"
+          className="d-flex bg-warning text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد وظیفه
+            ایجاد بورد
           </span>
         </Modal.Header>
         <Modal.Body>
@@ -64,11 +66,8 @@ const Boards = () => {
               <Row>
                 <Input xl={6} label="نام بورد:" control={control} />
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
-                <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
-                <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
                 <ComboBox name="projectPriority" control={control} label="اولویت:" />
-                <ComboBox name="projectStatus" control={control} label="وضعیت:" />
-                <ComboBox name="projectType" control={control} label="نوع:" />
+                <ComboBox name="projectType" control={control} label="نوع بورد:" />
                 <Row className="mt-4">
                   <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
@@ -95,12 +94,12 @@ const Boards = () => {
           <Btn
             variant="outline-warning"
             title="لغو"
-            onClick={() => dispatch(RsetShowCreateModal({ show: false }))}
+            onClick={() => setShowBoardModal(false)}
           />
           <Btn
             variant="outline-primary"
             title="تایید"
-            onClick={handleSubmit((data) => handleCreateProject(data))}
+            onClick={handleSubmit((data) => handleCreateBoard(data))}
           />
         </Modal.Footer>
       </Modal>
@@ -108,4 +107,4 @@ const Boards = () => {
   );
 };
 
-export default Boards;
+export default CreateBoardModal;

@@ -34,10 +34,8 @@ export const serviceProjects = () => {
     return axios.get(`${baseURL}api/ProjectController/Projects`);
 };
 
-export const serViceEditProject = () => {
-    return axios.get(`${baseURL}api/ProjectController/EditProject`);
+export const serViceEditProject = (postData) => {
+    return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 }
-
-
 
 // www.auto.fanwebco.com/taskmanager_api/api/ProjectController/Projects

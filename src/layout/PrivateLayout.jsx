@@ -12,8 +12,8 @@ const PrivateLayout = ({ children }) => {
   const handleGetAllUsers = async () => {
     try {
       const res = await getAllUsers();
-      if (res?.data?.res === 1) {
-        dispatch(RsetAllUsers(res?.data?.userList));
+      if (res?.data?.code === 1) {
+        dispatch(RsetAllUsers(res?.data?.data?.userList));
       }
       console.log(res);
     } catch (error) {

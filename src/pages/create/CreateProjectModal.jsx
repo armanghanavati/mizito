@@ -8,13 +8,7 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import {
-  createProject,
-  projectPriority,
-  projectRole,
-  projectStatus,
-  projectType
-} from '../../services/masterServices';
+import { createProject } from '../../services/masterServices';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
@@ -33,15 +27,13 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  console.log(main?.projType?.projType);
-
   const addUsersFilter = main?.allUsers?.map((item) => {
     return {
       id: item?.id,
       title: item?.fullName
     };
   });
-
+  console.log(main?.allEnums);
   // let addAllDepartment = []
   // const objectAll = addAllDepartment.({ label: "همه", value: "" })
 
@@ -84,8 +76,6 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
       };
     });
     setShowCreateProjectModal(false);
-    console.log(data);
-    console.log(StringHelpers.convertDateEn(data?.createDateTime));
     // downloadFile()
     const postData = {
       name: data?.name,
@@ -115,6 +105,7 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
         }
       ]
     };
+    console.log(postData);
     const resCreate = await createProject(postData);
     console.log(resCreate);
   };
@@ -170,19 +161,19 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
                 {/* <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} /> */}
                 {/* <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} /> */}
                 <ComboBox
-                  options={main?.projPriorty?.projPriority}
+                  options={main?.allEnums?.priorityList}
                   name="projectPriority"
                   control={control}
                   label="اولویت:"
                 />
                 <ComboBox
-                  options={main?.projStatus?.projStatus}
+                  options={main?.allEnums?.projectStatus}
                   name="projectStatus"
                   control={control}
                   label="وضعیت:"
                 />
                 <ComboBox
-                  options={main?.projType?.projType}
+                  options={main?.allEnums?.projectType}
                   name="projectType"
                   control={control}
                   label="نوع:"

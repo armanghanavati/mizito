@@ -1,49 +1,47 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_URL;
 
 export const login = (postData) => {
-    return axios.post(`${baseURL}api/Account/Login`, postData);
+  return axios.post(`${baseURL}api/Account/Login`, postData);
 };
 
-export const projectRole = () => {
-    return axios.get(`${baseURL}api/Enum/ProjectRole`);
+export const serAllEnums = () => {
+  return axios.get(`${baseURL}api/Enum/AllEnums`);
 };
 
-export const projectStatus = () => {
-    return axios.get(`${baseURL}api/Enum/ProjectStatus`);
-};
-
-export const projectType = () => {
-    return axios.get(`${baseURL}api/Enum/ProjectType`);
-};
-
-export const projectPriority = () => {
-    return axios.get(`${baseURL}api/Enum/ProjectPriority`);
+// دریافت اطلاعات کاربر
+export const getUserRole = () => {
+  return axios.post(`${baseURL}api/Account/UserDetailsByToken`, null);
 };
 
 export const getAllUsers = () => {
-    return axios.get(`${baseURL}api/Account/GetAllUsers`);
+  return axios.get(`${baseURL}api/Account/GetAllUsers`);
 };
 
 export const createProject = (postData) => {
-    return axios.post(`${baseURL}api/ProjectController/CreateProject`, postData);
+  return axios.post(`${baseURL}api/ProjectController/CreateProject`, postData);
 };
 
 export const serviceProjects = () => {
-    return axios.get(`${baseURL}api/ProjectController/Projects`);
+  return axios.get(`${baseURL}api/ProjectController/Projects`);
 };
 
 export const serViceEditProject = (postData) => {
-    return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
-}
+  return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
+};
 
 export const serCreateBoard = (postData) => {
-    return axios.get(`${baseURL}api/BoardController/CreateBoard`);
-}
+  return axios.get(`${baseURL}api/BoardController/CreateBoard`);
+};
 
 // دریافت تمامی بوردهای مخصوص کاربر
 export const serGetBoards = (postData) => {
-    return axios.get(`${baseURL}api/BoardController/Boards`);
-}
+  return axios.get(`${baseURL}api/BoardController/Boards?projectid=${postData}`);
+};
+
+export const serEditBoard = (postData) => {
+  return axios.get(`${baseURL}api/BoardController/EditBoard?boardid=${postData}`);
+};
+
 // www.auto.fanwebco.com/taskmanager_api/api/ProjectController/Projects

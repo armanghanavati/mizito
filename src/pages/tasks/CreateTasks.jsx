@@ -8,13 +8,6 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import {
-  createProject,
-  projectPriority,
-  projectRole,
-  projectStatus,
-  projectType
-} from '../../services/masterServices';
 import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
@@ -25,7 +18,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
   const [sprintNum, setSprintNum] = useState(50);
   const dispatch = useDispatch();
   const {
-    control,
+  control,
     handleSubmit,
     register,
     reset,

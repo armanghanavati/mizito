@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from '../../components/Input';
 import Btn from '../../components/Btn';
-import { login } from '../../services/masterServices'
+import { login } from '../../services/masterServices';
 
 import logo from '../../assets/hostcolor2000-300x300.jpg';
 import { RsetShowLoading } from '../../hooks/slices/main';
+import asyncWrapper from '../../utils/asyncWrapper';
 
-const Login = ({ }) => {
+const Login = ({}) => {
   const [showPass, setShowPass] = useState(false);
   const {
     control,
@@ -32,23 +33,20 @@ const Login = ({ }) => {
   //   }
   // }, []);
 
-  const submitData = async (data) => {
+  const submitData = asyncWrapper(async (data) => {
     const postData = {
       userName: data?.userName,
       password: data?.password
+    };
+    dispatch(RsetShowLoading({ value: true, btnName: 'login' }));
+    const res = await login(postData);
+    console.log(res);
+    dispatch(RsetShowLoading({ value: false }));
+    if (res?.data?.code === 1) {
+      localStorage.setItem('tokenId', res?.data?.jwtToken);
+      navigate('/users/home');
     }
-    try {
-      dispatch(RsetShowLoading({ value: true, btnName: "login" }));
-      const res = await login(postData)
-      console.log(res);
-      dispatch(RsetShowLoading({ value: false }));
-      if (res?.data?.code === 1) {
-        navigate("/users/home")
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  });
 
   return (
     <Container fluid className="vh-100">
@@ -126,7 +124,9 @@ const Login = ({ }) => {
               <Row className="mt-4">
                 <Col sm="12" md="12" xl="12">
                   <p className="">
-                    <Link className="font12 d-flex justify-content-end  text-decoration-none" to="#">
+                    <Link
+                      className="font12 d-flex justify-content-end  text-decoration-none"
+                      to="#">
                       رمز خود را فراموش کرده اید؟
                     </Link>
                   </p>

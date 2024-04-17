@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row } from 'react-bootstrap';
+import { Container, Dropdown, DropdownButton, Nav, NavDropdown, Navbar, Row } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RsetShowCreateModal } from '../hooks/slices/createSlice';
@@ -51,6 +51,23 @@ const Sidebar = () => {
           }>
           <i className="font20 fw-bold bi bi-clipboard-data" />
           <span className="me-2 "> بورد</span>
+          {/* <div>
+            <Navbar color='white' variant="white" className='text-white' expand="lg">
+              <Container fluid className='text-white'>
+                <Navbar.Collapse  id="navbar-dark-example" className='text-white'>
+                  <Nav>
+                    <NavDropdown align="end" id="" title="بورد" className='text-white' menuVariant="danger">
+                      <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
+                      <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                    </NavDropdown>
+                  </Nav>
+                </Navbar.Collapse>
+              </Container>
+            </Navbar>
+          </div> */}
         </NavLink>
       </div>
       <div className="my-2">

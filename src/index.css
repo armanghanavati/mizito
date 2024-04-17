@@ -296,3 +296,19 @@ body * {
 .spinner {
   animation: spin infinite 1s linear;
 }
+
+/* drop down */
+.btn.show,
+.btn:active {
+  color: white !important;
+  border-color: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.dropdown-toggle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}

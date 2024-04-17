@@ -75,7 +75,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-            <Row>
+              <Row>
                 <Input xl={6} label="نام پروژه:" name="name" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ ساخت:" control={control} />
                 <Controller
@@ -98,28 +98,6 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
                   control={control}
                   label="اولویت:"
                 />
-                <ComboBox
-                  options={main?.projStatus?.projStatus}
-                  name="projectStatus"
-                  control={control}
-                  label="وضعیت:"
-                />
-                <ComboBox
-                  options={main?.projType?.projType}
-                  name="projectType"
-                  control={control}
-                  label="نوع:"
-                />
-                <Row className="mt-4">
-                  <SwitchCase
-                    value={sprintNum}
-                    onChange={(e) => setSprintNum(e.target.value)}
-                    name="sprintNumber"
-                    range
-                    label="سرعت پروژه:"
-                  />
-                </Row>
-                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
                 <Row>
                   <Input
                     name="projectCreatorFullName"

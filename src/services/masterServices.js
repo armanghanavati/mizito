@@ -42,4 +42,8 @@ export const serCreateBoard = (postData) => {
     return axios.get(`${baseURL}api/BoardController/CreateBoard`);
 }
 
+// دریافت تمامی بوردهای مخصوص کاربر
+export const serGetBoards = (postData) => {
+    return axios.get(`${baseURL}api/BoardController/Boards`);
+}
 // www.auto.fanwebco.com/taskmanager_api/api/ProjectController/Projects

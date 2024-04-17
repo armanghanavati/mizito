@@ -248,6 +248,7 @@ body * {
   border-radius: 50%;
   animation: alternate 2s linear infinite;
 }
+
 .loading-bar {
   /* top: 50%; */
   /* box-shadow: 0 0 40px 1000px rgba(0, 0, 0, 0.44); */

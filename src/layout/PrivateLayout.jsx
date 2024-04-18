@@ -2,13 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { Col } from 'react-bootstrap';
-import {
-  getAllUsers,
-  projectPriority,
-  projectRole,
-  projectStatus,
-  projectType
-} from '../services/masterServices';
+import { getAllUsers, getUserRole, serAllEnums } from '../services/masterServices';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   RsetAllEnums,
@@ -19,6 +13,7 @@ import {
   RsetProjType
 } from '../hooks/slices/main';
 import StringHelpers from '../helpers/StringHelpers';
+import asyncWrapper from '../utils/asyncWrapper';
 
 const PrivateLayout = ({ children }) => {
   const dispatch = useDispatch();
@@ -26,38 +21,34 @@ const PrivateLayout = ({ children }) => {
 
   console.log(main?.allEnums);
 
-  const handleProjectRole = async () => {
-    try {
-      const resRole = await projectRole();
-      if (resRole?.data?.code === 1) {
-        const fixComboRole = StringHelpers?.convertComboBox(resRole?.data?.data);
-        dispatch(RsetProjRole({ projRoles: fixComboRole }));
-      }
-      const resPriority = await projectPriority();
-      if (resPriority?.data?.code === 1) {
-        const fixComboPriorty = StringHelpers?.convertComboBox(resPriority?.data?.data);
-        dispatch(RsetProjPriorty({ projPriority: fixComboPriorty }));
-      }
-      const resStatus = await projectStatus();
-      if (resStatus?.data?.code === 1) {
-        const fixComboStatus = StringHelpers?.convertComboBox(resStatus?.data?.data);
-        dispatch(RsetProjStatus({ projStatus: fixComboStatus }));
-      }
-      const resType = await projectType();
-      if (resType?.data?.code === 1) {
-        const fixComboType = StringHelpers?.convertComboBox(resType?.data?.data);
-        dispatch(RsetProjType({ projType: fixComboType }));
-      }
-    } catch (error) {
-      console.log(error);
+  const handleProjectRole = asyncWrapper(async () => {
+    const resRole = await serAllEnums();
+    if (resRole?.data?.code === 1) {
+      console.log(resRole);
+      const projectRole = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectRole);
+      const projectStatus = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectStatus);
+      const projectType = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectType);
+
+      // const fixComboRole = StringHelpers?.convertComboBox(resRole?.data?.data);
+      const priorityList = StringHelpers?.convertComboBox(resRole?.data?.data?.Priority);
+      dispatch(RsetAllEnums({ priorityList, projectRole, projectStatus, projectType }));
     }
-  };
+  });
+
+  const handleGetUserRole = asyncWrapper(async () => {
+    const res = await getUserRole();
+    console.log(res);
+    if (res?.data?.code === 1) {
+      dispatch(RsetAllUsers(res?.data?.data));
+    }
+  });
 
   const handleGetAllUsers = async () => {
     try {
       const res = await getAllUsers();
       if (res?.data?.code === 1) {
-        dispatch(RsetAllUsers(res?.data?.data?.userList));
+        console.log(res);
+        dispatch(RsetAllUsers(res?.data?.data));
       }
       console.log(res);
     } catch (error) {
@@ -66,6 +57,7 @@ const PrivateLayout = ({ children }) => {
   };
 
   useEffect(() => {
+    handleGetUserRole();
     handleGetAllUsers();
     handleProjectRole();
   }, []);

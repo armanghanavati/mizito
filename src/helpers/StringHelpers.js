@@ -56,7 +56,7 @@ export default class StringHelpers {
     return result.join('');
   }
   static convertDateEn(date) {
-    return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DDTHH:mm:ss.sss');
+    return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DDTHH:mm:ss.SSSZ');
   }
   static convertComboBox(data) {
     const fixData = data?.map((item, index) => {

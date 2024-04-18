@@ -10,20 +10,26 @@ import EditBoardModal from './EditBoardModal';
 const Boards = () => {
   const { create } = useSelector((state) => state);
   const [stepOneHead, setStepOneHead] = useState('مرحله اول');
-  const [stepTwoHead, setStepTwoHead] = useState('مرحله دوم');
-  const [stepThirdHead, setStepThirdHead] = useState('مرحله سوم');
-  const [stepFourthHead, setStepFourthHead] = useState('مرحله چهارم');
+  const [showBoardsFixed, setShowBoardsFixed] = useState([]);
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
   const [showEditBoardModal, setShowEditBoardModal] = useState(false);
 
   const handleGetBoards = asyncWrapper(async () => {
     if (!!create?.fieldsEditProject?.editProjectData?.id) {
-      console.log(create?.fieldsEditProject?.editProjectData?.projectCreatorId);
       const resGetBoard = await serGetBoards(
-        create?.fieldsEditProject?.editProjectData?.projectCreatorId
+        create?.fieldsEditProject?.editProjectData?.id
       );
-      console.log(resGetBoard);
+      const fixBoards = resGetBoard?.data?.data?.map((item) => {
+        return (
+          <>
+            {item?.name}
+          </>
+        )
+      })
+      setShowBoardsFixed(fixBoards)
+      console.log(fixBoards);
+      return resGetBoard.data;
     } else {
     }
   });
@@ -34,12 +40,15 @@ const Boards = () => {
 
   return (
     <>
+      <Col className='bg-light p-3' >
+        تاریخ ساخت پروژه:
+      </Col>
       <Row className="mx-1 my-3">
         <Col className=" justify-content-center" xxl="2">
           <Col
             xxl="2"
             className="d-flex align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 rounded bg-warning">
-            <span>{stepOneHead}</span>
+            <span>{showBoardsFixed || stepOneHead}</span>
             <i
               onClick={() => setShowEditBoardModal(true)}
               className="cursorPointer bi bi-sliders d-flex align-items-center"

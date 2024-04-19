@@ -8,11 +8,13 @@ import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import asyncWrapper from '../../utils/asyncWrapper';
+import { serCreateBoardGet } from '../../services/masterServices';
 ``;
 
-const CreateBoardModal = ({ showBoardModal
-  , setShowBoardModal }) => {
-  const { create } = useSelector((state) => state);
+const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => {
+  const { create, main } = useSelector((state) => state);
+  console.log(main?.allUsers?.userAssigned);
   const dispatch = useDispatch();
   const {
     control,
@@ -22,12 +24,14 @@ const CreateBoardModal = ({ showBoardModal
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  const handleCreateBoard = () => {
-    setShowBoardModal(false)
-    const postData = {
+  const handleCreateBoard = asyncWrapper(async (data) => {
+    setShowCreateBoardModal(false);
+    console.log(data);
+    console.log(response);
+    const postDatePost = {
       name: 'string',
       description: 'string',
-      createDateTime: '2024-04-15T19:30:21.508Z',
+      createDateTime: '2024-04-18T15:19:53.015Z',
       sprintNumber: 0,
       projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       projectType: 0,
@@ -43,21 +47,21 @@ const CreateBoardModal = ({ showBoardModal
         }
       ]
     };
-  };
+  });
 
   return (
     <>
       <Modal
         className="p-0"
         size="lg"
-        show={showBoardModal}
-        onHide={() => setShowBoardModal(false)}>
+        show={showCreateBoardModal}
+        onHide={() => setShowCreateBoardModal(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
           className="d-flex bg-warning text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد بورد
+            افزودن بورد
           </span>
         </Modal.Header>
         <Modal.Body>
@@ -74,7 +78,12 @@ const CreateBoardModal = ({ showBoardModal
                 <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
                 <Row>
                   <Input xl={6} label="ایجاد توسط:" control={control} />
-                  <ComboBox xl={6} control={control} label="اختصاص به:" />
+                  <ComboBox
+                    options={main?.allUsers?.userAssigned}
+                    xl={6}
+                    control={control}
+                    label="اختصاص به:"
+                  />
                 </Row>
                 <Controller
                   name={name}
@@ -94,7 +103,7 @@ const CreateBoardModal = ({ showBoardModal
           <Btn
             variant="outline-warning"
             title="لغو"
-            onClick={() => setShowBoardModal(false)}
+            onClick={() => setShowCreateBoardModal(false)}
           />
           <Btn
             variant="outline-primary"

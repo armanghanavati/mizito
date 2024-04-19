@@ -74,7 +74,12 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     const handleUsersAssgin = data?.assginTo?.map((item) => {
       console.log(item);
       return {
-        id: item?.id
+        userId: item?.id,
+        projectRoles: [
+          {
+            projectRole: 0
+          }
+        ]
       };
     });
     setShowCreateProjectModal(false);
@@ -87,16 +92,7 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
       sprintNumber: sprintNum,
-      projectAssignedUsersViewModel: [
-        {
-          userId: handleUsersAssgin,
-          projectRoles: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
+      projectAssignedUsersViewModel: handleUsersAssgin,
       attachmentsCreateViewModel: [
         // {
         //   id: '',
@@ -111,7 +107,6 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     const resCreate = await createProject(postData);
     console.log(resCreate);
   };
-
 
   //   "projectAssignedUsersViewModel": [
   //     {

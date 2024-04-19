@@ -1,5 +1,13 @@
 import React from 'react';
-import { Container, Dropdown, DropdownButton, Nav, NavDropdown, Navbar, Row } from 'react-bootstrap';
+import {
+  Container,
+  Dropdown,
+  DropdownButton,
+  Nav,
+  NavDropdown,
+  Navbar,
+  Row
+} from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RsetShowCreateModal } from '../hooks/slices/createSlice';
@@ -40,18 +48,19 @@ const Sidebar = () => {
         <i className="font20 fw-bold bi bi-clipboard2-check" />
         <span className="me-2 text-light">گزارش کار</span>
       </div>
-      <div className="my-2">
-        <NavLink
-          onClick={() => dispatch(RsetShowCreateModal({ show: true }))}
-          to="./boards"
-          className={({ isActive }) =>
-            isActive
-              ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
-              : 'bgGhost text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
-          }>
-          <i className="font20 fw-bold bi bi-clipboard-data" />
-          <span className="me-2 "> بورد</span>
-          {/* <div>
+      {create?.fieldsEditProject?.editProjectData?.id && (
+        <div className="my-2">
+          <NavLink
+            onClick={() => dispatch(RsetShowCreateModal({ show: true }))}
+            to="./boards"
+            className={({ isActive }) =>
+              isActive
+                ? 'bg-white tex-orange fw-bold shadow-sm text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
+                : 'bgGhost text_animate_side text-decoration-none  cursorPointer text-whit-100 py-2 px-2 d-flex justify-content-start align-items-center m-1 fw-sm rounded-pill text-start'
+            }>
+            <i className="font20 fw-bold bi bi-clipboard-data" />
+            <span className="me-2 "> بورد</span>
+            {/* <div>
             <Navbar color='white' variant="white" className='text-white' expand="lg">
               <Container fluid className='text-white'>
                 <Navbar.Collapse  id="navbar-dark-example" className='text-white'>
@@ -68,8 +77,9 @@ const Sidebar = () => {
               </Container>
             </Navbar>
           </div> */}
-        </NavLink>
-      </div>
+          </NavLink>
+        </div>
+      )}
       <div className="my-2">
         <NavLink
           to="./create"

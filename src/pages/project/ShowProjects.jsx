@@ -16,7 +16,8 @@ const ShowProjects = () => {
 
   const [allProjectList, setAllProjectList] = useState([]);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
-
+  const [showEditProject, setShowEditProject] = useState(false);
+  const [itemEditProject, setItemEditProject] = useState({});
   const handleGetProjects = async () => {
     try {
       dispatch(RsetShowLoading({ value: true }));
@@ -35,16 +36,20 @@ const ShowProjects = () => {
     handleGetProjects();
   }, []);
 
-  const handleEditProject = asyncWrapper(async (id) => {
+  const handleNavigateToBoard = asyncWrapper(async (id) => {
     const res = await serViceEditProject(id);
     if (res?.data?.code === 1) {
       navigate('/users/boards');
-      // setShowCreateProjectModal(true);
       console.log(res);
       dispatch(RsetFieldsEditProject({ editProjectData: res?.data?.data }));
     }
     console.log(res);
   });
+
+  const handleEditProject = (item, index) => {
+    setItemEditProject({ item, index });
+    setShowEditProject(true);
+  };
 
   return (
     <>
@@ -52,20 +57,23 @@ const ShowProjects = () => {
         <h3 className="text-secondary my-4">لیست پروژه‌ها</h3>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
           {allProjectList?.map((item, index) => (
-            <div key={index} className=" col mb-4">
-              <Col
-                onClick={() => handleEditProject(item?.id)}
-                className="cursorPointer  bg-white shadow-sm p-3 rounded-3"
-                md="12"
-                lg="12"
-                xl="12"
-                xxl="12">
-                <div className=" d-flex justify-content-center"> {item?.name} </div>
-                <hr />
-                <Col className="">
-                  <i className="bi  font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
-                </Col>
-                {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
+            <>
+              <div key={index} className=" col mb-4">
+                <Col className=" shadow-sm p-3 rounded-3" md="12" lg="12" xl="12" xxl="12">
+                  <div className=" d-flex justify-content-between">
+                    <span>{item?.name}</span>
+                    <span>
+                      <i
+                        onClick={() => handleEditProject(item, index)}
+                        className="cursorPointer font15 text-secondary bi bi-gear"
+                      />{' '}
+                    </span>
+                  </div>
+                  <hr />
+                  <Col onClick={() => handleNavigateToBoard(item?.id)} className="cursorPointer">
+                    <i className="bi  font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
+                  </Col>
+                  {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
                 <div className=" ">توضیحات: {item?.description} </div>
                 <div className=" ">تاریخ شروع: {item?.dueDateTime} </div>
                 <div className=" ">تاریخ پایان: {item?.endDateTime} </div>
@@ -74,8 +82,9 @@ const ShowProjects = () => {
                 <div className=" ">وضعیت پروژه:{item?.projectStatus} </div>
                 <div className=" ">نوع پروژه:{item?.projectType} </div>
                 <div className=" ">سرعت پروژه:{item?.sprintNumber} </div> */}
-              </Col>
-            </div>
+                </Col>
+              </div>
+            </>
           ))}
           <div className="d-flex justify-content-center  rounded-pill">
             <i
@@ -89,6 +98,13 @@ const ShowProjects = () => {
         <CreateProjectModal
           showCreateProjectModal={showCreateProjectModal}
           setShowCreateProjectModal={setShowCreateProjectModal}
+        />
+      )}
+      {showEditProject && (
+        <EditProjectModal
+          showEditProject={showEditProject}
+          setShowEditProject={setShowEditProject}
+          itemEditProject={itemEditProject}
         />
       )}
     </>

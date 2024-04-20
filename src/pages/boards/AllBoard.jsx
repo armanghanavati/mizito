@@ -99,6 +99,11 @@ const AllBoard = () => {
     }
   });
 
+  const handleShowEditBoard = (data, index) => {
+    console.log(data, index);
+    setShowEditBoardModal(true);
+  };
+
   useEffect(() => {
     handleGetBoards();
   }, []);
@@ -120,15 +125,23 @@ const AllBoard = () => {
             return (
               <div key={index} className="">
                 <Col
-                  onClick={() => handleRedirectBoard(item, index)}
-                  className="cursorPointer  bg-white shadow-sm p-3 rounded-3"
+                  className="  bg-white shadow-sm p-3 rounded-3"
                   md="12"
                   lg="12"
+                  
                   xl="12"
                   xxl="12">
-                  <div className=" d-flex justify-content-center"> {item?.name} </div>
+                  <div className=" d-flex justify-content-between">
+                    <span>{item?.name}</span>
+                    <span>
+                      <i
+                        onClick={() => handleShowEditBoard(item, index)}
+                        className="cursorPointer font15 text-secondary bi bi-gear"
+                      />{' '}
+                    </span>
+                  </div>
                   <hr />
-                  <Col className="">
+                  <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
                     <i className="bi  font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
                   </Col>
                   {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>

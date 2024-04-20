@@ -31,6 +31,10 @@ export const serViceEditProject = (postData) => {
   return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 };
 
+export const serPutEditProject = (postData) => {
+  return axios.get(`${baseURL}api/ProjectController/EditProject`,postData);
+};
+
 export const serCreateBoardGet = (id) => {
   return axios.get(`${baseURL}api/BoardController/CreateBoard?projectid=${id}`);
 };
@@ -48,7 +52,11 @@ export const serEditBoard = (postData) => {
   return axios.get(`${baseURL}api/BoardController/EditBoard?boardid=${postData}`);
 };
 
-// لیست تمامی بوردها
+export const serPutEditBoard = (postData) => {
+  return axios.put(`${baseURL}api/BoardController/EditBoard`, postData);
+};
+
+// لیست تمامی ورک فلوها
 export const serWorkFlows = () => {
   return axios.get(`${baseURL}api/WorkFlowController/WorkFlows`);
 };
@@ -57,7 +65,3 @@ export const serWorkFlows = () => {
 export const serTasks = (id) => {
   return axios.get(`${baseURL}api/TaskController/Tasks?boardid=${id}`);
 };
-
-
-
-// www.auto.fanwebco.com/taskmanager_api/api/ProjectController/Projects

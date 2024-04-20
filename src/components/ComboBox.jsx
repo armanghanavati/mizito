@@ -52,9 +52,9 @@ const ComboBox = ({
         }}
         render={({ field }) => (
           <>
-            <Col className="mt-4" xs={xs} md={md} xl={xl}>
+            <Col className="mt-3" xs={xs} md={md} xl={xl}>
               <label
-                className={`ms-3 ${
+                className={`ms-3 mb-2 ${
                   important && 'star'
                 }  align-items-center input-label input-label-sm lg:input-label-base`}>
                 {label}

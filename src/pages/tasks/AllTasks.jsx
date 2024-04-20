@@ -16,7 +16,7 @@ const AllTasks = ({ boardId }) => {
   }, []);
 
   const fixTaskSubWorkFlow = getTaskSubTasksViewModels?.map((item) => {
-    const filterTaskWorkFlow = item?.workFlow?.filter((id)=>  )
+    // const filterTaskWorkFlow = item?.workFlow?.filter((id)=>  )
     console.log(filterTaskWorkFlow);
   });
 

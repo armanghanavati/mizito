@@ -7,15 +7,17 @@ import AllTasks from '../tasks/AllTasks';
 
 const Board = ({ item }) => {
   const location = useLocation();
-  const [columnsWorkFlow, setColumnsWorkFlow] = useState([]);
-  const [getTaskSubTasksViewModels, setGetTaskSubTasksViewModels] = useState([]);
+  const [workflowList, setWorkflowList] = useState([]);
+  const [tasksList, setTasksList] = useState([]);
+  const [matchedTasks, setMatchedTasks] = useState([]);
+  const [fixTaskToWorkFlow, setFixTaskToWorkFlow] = useState([]);
 
   const handleWorkFlows = asyncWrapper(async () => {
     const resWorkFlows = await serWorkFlows();
     const resTasks = await serTasks(location?.state?.item?.id);
     if (resWorkFlows?.data?.code === 1) {
-      setGetTaskSubTasksViewModels(resTasks?.data?.data);
-      setColumnsWorkFlow(resWorkFlows?.data?.data);
+      setTasksList(resTasks?.data?.data);
+      setWorkflowList(resWorkFlows?.data?.data);
     }
   });
 
@@ -23,38 +25,11 @@ const Board = ({ item }) => {
     handleWorkFlows();
   }, []);
 
-  const tasksTest = getTaskSubTasksViewModels?.[0]?.taskSubTasksViewModels?.map((item) => {
-    console.log(item?.workFlow);
-  });
-
-  console.log(tasksTest);
-
-  const fixColumnsWorkFlow = columnsWorkFlow?.map((item) => {
-    // const filterColmnTasks = item?.filter((id) =>  )
-    const wfId = item?.id;
-    const filterTasks = getTaskSubTasksViewModels?.[0]?.taskSubTasksViewModels?.filter(
-      (item) => item?.workFlow === wfId
-    );
-
-    console.log(filterTasks);
-    return (
-      <>
-        <Col className=" justify-content-center" xxl="2">
-          <Col
-            xxl="2"
-            className="d-flex align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 rounded bg-warning">
-            <span>{item?.name}</span>
-            <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
-          </Col>
-          {/* <Col xxl="2">  </Col> */}
-          <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
-            <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
-            <span>ایجاد موضوع</span>
-          </div>
-        </Col>
-      </>
-    );
-  });
+  // useEffect(() => {
+  //   if (tasksList?.length !== 0) {
+  //     handleMatched();
+  //   }
+  // }, [tasksList]);
 
   return (
     <>
@@ -62,9 +37,31 @@ const Board = ({ item }) => {
         <span>تاریخ ساخت پروژه:</span>
       </Col>
       <Row className="mt-2 mx-1 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-        {fixColumnsWorkFlow}
+        {workflowList.map((wf, wfIndex) => {
+          return (
+            <>
+              <Col className=" justify-content-center" xxl="2">
+                <Col
+                  xxl="2"
+                  className="d-flex align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 rounded bg-warning">
+                  <span>{wf?.name}</span>
+                  <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
+                </Col>
+                <div>
+                  {tasksList?.filter((task) => task?.workFlow === wf?.id)
+                    .map((task , taskIndex) => (
+                      <div onClick={()=>  console.log(task?.id)} className='border shadow cursorPointer my-3 p-4' key={task?.id}>{task?.name}</div>
+                    ))}
+                </div>
+                <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
+                  <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
+                  <span>ایجاد موضوع</span>
+                </div>
+              </Col>
+            </>
+          );
+        })}
       </Row>
-      {/* <AllTasks boardId={location?.state?.item?.id} /> */}
     </>
   );
 };
@@ -107,3 +104,31 @@ export default Board;
 //   />
 // </div>
 // </div> */}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// const handleMatched = () => {
+//   let fixTaskWithWorkFlow = {};
+
+//   // const matched = tasksList?.filter((task) => {
+//   //   return workflowList?.some((item) => item?.id === task?.workFlow);
+//   // });
+
+//   // const unmatched = tasksList?.filter((task) => {
+//   //   return !workflowList?.some((item) => item?.id === task?.workFlow);
+//   // });
+//   // console.log(matched, unmatched);
+//   // setFixTaskToWorkFlow([...matched, ...unmatched]);
+//   const matchedTasks = tasksList?.map((task) => {
+//     const matchingWorkflow = workflowList?.find((item) => item?.id === task?.workFlow);
+//     return matchingWorkflow ? { ...task, workflowItemM: matchingWorkflow } : task;
+//   });
+
+//   const unmatchedWorkflowItems = workflowList?.filter(
+//     (workflow) => !matchedTasks.some((task) => task.workFlow === workflow.id)
+//   );
+//   setFixTaskToWorkFlow([...matchedTasks, ...unmatchedWorkflowItems]);
+// };
+
+// const showFixedBoard = fixTaskToWorkFlow?.map((item) => {
+//   console.log(item);
+//   );
+// });

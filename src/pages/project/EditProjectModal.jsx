@@ -8,9 +8,8 @@ import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
-``;
 
-const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
+const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject }) => {
   const { create } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
@@ -23,9 +22,9 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
 
   const handleAcceptEditProject = async (data) => {
     console.log(data);
-    setAllProjectList(false);
+    setShowEditProject(false);
     const postData = {
-      id: '',
+      id: itemEditProject?.item?.id,
       name: data?.projectName,
       description: '',
       dueDateTime: 'time',
@@ -61,7 +60,7 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
         className="p-0"
         size="lg"
         show={showEditProject}
-        onHide={() => setAllProjectList(false)}>
+        onHide={() => setShowEditProject(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
           className="d-flex sideCount text-white justify-content-center"
@@ -74,7 +73,7 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
           <Form>
             <Container fluid className="mb-3">
               <Row>
-              <Input xl={6} label="ایجاد توسط:" name="projectName" control={control} />
+                <Input xl={6} label="ایجاد توسط:" name="projectName" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
                 <ComboBox name="projectPriority" control={control} label="اولویت:" />
@@ -103,7 +102,7 @@ const EditProjectModal = ({ showEditProject, setAllProjectList }) => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Btn variant="outline-warning" title="لغو" onClick={() => setAllProjectList(false)} />
+          <Btn variant="outline-warning" title="لغو" onClick={() => setShowEditProject(false)} />
           <Btn
             variant="outline-primary"
             title="تایید"

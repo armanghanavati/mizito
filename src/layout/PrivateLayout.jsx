@@ -10,7 +10,8 @@ import {
   RsetProjPriorty,
   RsetProjRole,
   RsetProjStatus,
-  RsetProjType
+  RsetProjType,
+  RsetUserRole
 } from '../hooks/slices/main';
 import StringHelpers from '../helpers/StringHelpers';
 import asyncWrapper from '../utils/asyncWrapper';
@@ -19,12 +20,9 @@ const PrivateLayout = ({ children }) => {
   const dispatch = useDispatch();
   const { main } = useSelector((state) => state);
 
-  console.log(main?.allEnums);
-
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
     if (resRole?.data?.code === 1) {
-      console.log(resRole);
       const projectRole = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectRole);
       const projectStatus = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectStatus);
       const projectType = StringHelpers?.convertComboBox(resRole?.data?.data?.ProjectType);
@@ -37,24 +35,17 @@ const PrivateLayout = ({ children }) => {
 
   const handleGetUserRole = asyncWrapper(async () => {
     const res = await getUserRole();
-    console.log(res);
+    if (res?.data?.code === 1) {
+      dispatch(RsetUserRole(res?.data?.data));
+    }
+  });
+
+  const handleGetAllUsers = asyncWrapper(async () => {
+    const res = await getAllUsers();
     if (res?.data?.code === 1) {
       dispatch(RsetAllUsers(res?.data?.data));
     }
   });
-
-  const handleGetAllUsers = async () => {
-    try {
-      const res = await getAllUsers();
-      if (res?.data?.code === 1) {
-        console.log(res);
-        dispatch(RsetAllUsers(res?.data?.data));
-      }
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     handleGetUserRole();

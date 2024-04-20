@@ -55,7 +55,7 @@ const EditBoardModal = ({ showEditBoardModal, setShowEditBoardModal }) => {
           className="d-flex bg-warning text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ویرایش بورد
+            ایجاد لیست
           </span>
         </Modal.Header>
         <Modal.Body>

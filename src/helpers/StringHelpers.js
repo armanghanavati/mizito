@@ -1,5 +1,9 @@
 import gregorian from 'react-date-object/calendars/gregorian';
 import gregorian_fa from 'react-date-object/locales/gregorian_fa';
+import persian from 'react-date-object/calendars/persian';
+import persian_fa from 'react-date-object/locales/persian_fa';
+import { DateObject } from 'react-multi-date-picker';
+
 export default class StringHelpers {
   static convertNumbersToLatin(input) {
     if (!input) {
@@ -56,8 +60,15 @@ export default class StringHelpers {
     return result.join('');
   }
   static convertDateEn(date) {
-    return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DDTHH:mm:ss.sss');
+    const fixDate = new DateObject(new Date(date))
+
+    return fixDate?.format('YYYY-MM-DDTHH:mm:ss.SSS');
   }
+  static convertDateFa(date) {
+    const fixDate = new DateObject(new Date(date))?.convert(persian, persian_fa)?.format("YYYY/MM/DD")
+    return fixDate
+  }
+
   static convertComboBox(data) {
     const fixData = data?.map((item, index) => {
       return {

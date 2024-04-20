@@ -8,6 +8,7 @@ import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
 import CreateProjectModal from '../create/CreateProjectModal';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const ShowProjects = () => {
   const dispatch = useDispatch();
@@ -45,19 +46,14 @@ const ShowProjects = () => {
     console.log(res);
   });
 
-  const handleOnTouchMove = () => {
-    console.log('HHHHHHHHHh');
-  };
-
   return (
     <>
       <Container className="mt-2">
-        <h3 className="my-4 text-secondary">لیست پروژه‌ها</h3>
+        <h3 className="text-secondary my-4">لیست پروژه‌ها</h3>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
           {allProjectList?.map((item, index) => (
             <div key={index} className=" col mb-4">
               <Col
-                onTouchMove={handleOnTouchMove}
                 onClick={() => handleEditProject(item?.id)}
                 className="cursorPointer  bg-white shadow-sm p-3 rounded-3"
                 md="12"

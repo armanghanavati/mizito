@@ -3,14 +3,16 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from '../pages/home/Home';
 import ShowProjects from '../pages/project/ShowProjects';
 import Create from '../pages/create/index';
-import Boards from '../pages/boards/Boards';
+import AllBoard from '../pages/boards/AllBoard';
+import Board from '../pages/boards/Board';
 
 const PrivateRoutes = () => {
   return (
     <>
       <Routes>
         <Route path="/projects" element={<ShowProjects />} />
-        <Route path="/boards" element={<Boards />} />
+        <Route path="/boards" element={<AllBoard />} />
+        <Route path="/board:id" element={<Board />} />
         <Route path="/create" element={<Create />} />
         <Route path="/home" element={<Home />} />
         {/* <Route

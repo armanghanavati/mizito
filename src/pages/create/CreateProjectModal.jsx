@@ -28,12 +28,13 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
   } = useForm({ reValidateMode: 'onChange' });
 
   const addUsersFilter = main?.allUsers?.map((item) => {
+    console.log(item);
     return {
       id: item?.id,
       title: item?.fullName
     };
   });
-  console.log(main?.allEnums);
+  console.log(main?.allUsers);
   // let addAllDepartment = []
   // const objectAll = addAllDepartment.({ label: "همه", value: "" })
 
@@ -71,8 +72,14 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
 
   const handleCreateProject = async (data) => {
     const handleUsersAssgin = data?.assginTo?.map((item) => {
+      console.log(item);
       return {
-        id: item?.id
+        userId: item?.id,
+        projectRoles: [
+          {
+            projectRole: 0
+          }
+        ]
       };
     });
     setShowCreateProjectModal(false);
@@ -80,29 +87,20 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     const postData = {
       name: data?.name,
       description: data?.description,
-      dueDateTime: StringHelpers.convertDateEn(data?.createDateTime),
+      dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
       projectPriority: data?.projectPriority?.id,
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
       sprintNumber: sprintNum,
-      projectAssignedUsersViewModel: [
-        {
-          userId: handleUsersAssgin,
-          projectRoles: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
+      projectAssignedUsersViewModel: handleUsersAssgin,
       attachmentsCreateViewModel: [
-        {
-          id: '',
-          fileName: '',
-          filePath: '',
-          uploadDate: '',
-          attachCreatorId: ''
-        }
+        // {
+        //   id: '',
+        //   fileName: '',
+        //   filePath: '',
+        //   uploadDate: '',
+        //   attachCreatorId: ''
+        // }
       ]
     };
     console.log(postData);
@@ -110,6 +108,46 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     console.log(resCreate);
   };
 
+  //   "projectAssignedUsersViewModel": [
+  //     {
+  //       "userId": "ca2cc72f-d8e2-40d0-baf1-83fe9fa57a75",
+  //       "userName": "AMohammadi",
+  //       "fullName": "امیرعباس قره محمدی",
+  //       "projectUsersRoleViewModel": [
+  //         {
+  //           "projectRole": 1
+  //         },
+  //         {
+  //           "projectRole": 2
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       "userId": "d0ecd2d9-68ce-4626-aa80-5feb3019eda3",
+  //       "userName": "Ajafari",
+  //       "fullName": "علی جعفری",
+  //       "projectUsersRoleViewModel": [
+  //         {
+  //           "projectRole": 2
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       "userId": "eecdfc01-b308-47e4-9acd-bc15a83a04c3",
+  //       "userName": "JAsghari",
+  //       "fullName": "جواد اصغری",
+  //       "projectUsersRoleViewModel": [
+  //         {
+  //           "projectRole": 0
+  //         },
+  //         {
+  //           "projectRole": 1
+  //         }
+  //       ]
+  //     }
+  //   ],
+  //     "projectAttachmentsViewModel": []
+  // },
   // return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DD');
   useEffect(() => {
     console.log('Eres');

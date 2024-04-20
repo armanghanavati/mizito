@@ -13,7 +13,6 @@ function App() {
   return (
     <div>
       <Loading isLoading={main?.showLoading?.value ? true : false} />
-      {/* <Loading isLoading={main?.showLoading?.value ? true : false} /> */}
       <Router>
         <Routes>
           <Route

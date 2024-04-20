@@ -3,7 +3,6 @@ import { store } from '../hooks/store';
 
 axios.interceptors.request.use(
   function (config) {
-    console.log(config);
     if (!!localStorage.getItem('tokenId')) {
       config.headers.Authorization = `Bearer ${localStorage.getItem('tokenId')}`;
     }
@@ -16,6 +15,7 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 
 axios.interceptors.response.use(
   async function (response) {

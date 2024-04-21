@@ -60,13 +60,15 @@ export default class StringHelpers {
     return result.join('');
   }
   static convertDateEn(date) {
-    const fixDate = new DateObject(new Date(date))
+    const fixDate = new DateObject(new Date(date));
 
     return fixDate?.format('YYYY-MM-DDTHH:mm:ss.SSS');
   }
   static convertDateFa(date) {
-    const fixDate = new DateObject(new Date(date))?.convert(persian, persian_fa)?.format("YYYY/MM/DD")
-    return fixDate
+    const fixDate = new DateObject(new Date(date))
+      ?.convert(persian, persian_fa)
+      ?.format('YYYY/MM/DD');
+    return fixDate;
   }
 
   static convertComboBox(data) {
@@ -78,14 +80,8 @@ export default class StringHelpers {
     });
     return fixData;
   }
-  static convertEditFilterComboBox(data) {
-    // const fixData = data?.map((item, index) => {
-    //   return {
-    //     id: index,
-    //     title: item
-    //   };
-    // });
-    console.log(data);
-    return "";
+  static findCombo(data, state) {
+    const fixCombo = state?.filter((item) => item?.id === data);
+    return fixCombo;
   }
 }

@@ -15,18 +15,24 @@ const SwitchCase = ({
   control,
   onChange,
   value,
-  radioType = false
+  radioType = false,
+  min,
+  max
 }) => {
   return (
     <>
       {range ? (
         <>
-          <label htmlFor={name} className="px-2">
+          <label htmlFor={name} className="my-2 me-1 px-2">
             {label}
             {value}
           </label>
           <Col className=" d-flex align-items-end">
-            <FormRange name={name} value={value} onChange={onChange} />
+            <Controller
+              name={name}
+              control={control}
+              render={({ field }) => <FormRange name={name} min={min} max={max} {...field} />}
+            />
           </Col>
         </>
       ) : radioType ? (
@@ -39,31 +45,39 @@ const SwitchCase = ({
           name={name}
           control={control}
           render={({ field }) => (
-            <>
-              <Col className=" d-flex align-items-end">
-                <Form.Check
-                  className={`d-flex justify-content-center mb-1 cursorPointer ${className}`}
-                  color="#00000"
-                  width={400}
-                  {...field}
-                  id={name}
-                  type="checkbox"
-                  checked={field.value}
-                  onChange={(e) => field.onChange(e.target.checked)}
-                />
-                <label htmlFor={name} className="px-2">
-                  {label}
-                </label>
-              </Col>
-            </>
+            <Col className=" d-flex align-items-end">
+              <Form.Check
+                className={`d-flex justify-content-center mb-1 cursorPointer ${className}`}
+                color="#00000"
+                width={400}
+                {...field}
+                id={name}
+                type="checkbox"
+                checked={field.value}
+                onChange={(e) => field.onChange(e.target.checked)}
+              />
+              <label htmlFor={name} className="px-2">
+                {label}
+              </label>
+            </Col>
           )}
         />
       ) : (
         <Col className=" d-flex align-items-end">
-          <Form.Check inline label={label} name="group1" type="checkbox" />
-          {/* <label htmlFor={name} className="px-2">
-                            {label}
-                        </label> */}
+          <Controller
+            name={name}
+            control={control}
+            render={({ field }) => (
+              <Form.Check
+                {...field}
+                className={className}
+                inline
+                label={label}
+                name="group1"
+                type="checkbox"
+              />
+            )}
+          />
         </Col>
       )}
     </>

@@ -6,9 +6,11 @@ import { Provider } from 'react-redux';
 import { store } from './hooks/store.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import Toastify from './components/Toastify.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
     <App />
+    <Toastify />
   </Provider>
 );

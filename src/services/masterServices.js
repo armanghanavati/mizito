@@ -39,6 +39,7 @@ export const serCreateBoardGet = (id) => {
   return axios.get(`${baseURL}api/BoardController/CreateBoard?projectid=${id}`);
 };
 
+// ایجاد بورد
 export const serCreateBoardPost = (postData) => {
   return axios.post(`${baseURL}api/BoardController/CreateBoard`, postData);
 };

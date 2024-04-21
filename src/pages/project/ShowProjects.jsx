@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { serViceEditProject, serviceProjects } from '../../services/masterServices';
 import EditProjectModal from './EditProjectModal';
-import { RsetShowLoading } from '../../hooks/slices/main';
-import { useDispatch } from 'react-redux';
+import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
+import { useDispatch, useSelector } from 'react-redux';
 import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
 import CreateProjectModal from '../create/CreateProjectModal';
 import asyncWrapper from '../../utils/asyncWrapper';
@@ -13,11 +13,13 @@ import { Link } from 'react-router-dom';
 const ShowProjects = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { create } = useSelector((state) => state);
   const [allProjectList, setAllProjectList] = useState([]);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [showEditProject, setShowEditProject] = useState(false);
-  const [itemEditProject, setItemEditProject] = useState({});
+  const [itemAndIndexProject, setItemAndIndexProject] = useState({});
+  const [editProjectFields, setEditProjectFields] = useState({});
+
   const handleGetProjects = async () => {
     try {
       dispatch(RsetShowLoading({ value: true }));
@@ -37,18 +39,26 @@ const ShowProjects = () => {
   }, []);
 
   const handleNavigateToBoard = asyncWrapper(async (id) => {
-    const res = await serViceEditProject(id);
-    if (res?.data?.code === 1) {
-      navigate('/users/boards');
-      console.log(res);
-      dispatch(RsetFieldsEditProject({ editProjectData: res?.data?.data }));
-    }
-    console.log(res);
+    dispatch(RsetFieldsEditProject({ ...create?.fieldsEditProject, projectId: id }));
+    navigate(`/users/allBoardForm:${id}`);
   });
 
-  const handleEditProject = (item, index) => {
-    setItemEditProject({ item, index });
-    setShowEditProject(true);
+  const handleEditProject = asyncWrapper(async (item, index) => {
+    dispatch(RsetShowLoading({ value: true }));
+    const res = await serViceEditProject(item?.id);
+    dispatch(RsetShowLoading({ value: false }));
+    if (res?.data?.code === 1) {
+      setEditProjectFields(res?.data?.data);
+      setItemAndIndexProject({ item, index });
+      setShowCreateProjectModal(true);
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  });
+
+  const handleCreateProject = () => {
+    setEditProjectFields({});
+    setShowCreateProjectModal(true);
   };
 
   return (
@@ -88,7 +98,7 @@ const ShowProjects = () => {
           ))}
           <div className="d-flex justify-content-center  rounded-pill">
             <i
-              onClick={() => setShowCreateProjectModal(true)}
+              onClick={handleCreateProject}
               className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle"
             />
           </div>
@@ -96,15 +106,19 @@ const ShowProjects = () => {
       </Container>
       {showCreateProjectModal && (
         <CreateProjectModal
+          editProjectFields={editProjectFields}
+          handleGetProjects={handleGetProjects}
           showCreateProjectModal={showCreateProjectModal}
           setShowCreateProjectModal={setShowCreateProjectModal}
+          itemAndIndexProject={itemAndIndexProject}
         />
       )}
       {showEditProject && (
         <EditProjectModal
+          handleGetProjects={handleGetProjects}
           showEditProject={showEditProject}
           setShowEditProject={setShowEditProject}
-          itemEditProject={itemEditProject}
+          itemAndIndexProject={itemAndIndexProject}
         />
       )}
     </>

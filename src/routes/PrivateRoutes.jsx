@@ -11,7 +11,7 @@ const PrivateRoutes = () => {
     <>
       <Routes>
         <Route path="/projects" element={<ShowProjects />} />
-        <Route path="/boards" element={<AllBoard />} />
+        <Route path="/allBoardForm:id" element={<AllBoard />} />
         <Route path="/board:id" element={<Board />} />
         <Route path="/create" element={<Create />} />
         <Route path="/home" element={<Home />} />

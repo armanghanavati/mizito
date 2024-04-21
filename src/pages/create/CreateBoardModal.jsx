@@ -9,7 +9,7 @@ import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serCreateBoardGet } from '../../services/masterServices';
+import { serCreateBoardGet, serCreateBoardPost } from '../../services/masterServices';
 ``;
 
 const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => {
@@ -27,7 +27,6 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
   const handleCreateBoard = asyncWrapper(async (data) => {
     setShowCreateBoardModal(false);
     console.log(data);
-    console.log(response);
     const postDatePost = {
       name: 'string',
       description: 'string',
@@ -47,6 +46,8 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
         }
       ]
     };
+    const resCreateBoard = await serCreateBoardPost(postData);
+    console.log(resCreateBoard);
   });
 
   return (
@@ -68,17 +69,22 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input xl={6} label="نام بورد:" control={control} />
+                <Input name="name" xl={6} label="نام بورد:" control={control} />
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
-                <ComboBox name="projectPriority" control={control} label="اولویت:" />
-                <ComboBox name="projectType" control={control} label="نوع بورد:" />
+                <ComboBox
+                  name="projectType"
+                  options={main?.allUsers?.userAssigned}
+                  xl={6}
+                  control={control}
+                  label="نوع پروژه:"
+                />
+
                 <Row className="mt-4">
-                  <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
+                  <SwitchCase control={control} name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
-                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
                 <Row>
-                  <Input xl={6} label="ایجاد توسط:" control={control} />
                   <ComboBox
+                    name=""
                     options={main?.allUsers?.userAssigned}
                     xl={6}
                     control={control}
@@ -86,7 +92,7 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
                   />
                 </Row>
                 <Controller
-                  name={name}
+                  name="description"
                   control={control}
                   render={({ field }) => (
                     <>

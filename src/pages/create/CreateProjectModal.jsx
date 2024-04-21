@@ -13,8 +13,15 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
+import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal }) => {
+const CreateProjectModal = ({
+  itemAndIndexProject,
+  showCreateProjectModal,
+  setShowCreateProjectModal,
+  editProjectFields,
+  handleGetProjects
+}) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
   const dispatch = useDispatch();
@@ -23,55 +30,20 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
     handleSubmit,
     register,
     reset,
+    watch,
     formState: { errors },
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
   const addUsersFilter = main?.allUsers?.map((item) => {
-    console.log(item);
     return {
       id: item?.id,
       title: item?.fullName
     };
   });
-  console.log(main?.allUsers);
-  // let addAllDepartment = []
-  // const objectAll = addAllDepartment.({ label: "همه", value: "" })
-
-  // const mapDeps = allDeps.map((dep) => addAllDepartment.push({ label: dep.label, value: dep.value }))
-
-  // const upload = (e) => {
-  //   console.warn(e.target.files)
-  //   const files = e.target.files
-  //   const formData = new FormData()
-  //   formData.append('img', files[0])
-  //   fetch('http://127.0.0.1:8000/api/store', {
-  //     method: 'POST',
-  //     body: formData,
-  //   }).then((resp) => {
-  //     resp.json().then((result) => {
-  //       console.warn(result)
-  //     })
-  //   })
-  // }
-
-  // const downloadFile = (DOC, Caption, Format) => {
-  //   const raw = window.atob(DOC);
-  //   const rawLength = raw.length;
-  //   let array = new Uint8Array(new ArrayBuffer(rawLength));
-
-  //   for (let i = 0; i < rawLength; i++) {
-  //     array[i] = raw.charCodeAt(i);
-  //   }
-  //   const file = new Blob([array], {
-  //     type: getExtentionType(`.${Format.toLowerCase()}`),
-  //   });
-  //   const fileURL = URL.createObjectURL(file);
-  //   window.open(fileURL);
-  // }
 
   const handleCreateProject = async (data) => {
-    const handleUsersAssgin = data?.assginTo?.map((item) => {
+    const handleUsersAssgin = data?.projectAssignedUsersViewModel?.map((item) => {
       console.log(item);
       return {
         userId: item?.id,
@@ -83,7 +55,6 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
       };
     });
     setShowCreateProjectModal(false);
-    // downloadFile()
     const postData = {
       name: data?.name,
       description: data?.description,
@@ -91,77 +62,53 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
       projectPriority: data?.projectPriority?.id,
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
-      sprintNumber: sprintNum,
+      sprintNumber: data?.sprintNumber,
       projectAssignedUsersViewModel: handleUsersAssgin,
-      attachmentsCreateViewModel: [
-        // {
-        //   id: '',
-        //   fileName: '',
-        //   filePath: '',
-        //   uploadDate: '',
-        //   attachCreatorId: ''
-        // }
-      ]
+      attachmentsCreateViewModel: []
     };
     console.log(postData);
     const resCreate = await createProject(postData);
     console.log(resCreate);
+    if (resCreate?.data?.code === 1) {
+      handleGetProjects();
+      dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
+    }
   };
 
-  //   "projectAssignedUsersViewModel": [
-  //     {
-  //       "userId": "ca2cc72f-d8e2-40d0-baf1-83fe9fa57a75",
-  //       "userName": "AMohammadi",
-  //       "fullName": "امیرعباس قره محمدی",
-  //       "projectUsersRoleViewModel": [
-  //         {
-  //           "projectRole": 1
-  //         },
-  //         {
-  //           "projectRole": 2
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       "userId": "d0ecd2d9-68ce-4626-aa80-5feb3019eda3",
-  //       "userName": "Ajafari",
-  //       "fullName": "علی جعفری",
-  //       "projectUsersRoleViewModel": [
-  //         {
-  //           "projectRole": 2
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       "userId": "eecdfc01-b308-47e4-9acd-bc15a83a04c3",
-  //       "userName": "JAsghari",
-  //       "fullName": "جواد اصغری",
-  //       "projectUsersRoleViewModel": [
-  //         {
-  //           "projectRole": 0
-  //         },
-  //         {
-  //           "projectRole": 1
-  //         }
-  //       ]
-  //     }
-  //   ],
-  //     "projectAttachmentsViewModel": []
-  // },
-  // return date?.convert(gregorian, gregorian_fa)?.format('YYYY-MM-DD');
-  useEffect(() => {
-    console.log('Eres');
-    console.log(
-      StringHelpers?.convertEditFilterComboBox(
-        create?.fieldsEditProject?.addFields?.projectPriority
-      )
-    );
-    reset({ ...create?.fieldsEditProject?.addFields });
-  }, [create?.fieldsEditProject]);
+  const handleEditFields = () => {
+    const handleUsersAssgin = editProjectFields?.projectAssignedUsersViewModel?.map((item) => {
+      console.log(item);
+      return {
+        id: item?.userId,
+        title: item?.fullName
+      };
+    });
+    reset({
+      ...editProjectFields,
+      dueDateTime: StringHelpers?.convertDateFa(editProjectFields?.dueDateTime),
+      projectPriority: StringHelpers?.findCombo(
+        editProjectFields?.projectPriority,
+        main?.allEnums?.priorityList
+      ),
+      projectType: StringHelpers?.findCombo(
+        editProjectFields?.projectType,
+        main?.allEnums?.projectType
+      ),
+      projectStatus: StringHelpers?.findCombo(
+        editProjectFields?.projectStatus,
+        main?.allEnums?.projectStatus
+      ),
+      projectAssignedUsersViewModel: handleUsersAssgin,
+      sprintNumber: editProjectFields?.sprintNumber
+    });
+    console.log(handleUsersAssgin);
+  };
 
   useEffect(() => {
-    // handleProjectRole();
-  }, []);
+    handleEditFields();
+  }, [editProjectFields]);
 
   return (
     <>
@@ -218,14 +165,22 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
                 />
                 <Row className="mt-4">
                   <SwitchCase
-                    value={sprintNum}
-                    onChange={(e) => setSprintNum(e.target.value)}
+                    // value={sprintNum}
+                    min={1}
+                    max={20}
+                    // onChange={(e) => setSprintNum(e.target.value)}
+                    control={control}
                     name="sprintNumber"
                     range
-                    label="سرعت پروژه:"
+                    label={`سرعت پروژه:${watch('sprintNumber')}`}
                   />
                 </Row>
-                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
+                <SwitchCase
+                  control={control}
+                  name="attachmentStatus"
+                  className="my-4 me-0"
+                  label="وضعیت پیوست:"
+                />
                 <Row>
                   <Input
                     name="projectCreatorFullName"
@@ -236,7 +191,7 @@ const CreateProjectModal = ({ showCreateProjectModal, setShowCreateProjectModal 
                   <ComboBox
                     className="mt-2"
                     isMulti
-                    name="assginTo"
+                    name="projectAssignedUsersViewModel"
                     options={addUsersFilter}
                     xl={6}
                     control={control}

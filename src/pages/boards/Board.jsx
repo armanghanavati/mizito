@@ -4,17 +4,22 @@ import { useLocation } from 'react-router-dom';
 import { serTasks, serWorkFlows } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import AllTasks from '../tasks/AllTasks';
+import { useDispatch } from 'react-redux';
+import { RsetShowLoading } from '../../hooks/slices/main';
 
 const Board = ({ item }) => {
   const location = useLocation();
+  const dispatch = useDispatch();
   const [workflowList, setWorkflowList] = useState([]);
   const [tasksList, setTasksList] = useState([]);
   const [matchedTasks, setMatchedTasks] = useState([]);
   const [fixTaskToWorkFlow, setFixTaskToWorkFlow] = useState([]);
 
   const handleWorkFlows = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
     const resWorkFlows = await serWorkFlows();
     const resTasks = await serTasks(location?.state?.item?.id);
+    dispatch(RsetShowLoading({ value: false }));
     if (resWorkFlows?.data?.code === 1) {
       setTasksList(resTasks?.data?.data);
       setWorkflowList(resWorkFlows?.data?.data);
@@ -48,9 +53,15 @@ const Board = ({ item }) => {
                   <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
                 </Col>
                 <div>
-                  {tasksList?.filter((task) => task?.workFlow === wf?.id)
-                    .map((task , taskIndex) => (
-                      <div onClick={()=>  console.log(task?.id)} className='border shadow cursorPointer my-3 p-4' key={task?.id}>{task?.name}</div>
+                  {tasksList
+                    ?.filter((task) => task?.workFlow === wf?.id)
+                    .map((task, taskIndex) => (
+                      <div
+                        onClick={() => console.log(task?.id)}
+                        className="border shadow cursorPointer my-3 p-4"
+                        key={task?.id}>
+                        {task?.name}
+                      </div>
                     ))}
                 </div>
                 <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">

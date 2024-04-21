@@ -12,7 +12,7 @@ const initialState = {
   projType: {},
   projPriorty: {},
   projRole: {},
-  userRole:{}
+  userRole: {}
 };
 
 //  -> Reset overtime form
@@ -22,7 +22,6 @@ const initialState = {
 //     }
 // );
 
-//  -> Slice overtime
 const MainSlice = createSlice({
   name: 'main',
   initialState,
@@ -51,7 +50,9 @@ const MainSlice = createSlice({
     RsetUserRole: (state, { payload }) => {
       return { ...state, userRole: payload };
     },
-    
+    RsetShowToast: (state, { payload }) => {
+      return { ...state, showToast: payload };
+    }
   }
 });
 
@@ -64,6 +65,7 @@ export const {
   RsetShowLoading,
   RsetAllUsers,
   RsetProjRole,
-  RsetUserRole
+  RsetUserRole,
+  RsetShowToast
 } = MainSlice.actions;
 export default MainSlice.reducer;

@@ -51,7 +51,6 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
   };
   return (
     <>
-      {' '}
       <Modal
         className="p-0"
         size="lg"

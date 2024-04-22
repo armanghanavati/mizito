@@ -17,7 +17,8 @@ const SwitchCase = ({
   value,
   radioType = false,
   min,
-  max
+  max,
+  disabled
 }) => {
   return (
     <>
@@ -29,6 +30,7 @@ const SwitchCase = ({
           </label>
           <Col className=" d-flex align-items-end">
             <Controller
+              disabled={disabled}
               name={name}
               control={control}
               render={({ field }) => <FormRange name={name} min={min} max={max} {...field} />}

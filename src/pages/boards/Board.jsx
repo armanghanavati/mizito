@@ -63,7 +63,9 @@ const Board = ({ item }) => {
                   <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
                 </Col>
                 <div>
-                  <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
+                  <div
+                    onClick={() => setCreateIssue()}
+                    className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
                     <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
                     <span>ایجاد موضوع</span>
                   </div>

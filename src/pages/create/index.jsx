@@ -11,7 +11,7 @@ const Create = () => {
   const [showBoardModal, setShowBoardModal] = useState(false);
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
-  
+
   return (
     <div className="d-flex mt-4 mx-3 gap-4">
       <Btn
@@ -30,7 +30,7 @@ const Create = () => {
         onClick={() => setShowCreateIssuesModal(true)}
         className="mx-4 text-white"
         variant="info"
-        title="ایجاد موضوع "
+        title=" "
       />
       {showBoardModal && (
         <CreateBoardModal showBoardModal={showBoardModal} setShowBoardModal={setShowBoardModal} />

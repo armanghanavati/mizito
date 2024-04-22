@@ -58,7 +58,7 @@ const CreateProjectModal = ({
     const postData = {
       name: data?.name,
       description: data?.description,
-      dueDateTime: "",
+      dueDateTime: '',
       projectPriority: data?.projectPriority?.id,
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
@@ -109,6 +109,8 @@ const CreateProjectModal = ({
   useEffect(() => {
     handleEditFields();
   }, [editProjectFields]);
+
+  const typeValue = watch('projectType');
 
   return (
     <>
@@ -167,19 +169,14 @@ const CreateProjectModal = ({
                     // value={sprintNum}
                     min={1}
                     max={20}
+                    disabled={typeValue?.id === 1 ? false : true}
                     // onChange={(e) => setSprintNum(e.target.value)}
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه:${watch('sprintNumber')}`}
+                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : "0" }`}
                   />
                 </Row>
-                <SwitchCase
-                  control={control}
-                  name="attachmentStatus"
-                  className="my-4 me-0"
-                  label="وضعیت پیوست:"
-                />
                 <Row>
                   {/* <Input
                     name="projectCreatorFullName"

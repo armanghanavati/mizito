@@ -42,9 +42,9 @@ const Board = ({ item }) => {
   // }, [tasksList]);
 
   const handleShowTask = (task) => {
-    setTaskItem(task)
-    setShowTasksModal(true)
-  }
+    setTaskItem(task);
+    setShowTasksModal(true);
+  };
 
   return (
     <>
@@ -63,7 +63,12 @@ const Board = ({ item }) => {
                   <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
                 </Col>
                 <div>
-                  {tasksList?.filter((task) => task?.workFlow === wf?.id)
+                  <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
+                    <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
+                    <span>ایجاد موضوع</span>
+                  </div>
+                  {tasksList
+                    ?.filter((task) => task?.workFlow === wf?.id)
                     .map((task, taskIndex) => (
                       <div
                         onClick={() => handleShowTask(task)}
@@ -73,16 +78,18 @@ const Board = ({ item }) => {
                       </div>
                     ))}
                 </div>
-                <div className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
-                  <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
-                  <span>ایجاد موضوع</span>
-                </div>
               </Col>
             </>
           );
         })}
       </Row>
-      {showTasksModal && <TasksModal taskItem={taskItem} setShowTasksModal={setShowTasksModal} showTasksModal={showTasksModal} />}
+      {showTasksModal && (
+        <TasksModal
+          taskItem={taskItem}
+          setShowTasksModal={setShowTasksModal}
+          showTasksModal={showTasksModal}
+        />
+      )}
     </>
   );
 };

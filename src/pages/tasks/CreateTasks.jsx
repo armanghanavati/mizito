@@ -18,7 +18,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
   const [sprintNum, setSprintNum] = useState(50);
   const dispatch = useDispatch();
   const {
-  control,
+    control,
     handleSubmit,
     register,
     reset,

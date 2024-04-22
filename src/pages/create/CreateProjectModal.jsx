@@ -58,7 +58,7 @@ const CreateProjectModal = ({
     const postData = {
       name: data?.name,
       description: data?.description,
-      dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+      dueDateTime: "",
       projectPriority: data?.projectPriority?.id,
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
@@ -130,7 +130,6 @@ const CreateProjectModal = ({
             <Container fluid className="mb-3">
               <Row>
                 <Input xl={6} label="نام پروژه:" name="name" control={control} />
-                <Datepicker name="dueDateTime" label="تاریخ ساخت:" control={control} />
                 <Controller
                   name="attachmentsCreateViewModel"
                   control={control}
@@ -182,12 +181,12 @@ const CreateProjectModal = ({
                   label="وضعیت پیوست:"
                 />
                 <Row>
-                  <Input
+                  {/* <Input
                     name="projectCreatorFullName"
                     xl={6}
                     label="ایجاد توسط:"
                     control={control}
-                  />
+                  /> */}
                   <ComboBox
                     className="mt-2"
                     isMulti

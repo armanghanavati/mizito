@@ -88,7 +88,7 @@ const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject
                   <ComboBox xl={6} control={control} label="اختصاص به:" />
                 </Row>
                 <Controller
-                  name={name}
+                  name="name"
                   control={control}
                   render={({ field }) => (
                     <>

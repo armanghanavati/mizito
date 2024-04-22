@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Form, Modal, Row } from 'react-bootstrap';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
@@ -10,45 +10,58 @@ import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { serCreateBoardGet, serCreateBoardPost } from '../../services/masterServices';
-``;
+import StringHelpers from '../../helpers/StringHelpers';
+import { useLocation } from 'react-router-dom';
+import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => {
+const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreateBoardModal, itemAndIndexProject, itsBoard }) => {
   const { create, main } = useSelector((state) => state);
-  console.log(main?.allUsers?.userAssigned);
+  const location = useLocation()
   const dispatch = useDispatch();
-  const {
+  const { reset,
     control,
     handleSubmit,
     register,
+    watch,
     formState: { errors },
     getValues
   } = useForm({ reValidateMode: 'onChange' });
+  const getIdProject = location?.pathname?.split(':')?.[1];
+  const usersAssigned = itsBoard?.[0]?.boardUsersViewModel?.map((item) => {
+    return {
+      id: item?.userId,
+      title: item?.fullName
+    }
+  }
+  )
+  const boardUsersId = itsBoard?.[0]?.boardUsersViewModel?.map((item) => item?.userId)
 
   const handleCreateBoard = asyncWrapper(async (data) => {
     setShowCreateBoardModal(false);
-    console.log(data);
     const postDatePost = {
-      name: 'string',
-      description: 'string',
-      createDateTime: '2024-04-18T15:19:53.015Z',
-      sprintNumber: 0,
-      projectId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      projectType: 0,
+      name: data?.name,
+      description: data?.description,
+      createDateTime: StringHelpers.convertDateEn(data?.createDateTime),
+      sprintNumber: data?.sprintNumber,
+      projectId: getIdProject,
+      projectType: data?.projectType?.id,
       boardWorkFlowsId: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
-      boardUsersId: ['string'],
-      attachmentsCreateViewModel: [
-        {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          fileName: 'string',
-          filePath: 'string',
-          uploadDate: 'string',
-          attachCreatorId: 'string'
-        }
-      ]
+      boardUsersId: boardUsersId,
+      attachmentsCreateViewModel: []
     };
-    const resCreateBoard = await serCreateBoardPost(postData);
-    console.log(resCreateBoard);
+    const resCreateBoard = await serCreateBoardPost(postDatePost);
+    if (resCreateBoard?.data?.code === 1) {
+      const resGetBoard = await serGetBoards(getIdProject);
+      console.log(resGetBoard);
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
   });
+
+  useEffect(() => {
+    reset({ usersAssigned })
+  }, [itsBoard]);
 
   return (
     <>
@@ -69,23 +82,30 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input name="name" xl={6} label="نام بورد:" control={control} />
+                <Input name="name" xl={4} label="نام بورد:" control={control} />
                 <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
                 <ComboBox
+                  options={main?.allEnums?.projectType}
                   name="projectType"
-                  options={main?.allUsers?.userAssigned}
-                  xl={6}
                   control={control}
-                  label="نوع پروژه:"
+                  label="نوع:"
                 />
-
                 <Row className="mt-4">
-                  <SwitchCase control={control} name="sprintNumber" range label="سرعت پروژه:" />
+                  <SwitchCase
+                    min={1}
+                    max={20}
+                    control={control}
+                    name="sprintNumber"
+                    range
+                    label={`سرعت پروژه:${watch('sprintNumber') || 1}`}
+                  />
                 </Row>
                 <Row>
                   <ComboBox
-                    name=""
-                    options={main?.allUsers?.userAssigned}
+                    isDisabled
+                    isMulti
+                    name="usersAssigned"
+                    options={usersAssigned}
                     xl={6}
                     control={control}
                     label="اختصاص به:"
@@ -97,7 +117,7 @@ const CreateBoardModal = ({ showCreateBoardModal, setShowCreateBoardModal }) => 
                   render={({ field }) => (
                     <>
                       <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
-                      <Form.Control as="textarea" rows={3} />
+                      <Form.Control {...field} name="description" as="textarea" rows={3} />
                     </>
                   )}
                 />

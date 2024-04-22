@@ -32,7 +32,7 @@ export const serViceEditProject = (postData) => {
 };
 
 export const serPutEditProject = (postData) => {
-  return axios.get(`${baseURL}api/ProjectController/EditProject`,postData);
+  return axios.get(`${baseURL}api/ProjectController/EditProject`, postData);
 };
 
 export const serCreateBoardGet = (id) => {
@@ -65,4 +65,9 @@ export const serWorkFlows = () => {
 // لیست تمامی ستون ها بورد
 export const serTasks = (id) => {
   return axios.get(`${baseURL}api/TaskController/Tasks?boardid=${id}`);
+};
+
+// لیست تمامی ساب تسک ها
+export const serGetSubTasks = (id) => {
+  return axios.get(`${baseURL}api/SubTaskController/SubTasks?taskid=${id}`);
 };

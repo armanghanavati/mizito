@@ -17,6 +17,7 @@ const Datepicker = ({
     xs = 12,
     errmsgmin = "",
     md = 6,
+    xxl = 4,
     xl = 4,
     validate,
     name = "",
@@ -71,6 +72,7 @@ const Datepicker = ({
                             xs={xs}
                             md={md}
                             xl={xl}
+                            xxl={xxl}
                         >
                             <Form.Label
                                 className={` align-items-center ${important && "star"

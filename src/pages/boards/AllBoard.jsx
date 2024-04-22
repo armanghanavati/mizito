@@ -7,7 +7,7 @@ import { serCreateBoardGet, serGetBoards } from '../../services/masterServices';
 import CreateBoardModal from '../create/CreateBoardModal';
 import EditBoardModal from './EditBoardModal';
 import StringHelpers from '../../helpers/StringHelpers';
-import { RsetAllUsers, RsetShowLoading } from '../../hooks/slices/main';
+import { RsetAllUsers, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import Board from './Board';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
@@ -17,27 +17,28 @@ const AllBoard = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const getIdProject = location?.pathname?.split(':')?.[1];
-  const [stepOneHead, setStepOneHead] = useState('مرحله اول');
-  const [showBoardsFixed, setShowBoardsFixed] = useState([]);
+  const [itemAndIndexProject, setItemAndIndexProject] = useState({});
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [findBoard, setFindBoard] = useState(false);
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
   const [showEditBoardModal, setShowEditBoardModal] = useState(false);
-  const [boardsList, setBoardsList] = useState([]);
+  const [allBoard, setAllBoard] = useState([]);
+  const [itsBoard, setItsBoard] = useState([]);
 
   const handleGetBoards = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
-    console.log(getIdProject);
     if (!!getIdProject) {
       const resGetBoard = await serGetBoards(getIdProject);
       dispatch(RsetShowLoading({ value: false }));
       setFindBoard(true);
-      console.log(resGetBoard);
-      setBoardsList(resGetBoard?.data?.data);
-      // setShowBoardsFixed(fixBoards);
-      // console.log(fixBoards);
-      return resGetBoard.data;
+      setAllBoard(resGetBoard?.data?.data);
+      const itsBoard = resGetBoard?.data?.data?.map((board) => {
+        return board
+      }
+      )
+      setItsBoard(itsBoard)
     } else {
+      dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
     }
   });
 
@@ -107,7 +108,7 @@ const AllBoard = () => {
   };
 
   const handleShowEditBoard = (data, index) => {
-    console.log(data, index);
+    setItemAndIndexProject({ data, index });
     setShowCreateBoardModal(true);
   };
 
@@ -119,16 +120,16 @@ const AllBoard = () => {
     <>
       <Container>
         <div className="p-4 d-flex align-items-center justify-content-between text-secondary">
-          <span>{boardsList?.[0]?.projectName}</span>
+          <span>{allBoard?.[0]?.projectName}</span>
           <span>
-            تاریخ ساخت بورد: {StringHelpers.convertDateFa(boardsList?.[0]?.createDateTime)}
+            تاریخ ساخت بورد: {StringHelpers.convertDateFa(allBoard?.[0]?.createDateTime)}
           </span>
-          <span>سرعت پروژه: {boardsList?.[0]?.sprintNumber}</span>
+          <span>سرعت پروژه: {allBoard?.[0]?.sprintNumber}</span>
         </div>
         <hr />
         <h3 className="text-secondary py-3">لیست بوردها</h3>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-          {boardsList?.map((item, index) => {
+          {allBoard?.map((item, index) => {
             return (
               <div key={index} className="">
                 <Col
@@ -182,6 +183,9 @@ const AllBoard = () => {
       )}
       {showCreateBoardModal && (
         <CreateBoardModal
+          handleGetBoards={handleGetBoards}
+          itemAndIndexProject={itemAndIndexProject}
+          itsBoard={itsBoard}
           showCreateBoardModal={showCreateBoardModal}
           setShowCreateBoardModal={setShowCreateBoardModal}
         />

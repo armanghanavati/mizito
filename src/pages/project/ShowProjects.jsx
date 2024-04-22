@@ -8,7 +8,6 @@ import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
 import CreateProjectModal from '../create/CreateProjectModal';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 const ShowProjects = () => {
   const dispatch = useDispatch();

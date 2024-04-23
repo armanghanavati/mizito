@@ -8,7 +8,7 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import { createProject, serPutEditProject, serPutEditProject } from '../../services/masterServices';
+import { createProject, serPutEditProject } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { RsetShowToast } from '../../hooks/slices/main';
 
@@ -72,34 +72,35 @@ const CreateProjectModal = ({
           //   attachCreatorId: ""
           // }
         ]
-      }
-      const res = await serPutEditProject(data?.id, postData)
+      };
+      const res = await serPutEditProject(postData);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
     } else {
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
     }
     setShowCreateProjectModal(false);
-    const postData = {
-      name: data?.name,
-      description: data?.description,
-      dueDateTime: null,
-      projectPriority: data?.projectPriority?.id,
-      projectStatus: data?.projectStatus?.id,
-      projectType: data?.projectType?.id,
-      sprintNumber: data?.sprintNumber,
-      projectAssignedUsersViewModel: handleUsersAssgin,
-      attachmentsCreateViewModel: []
-    };
-    const resCreate = await createProject(postData);
-
-    if (resCreate?.data?.code === 1) {
-      handleGetProjects();
-      console.log(resCreate?.data?.msg);
-      dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
-    } else {
-      console.log(resCreate);
-      dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
+    if (!editService) {
+      const postData = {
+        name: data?.name,
+        description: data?.description,
+        dueDateTime: null,
+        projectPriority: data?.projectPriority?.id,
+        projectStatus: data?.projectStatus?.id,
+        projectType: data?.projectType?.id,
+        sprintNumber: data?.sprintNumber,
+        projectAssignedUsersViewModel: handleUsersAssgin,
+        attachmentsCreateViewModel: []
+      };
+      const resCreate = await createProject(postData);
+      if (resCreate?.data?.code === 1) {
+        console.log(resCreate?.data?.msg);
+        dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
+      } else {
+        console.log(resCreate);
+        dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
+      }
     }
+    handleGetProjects();
   };
 
   const handleEditFields = () => {
@@ -198,7 +199,7 @@ const CreateProjectModal = ({
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : "0"}`}
+                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : '0'}`}
                   />
                 </Row>
                 <Row>

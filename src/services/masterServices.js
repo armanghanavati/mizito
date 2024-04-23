@@ -31,8 +31,9 @@ export const serViceEditProject = (postData) => {
   return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 };
 
-export const serPutEditProject = (postData) => {
-  return axios.get(`${baseURL}api/ProjectController/EditProject`, postData);
+// تایید ویرایش پروژه
+export const serPutEditProject = (id, postData) => {
+  return axios.get(`${baseURL}api/ProjectController/EditProject/${id}`, postData);
 };
 
 export const serCreateBoardGet = (id) => {

@@ -16,6 +16,7 @@ const ShowProjects = () => {
   const [allProjectList, setAllProjectList] = useState([]);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [showEditProject, setShowEditProject] = useState(false);
+  const [editService, setEditService] = useState(false);
   const [itemAndIndexProject, setItemAndIndexProject] = useState({});
   const [editProjectFields, setEditProjectFields] = useState({});
 
@@ -44,6 +45,7 @@ const ShowProjects = () => {
 
   const handleEditProject = asyncWrapper(async (item, index) => {
     dispatch(RsetShowLoading({ value: true }));
+    setEditService(true)
     const res = await serViceEditProject(item?.id);
     dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
@@ -57,6 +59,7 @@ const ShowProjects = () => {
 
   const handleCreateProject = () => {
     setEditProjectFields({});
+    setEditService(false)
     setShowCreateProjectModal(true);
   };
 
@@ -105,18 +108,11 @@ const ShowProjects = () => {
       </Container>
       {showCreateProjectModal && (
         <CreateProjectModal
+          editService={editService}
           editProjectFields={editProjectFields}
           handleGetProjects={handleGetProjects}
           showCreateProjectModal={showCreateProjectModal}
           setShowCreateProjectModal={setShowCreateProjectModal}
-          itemAndIndexProject={itemAndIndexProject}
-        />
-      )}
-      {showEditProject && (
-        <EditProjectModal
-          handleGetProjects={handleGetProjects}
-          showEditProject={showEditProject}
-          setShowEditProject={setShowEditProject}
           itemAndIndexProject={itemAndIndexProject}
         />
       )}

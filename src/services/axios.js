@@ -16,7 +16,6 @@ axios.interceptors.request.use(
   }
 );
 
-
 axios.interceptors.response.use(
   async function (response) {
     if (

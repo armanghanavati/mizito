@@ -8,14 +8,12 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import { createProject } from '../../services/masterServices';
-import persian_fa from 'react-date-object/locales/persian_fa';
-import persian from 'react-date-object/calendars/persian';
-import { DateObject } from 'react-multi-date-picker';
+import { createProject, serPutEditProject, serPutEditProject } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { RsetShowToast } from '../../hooks/slices/main';
 
 const CreateProjectModal = ({
+  editService,
   itemAndIndexProject,
   showCreateProjectModal,
   setShowCreateProjectModal,
@@ -54,11 +52,37 @@ const CreateProjectModal = ({
         ]
       };
     });
+    if (editService) {
+      const postData = {
+        id: data?.id,
+        name: data?.name,
+        description: data?.description,
+        dueDateTime: null,
+        projectPriority: data?.projectPriority?.id,
+        projectStatus: data?.projectStatus?.id,
+        projectType: data?.projectType?.id,
+        sprintNumber: data?.sprintNumber,
+        projectAssignedUsersViewModel: handleUsersAssgin,
+        attachmentEditViewModels: [
+          // {
+          //   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          //   fileName: "",
+          //   filePath: "",
+          //   uploadDate: "",
+          //   attachCreatorId: ""
+          // }
+        ]
+      }
+      const res = await serPutEditProject(data?.id, postData)
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
     setShowCreateProjectModal(false);
     const postData = {
       name: data?.name,
       description: data?.description,
-      dueDateTime: '',
+      dueDateTime: null,
       projectPriority: data?.projectPriority?.id,
       projectStatus: data?.projectStatus?.id,
       projectType: data?.projectType?.id,
@@ -66,13 +90,14 @@ const CreateProjectModal = ({
       projectAssignedUsersViewModel: handleUsersAssgin,
       attachmentsCreateViewModel: []
     };
-    console.log(postData);
     const resCreate = await createProject(postData);
-    console.log(resCreate);
+
     if (resCreate?.data?.code === 1) {
       handleGetProjects();
+      console.log(resCreate?.data?.msg);
       dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
     } else {
+      console.log(resCreate);
       dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
     }
   };
@@ -103,7 +128,6 @@ const CreateProjectModal = ({
       projectAssignedUsersViewModel: handleUsersAssgin,
       sprintNumber: editProjectFields?.sprintNumber
     });
-    console.log(handleUsersAssgin);
   };
 
   useEffect(() => {

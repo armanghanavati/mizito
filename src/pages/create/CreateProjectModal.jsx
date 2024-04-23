@@ -174,7 +174,7 @@ const CreateProjectModal = ({
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : "0" }`}
+                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : "0"}`}
                   />
                 </Row>
                 <Row>

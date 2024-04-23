@@ -31,7 +31,6 @@ const TasksModal = ({ setShowTasksModal
             dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
         }
     })
-
     useEffect(() => {
         handleSubTasks()
     }, []);
@@ -48,7 +47,7 @@ const TasksModal = ({ setShowTasksModal
                     className="d-flex bg-primary text-white justify-content-center"
                     closeButton>
                     <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-                        موضوع
+                        وظیفه
                     </span>
                 </Modal.Header>
                 <Modal.Body>

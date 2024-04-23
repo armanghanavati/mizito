@@ -61,7 +61,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
           className="d-flex bg-info text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد موضوع
+            ایجاد وظیفه
           </span>
         </Modal.Header>
         <Modal.Body>
@@ -82,8 +82,6 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
                     </>
                   )}
                 />
-                {/* <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} /> */}
-                {/* <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} /> */}
                 <ComboBox
                   options={main?.projPriorty?.projPriority}
                   name="projectPriority"

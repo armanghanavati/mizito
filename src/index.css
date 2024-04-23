@@ -371,3 +371,9 @@ body * {
   align-items: center !important;
   gap: 8px !important;
 }
+
+.subTask_To_Task {
+  min-height: 150px;
+  max-height: 150px;
+  overflow-y: auto;
+}

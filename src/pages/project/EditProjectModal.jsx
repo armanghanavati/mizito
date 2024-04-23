@@ -73,7 +73,6 @@ const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input xl={6} label="ایجاد توسط:" name="projectName" control={control} />
                 <Datepicker name="dueDateTime" label="تاریخ شروع:" control={control} />
                 <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} />
                 <ComboBox name="projectPriority" control={control} label="اولویت:" />
@@ -82,9 +81,7 @@ const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject
                 <Row className="mt-4">
                   <SwitchCase name="sprintNumber" range label="سرعت پروژه:" />
                 </Row>
-                <SwitchCase className="mt-4 me-0" label="وضعیت پیوست:" />
                 <Row>
-                  <Input xl={6} label="ایجاد توسط:" control={control} />
                   <ComboBox xl={6} control={control} label="اختصاص به:" />
                 </Row>
                 <Controller

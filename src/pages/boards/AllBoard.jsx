@@ -133,7 +133,7 @@ const AllBoard = () => {
             return (
               <div key={index} className="">
                 <Col
-                  className="  bg-white shadow-sm p-3 rounded-3"
+                  className="my-3 bg-white shadow-sm p-3 rounded-3"
                   md="12"
                   lg="12"
                   xl="12"
@@ -148,8 +148,8 @@ const AllBoard = () => {
                     </span>
                   </div>
                   <hr />
-                  <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
-                    <i className="bi  font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
+                  <Col className=" cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
+                    <i className="bi font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
                   </Col>
                   {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
                 <div className=" ">توضیحات: {item?.description} </div>

@@ -26,6 +26,7 @@ const CreateProjectModal = ({
   const dispatch = useDispatch();
   const {
     control,
+    setValue,
     handleSubmit,
     register,
     reset,
@@ -43,7 +44,6 @@ const CreateProjectModal = ({
 
   const handleCreateProject = asyncWrapper(async (data) => {
     const handleUsersAssgin = data?.projectAssignedUsersViewModel?.map((item) => {
-      console.log(item);
       return {
         userId: item?.id,
         projectRoles: [
@@ -53,6 +53,7 @@ const CreateProjectModal = ({
         ]
       };
     });
+    console.log(handleUsersAssgin);
     if (editService) {
       const postData = {
         id: data?.id,
@@ -75,12 +76,14 @@ const CreateProjectModal = ({
         ]
       };
       const res = await serPutEditProject(postData);
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      if (res?.data?.code === 1) {
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      }
+      else {
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      }
+
     } else {
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
-    }
-    setShowCreateProjectModal(false);
-    if (!editService) {
       const postData = {
         name: data?.name,
         description: data?.description,
@@ -96,13 +99,15 @@ const CreateProjectModal = ({
       if (resCreate?.data?.code === 1) {
         console.log(resCreate?.data?.msg);
         dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
-      } else {
+      }
+      else {
         console.log(resCreate);
         dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
       }
     }
+    setShowCreateProjectModal(false);
     handleGetProjects();
-  };
+  });
 
   const handleEditFields = () => {
     const handleUsersAssgin = editProjectFields?.projectAssignedUsersViewModel?.map((item) => {
@@ -135,6 +140,12 @@ const CreateProjectModal = ({
   useEffect(() => {
     handleEditFields();
   }, [editProjectFields]);
+
+  // useEffect(() => {
+  //   if (typeValue?.id === 1) {
+  //     setValue("sprintNumber", 1);
+  //   }
+  // }, [watch("sprintNumber")]);
 
   const typeValue = watch('projectType');
 
@@ -200,7 +211,7 @@ const CreateProjectModal = ({
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه: ${typeValue?.id === 1 ? watch('sprintNumber') : '0'}`}
+                    label={`سرعت پروژه: ${typeValue?.id === 1 ? Number(watch('sprintNumber') || 1) : '0'}`}
                   />
                 </Row>
                 <Row>

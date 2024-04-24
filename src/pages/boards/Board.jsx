@@ -59,8 +59,6 @@ const Board = ({ item }) => {
     setShowCreateIssuesModal(true);
   };
 
-  console.log(handleShowSubTaskToTask());
-
   return (
     <>
       <Col className="bg-light p-3 d-flex justify-content-between">

@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { serGetSubTasks } from '../../services/masterServices';
 import SubTasks from '../subTasks';
+import Comment from '../Comment/index'
 
 const TasksModal = ({ setShowTasksModal
     , showTasksModal, taskItem }) => {
@@ -52,6 +53,7 @@ const TasksModal = ({ setShowTasksModal
                 </Modal.Header>
                 <Modal.Body>
                     <SubTasks allSubTask={allSubTask} />
+                    <Comment />
                 </Modal.Body>
                 <Modal.Footer>
                     <Btn

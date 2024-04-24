@@ -24,7 +24,7 @@ const SwitchCase = ({
     <>
       {range ? (
         <>
-          <label htmlFor={name} className="my-2 me-1 px-2">
+          <label htmlFor={name} className="my-2 font15 me-2 px-2">
             {label}
             {value}
           </label>

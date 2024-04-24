@@ -34,8 +34,8 @@ const Toastify = () => {
               <strong className="justify-content-center me-auto">{oparationIcons()}</strong>
             </Toast.Header>
             <Toast.Body
-              className={`d-flex py-4 justify-content-end ${main?.showToast?.bg === 'warning' ? 'text-dark' : 'text-white'}`}>
-              {main?.showToast?.title}
+              className={`d-flex py-4 justify-content-end text-start ${main?.showToast?.bg === 'warning' ? 'text-dark' : 'text-white'}`}>
+              .{main?.showToast?.title}
             </Toast.Body>
           </Toast>
         </Col>

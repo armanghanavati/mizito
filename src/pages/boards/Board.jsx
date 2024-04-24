@@ -21,6 +21,8 @@ const Board = ({ item }) => {
   const [tasksList, setTasksList] = useState([]);
   const [allSubTask, setAllSubTask] = useState();
 
+  console.log(location?.state);
+
   const handleWorkFlows = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
     const resWorkFlows = await serWorkFlows();

@@ -10,6 +10,7 @@ import StringHelpers from '../../helpers/StringHelpers';
 import { RsetAllUsers, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import Board from './Board';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
 
 const AllBoard = () => {
   const { create, main } = useSelector((state) => state);
@@ -29,14 +30,17 @@ const AllBoard = () => {
     dispatch(RsetShowLoading({ value: true }));
     if (!!getIdProject) {
       const resGetBoard = await serGetBoards(getIdProject);
+      console.log(resGetBoard);
+      dispatch(
+        RsetFieldsEditProject({ userAssigned: resGetBoard?.data?.data[0]?.boardUsersViewModel })
+      );
       dispatch(RsetShowLoading({ value: false }));
       setFindBoard(true);
       setAllBoard(resGetBoard?.data?.data);
       const itsBoard = resGetBoard?.data?.data?.map((board) => {
-        return board
-      }
-      )
-      setItsBoard(itsBoard)
+        return board;
+      });
+      setItsBoard(itsBoard);
     } else {
       dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
     }
@@ -121,9 +125,7 @@ const AllBoard = () => {
       <Container>
         <div className="p-4 d-flex align-items-center justify-content-between text-secondary">
           <span>{allBoard?.[0]?.projectName}</span>
-          <span>
-            تاریخ ساخت بورد: {StringHelpers.convertDateFa(allBoard?.[0]?.createDateTime)}
-          </span>
+          <span>تاریخ ساخت بورد: {StringHelpers.convertDateFa(allBoard?.[0]?.createDateTime)}</span>
           <span>سرعت پروژه: {allBoard?.[0]?.sprintNumber}</span>
         </div>
         <hr />

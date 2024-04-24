@@ -12,10 +12,14 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
+import { serCreateTask } from '../../services/masterServices';
+import asyncWrapper from '../../utils/asyncWrapper';
+import { useLocation } from 'react-router-dom';
 
-const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
+const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlowItem }) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
+  const location = useLocation();
   const dispatch = useDispatch();
   const {
     control,
@@ -26,29 +30,38 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  const handleCreateTask = () => {
-    const postData = {
-      name: 'string',
-      description: 'string',
-      priority: 0,
-      workFlow: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      dueDateTime: '2024-04-16T19:44:37.406Z',
-      remainderDateTime: '2024-04-16T19:44:37.406Z',
-      attachmentStatus: true,
-      boardId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      taskAssignedUsersId: ['string'],
-      taskVerifyUsersId: ['string'],
-      attachmentCreateViewModels: [
-        {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          fileName: 'string',
-          filePath: 'string',
-          uploadDate: 'string',
-          attachCreatorId: 'string'
-        }
-      ]
+  console.log(workFlowItem?.id);
+  const fixUsers = create?.fieldsEditProject?.userAssigned?.map((user) => {
+    return {
+      id: user?.userId,
+      title: user?.fullName
     };
-  };
+  });
+
+  const handleCreateTask = asyncWrapper(async (data) => {
+    console.log(data);
+    const postData = {
+      name: data?.name,
+      description: data?.description,
+      priority: 0,
+      workFlow: workFlowItem?.id,
+      dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+      remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
+      attachmentStatus: false,
+      boardId: location?.state?.item?.id,
+      taskAssignedUsersId: ['string'],
+      taskVerifyUsersId: [''],
+      attachmentCreateViewModels: []
+    };
+    const res = await serCreateTask(postData);
+    if (res?.data?.code === 1) {
+      setShowCreateIssuesModal(false);
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  });
+
   return (
     <>
       <Modal
@@ -68,42 +81,19 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal }) => {
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input xl={6} label="نام پروژه:" name="name" control={control} />
-                <Datepicker name="dueDateTime" label="تاریخ ساخت:" control={control} />
-                <Controller
-                  name="attachmentsCreateViewModel"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <Form.Group controlId="attachmentsCreateViewModel" className="mb-3">
-                        <Form.Label>آپلود فایل</Form.Label>
-                        <Form.Control {...field} type="file" />
-                      </Form.Group>
-                    </>
-                  )}
-                />
+                <Input xl={6} label="نام موضوع :" name="name" control={control} />
                 <ComboBox
-                  options={main?.projPriorty?.projPriority}
-                  name="projectPriority"
+                  className=""
+                  isMulti
+                  name="assginTo"
+                  options={fixUsers}
+                  xl={6}
                   control={control}
-                  label="اولویت:"
+                  label="اختصاص به:"
                 />
                 <Row>
-                  <Input
-                    name="projectCreatorFullName"
-                    xl={6}
-                    label="ایجاد توسط:"
-                    control={control}
-                  />
-                  <ComboBox
-                    className="mt-2"
-                    isMulti
-                    name="assginTo"
-                    // options={addUsersFilter}
-                    xl={6}
-                    control={control}
-                    label="اختصاص به:"
-                  />
+                  <Datepicker name="dueDateTime" label="تاریخ ایجاد:" control={control} />
+                  <Datepicker name="remainderDateTime" label="تاریخ پایان:" control={control} />
                 </Row>
                 <Controller
                   name="description"

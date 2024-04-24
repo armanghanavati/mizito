@@ -32,8 +32,8 @@ export const serViceEditProject = (postData) => {
 };
 
 // تایید ویرایش پروژه
-export const serPutEditProject = (id, postData) => {
-  return axios.get(`${baseURL}api/ProjectController/EditProject/${id}`, postData);
+export const serPutEditProject = (postData) => {
+  return axios.put(`${baseURL}api/ProjectController/EditProject`, postData);
 };
 
 export const serCreateBoardGet = (id) => {
@@ -71,4 +71,9 @@ export const serTasks = (id) => {
 // لیست تمامی ساب تسک ها
 export const serGetSubTasks = (id) => {
   return axios.get(`${baseURL}api/SubTaskController/SubTasks?taskid=${id}`);
+};
+
+// ایجاد وظیفه
+export const serCreateTask = (postData) => {
+  return axios.post(`${baseURL}api/TaskController/CreateTask`, postData);
 };

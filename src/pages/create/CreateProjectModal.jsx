@@ -8,9 +8,10 @@ import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
 import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
-import { createProject, serPutEditProject, serPutEditProject } from '../../services/masterServices';
+import { createProject, serPutEditProject } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { RsetShowToast } from '../../hooks/slices/main';
+import asyncWrapper from '../../utils/asyncWrapper';
 
 const CreateProjectModal = ({
   editService,
@@ -40,7 +41,7 @@ const CreateProjectModal = ({
     };
   });
 
-  const handleCreateProject = async (data) => {
+  const handleCreateProject = asyncWrapper(async (data) => {
     const handleUsersAssgin = data?.projectAssignedUsersViewModel?.map((item) => {
       console.log(item);
       return {
@@ -91,7 +92,6 @@ const CreateProjectModal = ({
       attachmentsCreateViewModel: []
     };
     const resCreate = await createProject(postData);
-
     if (resCreate?.data?.code === 1) {
       handleGetProjects();
       console.log(resCreate?.data?.msg);
@@ -100,7 +100,7 @@ const CreateProjectModal = ({
       console.log(resCreate);
       dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
     }
-  };
+  })
 
   const handleEditFields = () => {
     const handleUsersAssgin = editProjectFields?.projectAssignedUsersViewModel?.map((item) => {

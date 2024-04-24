@@ -68,6 +68,12 @@ const ShowProjects = () => {
       <Container className="mt-2">
         <h3 className="text-secondary my-4">لیست پروژه‌ها</h3>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+          <div className="d-flex justify-content-center  rounded-pill">
+            <i
+              onClick={handleCreateProject}
+              className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle"
+            />
+          </div>
           {allProjectList?.map((item, index) => (
             <>
               <div key={index} className=" col mb-4">
@@ -98,12 +104,7 @@ const ShowProjects = () => {
               </div>
             </>
           ))}
-          <div className="d-flex justify-content-center  rounded-pill">
-            <i
-              onClick={handleCreateProject}
-              className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle"
-            />
-          </div>
+
         </div>
       </Container>
       {showCreateProjectModal && (

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import { serGetSubTasks, serTasks, serWorkFlows } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
@@ -9,6 +9,7 @@ import { RsetShowLoading } from '../../hooks/slices/main';
 import ShowTasksModal from '../tasks/TasksModal';
 import TasksModal from '../tasks/TasksModal';
 import CreateTasks from '../tasks/CreateTasks';
+import CreateWorkFlow from '../WorkFlow/index';
 
 const Board = ({ item }) => {
   const location = useLocation();
@@ -16,6 +17,7 @@ const Board = ({ item }) => {
   const [workflowList, setWorkflowList] = useState([]);
   const [showTasksModal, setShowTasksModal] = useState(false);
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
+  const [showWorkFlow, setShowWorkFlow] = useState(false);
   const [taskItem, setTaskItem] = useState({});
   const [workFlowItem, setWorkFlowItem] = useState({});
   const [tasksList, setTasksList] = useState([]);
@@ -57,12 +59,16 @@ const Board = ({ item }) => {
     setShowCreateIssuesModal(true);
   };
 
+  const handleCreateWorkFlow = () => {
+    setShowWorkFlow(true);
+  };
+
   return (
     <>
       <Col className="bg-light p-3 d-flex justify-content-between">
         <span>تاریخ ساخت پروژه:</span>
       </Col>
-      <Row className="mt-2 mx-1 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+      <Container className="count_WorkFlow d-flex">
         {workflowList.map((wf, wfIndex) => {
           return (
             <>
@@ -87,7 +93,7 @@ const Board = ({ item }) => {
                       return (
                         <div
                           onClick={() => handleShowTask(task)}
-                          className="border subTask_To_Task d-flex row justify-content-between shadow cursorPointer my-3 p-4"
+                          className="border subTask_To_Task d-flex row justify-content-between shadow cursorPointer my-3 mx-1 p-4"
                           key={task?.id}>
                           <div className="d-flex justify-content-center">{task?.name}</div>
                           <div>
@@ -107,7 +113,15 @@ const Board = ({ item }) => {
             </>
           );
         })}
-      </Row>
+        <span className="d-flex align-items-start my-2 text-warning fw-bold">
+          <span
+            onClick={handleCreateWorkFlow}
+            className="cursorPointer bg-white rounded px-2 d-flex align-items-center">
+            ایجاد ستون
+            <i className=" d-flex align-items-center py-1 mx-1 font20 fw-bold bi bi-plus-circle" />
+          </span>
+        </span>
+      </Container>
       {showTasksModal && (
         <TasksModal
           allSubTask={allSubTask}
@@ -121,6 +135,13 @@ const Board = ({ item }) => {
           workFlowItem={workFlowItem}
           showCreateIssuesModal={showCreateIssuesModal}
           setShowCreateIssuesModal={setShowCreateIssuesModal}
+        />
+      )}
+      {workFlowItem && (
+        <CreateWorkFlow
+          workFlowItem={workFlowItem}
+          setShowWorkFlow={setShowWorkFlow}
+          showWorkFlow={showWorkFlow}
         />
       )}
     </>

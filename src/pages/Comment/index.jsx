@@ -10,7 +10,7 @@ const Comment = ({ taskItem }) => {
   const handleGetComments = asyncWrapper(async () => {
     const res = await serComments(taskItem?.id);
     if (res?.data?.code === 1) {
-        console.log(res);
+      console.log(res);
     }
   });
 

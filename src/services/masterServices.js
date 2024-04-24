@@ -63,6 +63,11 @@ export const serWorkFlows = () => {
   return axios.get(`${baseURL}api/WorkFlowController/WorkFlows`);
 };
 
+// اضافه کردن یک ستون به بورد
+export const addNewWorkFlowToBoard = (postData) => {
+  return axios.post(`${baseURL}api/WorkFlowController/AddNewWorkFlowToBoard`, postData);
+};
+
 // لیست تمامی ستون ها بورد
 export const serTasks = (id) => {
   return axios.get(`${baseURL}api/TaskController/Tasks?boardid=${id}`);

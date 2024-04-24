@@ -19,7 +19,7 @@ const Board = ({ item }) => {
   const [taskItem, setTaskItem] = useState({});
   const [workFlowItem, setWorkFlowItem] = useState({});
   const [tasksList, setTasksList] = useState([]);
-  const [allSubTask, setAllSubTask] = useState();
+  const [allSubTask, setAllSubTask] = useState([]);
 
   console.log(location?.state);
 
@@ -36,20 +36,18 @@ const Board = ({ item }) => {
 
   useEffect(() => {
     handleWorkFlows();
-    handleShowSubTaskToTask()
   }, []);
 
-  const handleShowSubTaskToTask =
-    asyncWrapper(async () => {
-      const res = await serGetSubTasks(tasksList?.id)
-      if (res?.data?.code === 1) {
-        console.log(res?.data?.data);
-        setAllSubTask(res?.data?.data);
-      }
-      return res?.data?.data?.map((item) => item?.name)
-    })
+  const handleShowSubTaskToTask = asyncWrapper(async (task) => {
+    const res = await serGetSubTasks(task?.id);
+    if (res?.data?.code === 1) {
+      setAllSubTask(res?.data?.data);
+    }
+    return res?.data?.data?.map((item) => item?.name);
+  });
 
   const handleShowTask = (task) => {
+    handleShowSubTaskToTask(task);
     setTaskItem(task);
     setShowTasksModal(true);
   };
@@ -86,27 +84,23 @@ const Board = ({ item }) => {
                   {tasksList
                     ?.filter((task) => task?.workFlow === wf?.id)
                     .map((task, taskIndex) => {
-                      console.log(task);
                       return (
                         <div
                           onClick={() => handleShowTask(task)}
                           className="border subTask_To_Task d-flex row justify-content-between shadow cursorPointer my-3 p-4"
                           key={task?.id}>
-                          <div className='d-flex justify-content-center' >
-                            {task?.name}
-                          </div>
+                          <div className="d-flex justify-content-center">{task?.name}</div>
                           <div>
                             {task?.taskSubTasksViewModels?.map((subToTask) => (
-                              <Row className='' >
-                                <Col className=' my-2 rounded  text-secondary bg-white p-1 ' >
+                              <Row className="">
+                                <Col className=" my-2 rounded  text-secondary bg-white p-1 ">
                                   {subToTask?.name}
-
                                 </Col>
                               </Row>
                             ))}
                           </div>
                         </div>
-                      )
+                      );
                     })}
                 </div>
               </Col>
@@ -116,6 +110,7 @@ const Board = ({ item }) => {
       </Row>
       {showTasksModal && (
         <TasksModal
+          allSubTask={allSubTask}
           taskItem={taskItem}
           setShowTasksModal={setShowTasksModal}
           showTasksModal={showTasksModal}
@@ -124,7 +119,8 @@ const Board = ({ item }) => {
       {showCreateIssuesModal && (
         <CreateTasks
           workFlowItem={workFlowItem}
-          showCreateIssuesModal={showCreateIssuesModal} setShowCreateIssuesModal={setShowCreateIssuesModal}
+          showCreateIssuesModal={showCreateIssuesModal}
+          setShowCreateIssuesModal={setShowCreateIssuesModal}
         />
       )}
     </>

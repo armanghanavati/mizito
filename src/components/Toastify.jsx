@@ -5,7 +5,6 @@ import { RsetShowToast } from '../hooks/slices/main';
 
 const Toastify = () => {
   const { main } = useSelector((state) => state);
-  console.log(main?.showToast);
   const dispatch = useDispatch();
 
   const oparationIcons = () => {

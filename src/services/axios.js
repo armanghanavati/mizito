@@ -34,6 +34,7 @@ axios.interceptors.response.use(
     return response;
   },
   async function (error) {
+    console.log(error);
 
     try {
       const expectedErrors =
@@ -46,16 +47,24 @@ axios.interceptors.response.use(
           RsetShowToast({
             show: true,
             title:
-              error.response.data.message || "مشکلی در سرور به وجود آمده است.", bg: "danger"
-          }),
+              error.response.data.message ||
+              'مشکلی در سرور به وجود آمده است لطفا دوباره امتحان کنید.',
+            bg: 'danger'
+          })
         );
       }
     } catch (error) {
       console.log(error);
       const { message } = error;
-      store.dispatch(RsetShowToast({
-        show: true, title: error.response.data.message || "مشکلی در سرور به وجود آمده است.", bg: "danger",
-      }));
+      store.dispatch(
+        RsetShowToast({
+          show: true,
+          title:
+            error.response.data.message ||
+            'مشکلی در سرور به وجود آمده است لطفا دوباره امتحان کنید.',
+          bg: 'danger'
+        })
+      );
       return Promise.reject(message);
     }
   }

@@ -116,7 +116,7 @@ const ShowProjects = () => {
           setShowCreateProjectModal={setShowCreateProjectModal}
           itemAndIndexProject={itemAndIndexProject}
         />
-      )}editProjectFields
+      )}
     </>
   );
 };

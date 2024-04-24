@@ -6,65 +6,48 @@ import { Controller, useForm } from 'react-hook-form';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { serGetSubTasks } from '../../services/masterServices';
 import SubTasks from '../subTasks';
-import Comment from '../Comment/index'
+import Comment from '../Comment/index';
 
-const TasksModal = ({ setShowTasksModal
-    , showTasksModal, taskItem }) => {
-    const { create, main } = useSelector((state) => state);
-    const [allSubTask, setAllSubTask] = useState();
-    const dispatch = useDispatch();
-    const {
-        control,
-        handleSubmit,
-        register,
-        reset,
-        watch,
-        formState: { errors },
-        getValues
-    } = useForm({ reValidateMode: 'onChange' });
+const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem,allSubTask }) => {
+  const { create, main } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  const {
+    control,
+    handleSubmit,
+    register,
+    reset,
+    watch,
+    formState: { errors },
+    getValues
+  } = useForm({ reValidateMode: 'onChange' });
 
-    const handleSubTasks = asyncWrapper(async () => {
-        const res = await serGetSubTasks(taskItem?.id)
-        if (res?.data?.code === 1) {
-            console.log(res?.data?.data);
-            setAllSubTask(res?.data?.data);
-        } else {
-            dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
-        }
-    })
-    useEffect(() => {
-        handleSubTasks()
-    }, []);
+  console.log(taskItem);
 
-    return (
-        <>
-            <Modal
-                className="p-0"
-                size="lg"
-                show={showTasksModal}
-                onHide={() => setShowTasksModal(false)}>
-                <Modal.Header
-                    style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-                    className="d-flex bg-primary text-white justify-content-center"
-                    closeButton>
-                    <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-                        وظیفه
-                    </span>
-                </Modal.Header>
-                <Modal.Body>
-                    <SubTasks allSubTask={allSubTask} />
-                    <Comment />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Btn
-                        variant="outline-warning"
-                        title="بستن"
-                        onClick={() => setShowTasksModal(false)}
-                    />
-                </Modal.Footer>
-            </Modal>
-        </>
-    );
+  return (
+    <>
+      <Modal
+        className="p-0"
+        size="lg"
+        show={showTasksModal}
+        onHide={() => setShowTasksModal(false)}>
+        <Modal.Header
+          style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
+          className="d-flex bg-primary text-white justify-content-center"
+          closeButton>
+          <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
+            وظیفه
+          </span>
+        </Modal.Header>
+        <Modal.Body>
+          <SubTasks allSubTask={allSubTask} />
+          <Comment taskItem={taskItem} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Btn variant="outline-warning" title="بستن" onClick={() => setShowTasksModal(false)} />
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 };
 
 export default TasksModal;

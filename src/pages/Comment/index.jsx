@@ -18,7 +18,7 @@ const Comment = ({ taskItem }) => {
     handleGetComments();
   }, []);
 
-  return <div className="border my-2 p-3">dddd</div>;
+  return <div className="my-2 bg-light p-3">dddd</div>;
 };
 
 export default Comment;

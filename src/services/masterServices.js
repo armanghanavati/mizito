@@ -87,3 +87,9 @@ export const serCreateTask = (postData) => {
 export const serComments = (commentId) => {
   return axios.get(`${baseURL}api/CommentController/Comments?taskOrsubtaskid=${commentId}`);
 };
+
+// ارسال کامنت ها
+export const serCreateComment = (postData) => {
+  return axios.post(`${baseURL}api/CommentController/CreateComment`, postData);
+};
+

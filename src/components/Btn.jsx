@@ -24,7 +24,7 @@ const Btn = ({
         {variant ? (
           <Button
             name={name}
-            className={`${className} d-flex w-100  px-4 py-2 justify-content-center`}
+            className={`${className} d-flex w-100 px-4 align-items-center justify-content-center`}
             variant={variant}
             onClick={onClick}>
             {icon}

@@ -378,6 +378,7 @@ body * {
   overflow-y: auto;
 }
 
-.count_WorkFlow{
+.count_WorkFlow {
+  height: max-content;
   overflow-x: scroll !important;
 }

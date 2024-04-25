@@ -137,6 +137,8 @@ const CreateProjectModal = ({
     });
   };
 
+  console.log(editProjectFields, "editProjectFields editProjectFields editProjectFields");
+
   useEffect(() => {
     handleEditFields();
   }, [editProjectFields]);
@@ -206,12 +208,11 @@ const CreateProjectModal = ({
                     // value={sprintNum}
                     min={1}
                     max={20}
-                    disabled={typeValue?.id === 1 ? false : true}
-                    // onChange={(e) => setSprintNum(e.target.value)}
+                    disabled={watch('projectType')?.id === 1 ? false : true}
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه: ${typeValue?.id === 1 ? Number(watch('sprintNumber') || 1) : '0'}`}
+                    label={`سرعت پروژه: ${Number(watch('sprintNumber') || 1)}`}
                   />
                 </Row>
                 <Row>

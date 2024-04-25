@@ -37,7 +37,7 @@ const SubTasks = ({ allSubTask }) => {
         return (
             <Container fluid >
                 <Row className='d-flex justify-content-between' >
-                    <Col className='d-flex justify-content-between my-1' xs={12} md={12}>
+                    <Col className='d-flex justify-content-between ' xs={12} md={12}>
                         <SwitchCase
                             control={control}
                             name=""

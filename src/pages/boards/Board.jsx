@@ -68,14 +68,14 @@ const Board = ({ item }) => {
       <Col className="bg-light p-3 d-flex justify-content-between">
         <span>تاریخ ساخت پروژه:</span>
       </Col>
-      <Container className="count_WorkFlow d-flex">
+      <Container fluid className="count_WorkFlow d-flex">
         {workflowList.map((wf, wfIndex) => {
           return (
             <>
-              <Col className="m-2 justify-content-center" xxl="2">
+              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2">
                 <Col
                   xxl="2"
-                  className="d-flex align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 rounded bg-warning">
+                  className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 bg-warning">
                   <span>{wf?.name}</span>
 
                   <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
@@ -83,17 +83,17 @@ const Board = ({ item }) => {
                 <div>
                   <div
                     onClick={() => handleCreateIssue(wf)}
-                    className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 rounded bg-white shadow">
-                    <i className="d-flex align-items-center mx-1 text-secondary bi bi-plus-circle" />
+                    className="d-flex bg-white py-1 justify-content-center cursorPointer align-items-center my-4 border-bottom text-warning ">
+                    <i className="d-flex align-items-center mx-1 text-warning bi bi-plus-circle" />
                     <span>ایجاد موضوع</span>
                   </div>
                   {tasksList
                     ?.filter((task) => task?.workFlow === wf?.id)
-                    .map((task, taskIndex) => {
+                    .map((task) => {
                       return (
                         <div
                           onClick={() => handleShowTask(task)}
-                          className="border subTask_To_Task d-flex row justify-content-between shadow cursorPointer my-3 mx-1 p-4"
+                          className=" bg-white shadow subTask_To_Task d-flex row justify-content-between  cursorPointer my-3 mx-1 p-4"
                           key={task?.id}>
                           <div className="d-flex justify-content-center">{task?.name}</div>
                           <div>
@@ -113,14 +113,14 @@ const Board = ({ item }) => {
             </>
           );
         })}
-        <span className="d-flex align-items-start my-2 text-warning fw-bold">
+        <Col className="col-2 d-flex align-items-start justify-content-center my-2 text-warning fw-bold">
           <span
             onClick={handleCreateWorkFlow}
             className="cursorPointer bg-white rounded px-2 d-flex align-items-center">
             ایجاد ستون
             <i className=" d-flex align-items-center py-1 mx-1 font20 fw-bold bi bi-plus-circle" />
           </span>
-        </span>
+        </Col>
       </Container>
       {showTasksModal && (
         <TasksModal

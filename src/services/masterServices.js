@@ -90,6 +90,6 @@ export const serComments = (commentId) => {
 
 // ارسال کامنت ها
 export const serCreateComment = (postData) => {
+  console.log(postData);
   return axios.post(`${baseURL}api/CommentController/CreateComment`, postData);
 };
-

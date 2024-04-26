@@ -30,6 +30,7 @@ const AllBoard = () => {
     dispatch(RsetShowLoading({ value: true }));
     if (!!getIdProject) {
       const resGetBoard = await serGetBoards(getIdProject);
+      console.log(resGetBoard);
       if (resGetBoard?.data?.code === 1) {
         console.log(resGetBoard);
         dispatch(
@@ -43,6 +44,7 @@ const AllBoard = () => {
         });
         setItsBoard(itsBoard);
       } else {
+        console.log(resGetBoard);
         dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
       }
     } else {

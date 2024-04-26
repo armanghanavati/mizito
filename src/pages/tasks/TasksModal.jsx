@@ -4,7 +4,7 @@ import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serGetSubTasks } from '../../services/masterServices';
+import { serComments, serCreateComment, serGetSubTasks } from '../../services/masterServices';
 import SubTasks from '../subTasks';
 import Comment from '../Comment/index';
 import Input from '../../components/Input';
@@ -21,22 +21,29 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
     formState: { errors },
     getValues
   } = useForm({ reValidateMode: 'onChange' });
+  const [allow, setAllow] = useState(false);
+  const [allCommets, setAllCommets] = useState([]);
 
   console.log(taskItem, allSubTask);
 
-  const handleCreateComment = asyncWrapper(async (data) => {
+  const handleGetComments = asyncWrapper(async () => {
+    const res = await serComments(taskItem?.id);
+    if (res?.data?.code === 1) {
+      setAllCommets(res?.data?.data);
+    }
+  });
 
+  const handleCreateComment = asyncWrapper(async (data) => {
     const postData = {
       text: data?.createComment,
-      attachmentStatus: true,
-      taskJiraId: taskItem?.id,
-      subTaskId: "",
-      commentMentionUsersViewModels: [""],
+      taskJiraId: taskItem?.id || null,
+      subTaskId: '' || null,
+      commentMentionUsersViewModels: [] || [],
       attachmentCreateViewModels: []
-    }
-    const res = await serCreateComment(postData)
-    console.log(res);
-  })
+    };
+    await serCreateComment(postData);
+    return handleGetComments();
+  });
 
   return (
     <>
@@ -55,23 +62,26 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
         </Modal.Header>
         <Modal.Body>
           <SubTasks allSubTask={allSubTask} />
-          <div className='border my-4 p-2'>
+          <div className="border my-4 p-2">
             <Form>
-              <Row className='align-items-center' >
-                <Input label='متن گزارش:' xs={2} xl={10} control={control} name='createComment' />
-                <Btn className='mt-4' icon={<i className="d-flex align-items-center bi ms-1 bi-send" />} variant="outline-primary" title="ارسال"
+              <Row className="align-items-center">
+                <Input label="متن گزارش:" xs={2} xl={10} control={control} name="createComment" />
+                <Btn
+                  className="mt-4"
+                  icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
+                  variant="outline-primary"
+                  title="ارسال"
                   onClick={handleSubmit((data) => handleCreateComment(data))}
-
                 />
               </Row>
             </Form>
-            <Comment taskItem={taskItem} />
+            <Comment allCommets={allCommets} taskItem={taskItem} />
           </div>
         </Modal.Body>
         <Modal.Footer>
           <Btn variant="outline-warning" title="بستن" onClick={() => setShowTasksModal(false)} />
         </Modal.Footer>
-      </Modal >
+      </Modal>
     </>
   );
 };

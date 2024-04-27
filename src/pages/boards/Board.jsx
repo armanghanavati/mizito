@@ -80,7 +80,7 @@ const Board = ({ item }) => {
 
                   <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
                 </Col>
-                <div>
+                <div className='' >
                   <div
                     onClick={() => handleCreateIssue(wf)}
                     className="d-flex bg-white py-1 justify-content-center cursorPointer align-items-center my-4 border-bottom text-warning ">

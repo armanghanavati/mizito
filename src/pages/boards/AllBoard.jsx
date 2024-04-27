@@ -43,6 +43,7 @@ const AllBoard = () => {
         });
         setItsBoard(itsBoard);
       } else {
+        console.log(resGetBoard);
         dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
       }
     } else {

@@ -12,9 +12,10 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
-import { serCreateTask } from '../../services/masterServices';
+import { serCreateTask, serTasks, serWorkFlows } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
+import { RsetShowToast } from '../../hooks/slices/main';
 
 const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlowItem }) => {
   const { create, main } = useSelector((state) => state);
@@ -55,8 +56,11 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
     };
     const res = await serCreateTask(postData);
     if (res?.data?.code === 1) {
+      console.log(res);
       setShowCreateIssuesModal(false);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      await serWorkFlows();
+      await serTasks(location?.state?.item?.id);
     } else {
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
     }

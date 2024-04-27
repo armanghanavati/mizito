@@ -22,7 +22,7 @@ const CreateProjectModal = ({
   handleGetProjects
 }) => {
   const { create, main } = useSelector((state) => state);
-  const [sprintNum, setSprintNum] = useState(50);
+  const [sprintNum, setSprintNum] = useState(1);
   const dispatch = useDispatch();
   const {
     control,
@@ -41,6 +41,7 @@ const CreateProjectModal = ({
       title: item?.fullName
     };
   });
+
 
   const handleCreateProject = asyncWrapper(async (data) => {
     const handleUsersAssgin = data?.projectAssignedUsersViewModel?.map((item) => {
@@ -75,6 +76,7 @@ const CreateProjectModal = ({
           // }
         ]
       };
+      console.log(postData);
       const res = await serPutEditProject(postData);
       if (res?.data?.code === 1) {
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
@@ -151,6 +153,8 @@ const CreateProjectModal = ({
 
   const typeValue = watch('projectType');
 
+  console.log(watch('sprintNumber'));
+
   return (
     <>
       <Modal
@@ -183,8 +187,6 @@ const CreateProjectModal = ({
                     </>
                   )}
                 />
-                {/* <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} /> */}
-                {/* <Datepicker name="endDateTime" label="تاریخ پایان:" control={control} /> */}
                 <ComboBox
                   options={main?.allEnums?.priorityList}
                   name="projectPriority"
@@ -203,16 +205,34 @@ const CreateProjectModal = ({
                   control={control}
                   label="نوع:"
                 />
-                <Row className="mt-4">
+                {/* <Row className="mt-4">
                   <SwitchCase
                     // value={sprintNum}
+                    onChecked={true}
                     min={1}
                     max={20}
                     disabled={watch('projectType')?.id === 1 ? false : true}
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه: ${Number(watch('sprintNumber') || 1)}`}
+                    label={`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : Number(watch('sprintNumber'))}`}
+                  />
+                </Row> */}
+                <Row className="mt-4">
+                  {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum}`}
+                  <Form.Label>  </Form.Label>
+                  <Form.Range
+                    defaultValue={editProjectFields?.sprintNumber}
+                    type="range"
+                    value={watch('projectType')?.id === 0 ? 0 : sprintNum}
+                    onChecked={true}
+                    min={1}
+                    max={20}
+                    onChange={(e) => setSprintNum(Number(e.target.value))}
+                    // disabled={watch('projectType')?.id === 1 ? false : true}
+                    // control={control}
+                    name="sprintNumber"
+                    range
                   />
                 </Row>
                 <Row>

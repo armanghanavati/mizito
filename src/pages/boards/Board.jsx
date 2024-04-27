@@ -72,7 +72,7 @@ const Board = ({ item }) => {
         {workflowList.map((wf, wfIndex) => {
           return (
             <>
-              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2">
+              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="1">
                 <Col
                   xxl="2"
                   className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 bg-warning">

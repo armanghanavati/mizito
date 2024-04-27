@@ -36,6 +36,29 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
   )
   const boardUsersId = itsBoard?.[0]?.boardUsersViewModel?.map((item) => item?.userId)
 
+  const handleGetBoard = asyncWrapper(async () => {
+    const postData = {
+      id: "id",
+      projectType: 0,
+      sprintNumber: 0,
+      projectAssignedUsersViewModel: [
+        {
+          userId: "",
+          userName: "",
+          fullName: "",
+          projectUsersRoleViewModel: [
+            {
+              projectRole: 0
+            }
+          ]
+        }
+      ],
+      projectAttachmentsViewModel: []
+    }
+    // const res = await api
+  }
+  )
+
   const handleCreateBoard = asyncWrapper(async (data) => {
     setShowCreateBoardModal(false);
     const postDatePost = {
@@ -50,6 +73,7 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
       attachmentsCreateViewModel: []
     };
     const resCreateBoard = await serCreateBoardPost(postDatePost);
+    console.log(resCreateBoard);
     if (resCreateBoard?.data?.code === 1) {
       const resGetBoard = await serGetBoards(getIdProject);
       console.log(resGetBoard);
@@ -83,8 +107,8 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
             <Container fluid className="mb-3">
               <Row>
                 <Input name="name" xl={4} label="نام بورد:" control={control} />
-                <Datepicker name="createDateTime" label="تاریخ ساخت:" control={control} />
                 <ComboBox
+                  isDisabled
                   options={main?.allEnums?.projectType}
                   name="projectType"
                   control={control}

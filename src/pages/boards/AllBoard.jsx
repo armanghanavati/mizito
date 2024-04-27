@@ -30,12 +30,12 @@ const AllBoard = () => {
     dispatch(RsetShowLoading({ value: true }));
     if (!!getIdProject) {
       const resGetBoard = await serGetBoards(getIdProject);
+      dispatch(RsetShowLoading({ value: false }));
       if (resGetBoard?.data?.code === 1) {
         console.log(resGetBoard);
         dispatch(
           RsetFieldsEditProject({ userAssigned: resGetBoard?.data?.data[0]?.boardUsersViewModel })
         );
-        dispatch(RsetShowLoading({ value: false }));
         setFindBoard(true);
         setAllBoard(resGetBoard?.data?.data);
         const itsBoard = resGetBoard?.data?.data?.map((board) => {
@@ -112,6 +112,7 @@ const AllBoard = () => {
   });
 
   const handleCreateBoard = () => {
+
     setShowCreateBoardModal(true);
   };
 

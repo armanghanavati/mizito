@@ -19,10 +19,11 @@ const CreateProjectModal = ({
   showCreateProjectModal,
   setShowCreateProjectModal,
   editProjectFields,
+  sprintNum,
+  setSprintNum,
   handleGetProjects
 }) => {
   const { create, main } = useSelector((state) => state);
-  const [sprintNum, setSprintNum] = useState(1);
   const dispatch = useDispatch();
   const {
     control,
@@ -34,6 +35,7 @@ const CreateProjectModal = ({
     formState: { errors },
     getValues
   } = useForm({ reValidateMode: 'onChange' });
+  const typeValue = watch('projectType');
 
   const addUsersFilter = main?.allUsers?.map((item) => {
     return {
@@ -41,7 +43,6 @@ const CreateProjectModal = ({
       title: item?.fullName
     };
   });
-
 
   const handleCreateProject = asyncWrapper(async (data) => {
     const handleUsersAssgin = data?.projectAssignedUsersViewModel?.map((item) => {
@@ -54,7 +55,6 @@ const CreateProjectModal = ({
         ]
       };
     });
-    console.log(handleUsersAssgin);
     if (editService) {
       const postData = {
         id: data?.id,
@@ -64,27 +64,17 @@ const CreateProjectModal = ({
         projectPriority: data?.projectPriority?.id,
         projectStatus: data?.projectStatus?.id,
         projectType: data?.projectType?.id,
-        sprintNumber: data?.sprintNumber,
+        sprintNumber: typeValue === 0 ? 0 : sprintNum,
         projectAssignedUsersViewModel: handleUsersAssgin,
-        attachmentEditViewModels: [
-          // {
-          //   id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          //   fileName: "",
-          //   filePath: "",
-          //   uploadDate: "",
-          //   attachCreatorId: ""
-          // }
-        ]
+        attachmentEditViewModels: []
       };
       console.log(postData);
       const res = await serPutEditProject(postData);
       if (res?.data?.code === 1) {
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
-      }
-      else {
+      } else {
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
       }
-
     } else {
       const postData = {
         name: data?.name,
@@ -101,8 +91,7 @@ const CreateProjectModal = ({
       if (resCreate?.data?.code === 1) {
         console.log(resCreate?.data?.msg);
         dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'success' }));
-      }
-      else {
+      } else {
         console.log(resCreate);
         dispatch(RsetShowToast({ show: true, title: resCreate?.data?.msg, bg: 'danger' }));
       }
@@ -134,26 +123,15 @@ const CreateProjectModal = ({
         editProjectFields?.projectStatus,
         main?.allEnums?.projectStatus
       ),
-      projectAssignedUsersViewModel: handleUsersAssgin,
-      sprintNumber: editProjectFields?.sprintNumber
+      projectAssignedUsersViewModel: handleUsersAssgin
+      // sprintNumber: editProjectFields?.sprintNumber
     });
   };
 
-  console.log(editProjectFields, "editProjectFields editProjectFields editProjectFields");
-
   useEffect(() => {
     handleEditFields();
+    setSprintNum(editProjectFields?.sprintNumber);
   }, [editProjectFields]);
-
-  // useEffect(() => {
-  //   if (typeValue?.id === 1) {
-  //     setValue("sprintNumber", 1);
-  //   }
-  // }, [watch("sprintNumber")]);
-
-  const typeValue = watch('projectType');
-
-  console.log(watch('sprintNumber'));
 
   return (
     <>
@@ -205,26 +183,13 @@ const CreateProjectModal = ({
                   control={control}
                   label="نوع:"
                 />
-                {/* <Row className="mt-4">
-                  <SwitchCase
-                    // value={sprintNum}
-                    onChecked={true}
-                    min={1}
-                    max={20}
-                    disabled={watch('projectType')?.id === 1 ? false : true}
-                    control={control}
-                    name="sprintNumber"
-                    range
-                    label={`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : Number(watch('sprintNumber'))}`}
-                  />
-                </Row> */}
                 <Row className="mt-4">
-                  {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum}`}
-                  <Form.Label>  </Form.Label>
+                  {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum || 1}`}
+                  <Form.Label> </Form.Label>
                   <Form.Range
-                    defaultValue={editProjectFields?.sprintNumber}
+                    disabled={watch('projectType')?.id === 0 ? true : false}
                     type="range"
-                    value={watch('projectType')?.id === 0 ? 0 : sprintNum}
+                    value={sprintNum}
                     onChecked={true}
                     min={1}
                     max={20}

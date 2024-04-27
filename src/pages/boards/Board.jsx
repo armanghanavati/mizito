@@ -85,7 +85,7 @@ const Board = ({ item }) => {
                     onClick={() => handleCreateIssue(wf)}
                     className="d-flex bg-white py-1 justify-content-center cursorPointer align-items-center my-4 border-bottom text-warning ">
                     <i className="d-flex align-items-center mx-1 text-warning bi bi-plus-circle" />
-                    <span>ایجاد موضوع</span>
+                    <span>ایجاد وظیفه</span>
                   </div>
                   {tasksList
                     ?.filter((task) => task?.workFlow === wf?.id)

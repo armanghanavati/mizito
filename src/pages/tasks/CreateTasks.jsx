@@ -85,7 +85,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input xl={6} label="نام موضوع :" name="name" control={control} />
+                <Input xl={6} label="نام وظیفه :" name="name" control={control} />
                 <ComboBox
                   className=""
                   isMulti
@@ -93,7 +93,16 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
                   options={fixUsers}
                   xl={6}
                   control={control}
-                  label="اختصاص به:"
+                  label="مسئول انجام:"
+                />
+                <ComboBox
+                  className=""
+                  isMulti
+                  name="assginTo"
+                  options={fixUsers}
+                  xl={6}
+                  control={control}
+                  label="مسئول تایید:"
                 />
                 <Row>
                   <Datepicker name="dueDateTime" label="تاریخ ایجاد:" control={control} />

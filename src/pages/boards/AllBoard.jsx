@@ -19,6 +19,7 @@ const AllBoard = () => {
   const location = useLocation();
   const getIdProject = location?.pathname?.split(':')?.[1];
   const [itemAndIndexProject, setItemAndIndexProject] = useState({});
+  const [editFiledsBoard, setEditFiledsBoard] = useState({});
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [findBoard, setFindBoard] = useState(false);
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
@@ -32,7 +33,6 @@ const AllBoard = () => {
       const resGetBoard = await serGetBoards(getIdProject);
       dispatch(RsetShowLoading({ value: false }));
       if (resGetBoard?.data?.code === 1) {
-        console.log(resGetBoard);
         dispatch(
           RsetFieldsEditProject({ userAssigned: resGetBoard?.data?.data[0]?.boardUsersViewModel })
         );
@@ -58,62 +58,29 @@ const AllBoard = () => {
   };
 
   const handleGetSerBoardCreate = asyncWrapper(async () => {
-    const postDataGet = {
-      id: getIdProject,
-      name: 'string',
-      description: 'string',
-      createDateTime: '2024-04-18T14:20:45.991Z',
-      dueDateTime: '2024-04-18T14:20:45.991Z',
-      endDateTime: '2024-04-18T14:20:45.991Z',
-      projectPriority: 0,
-      projectStatus: 0,
-      projectType: 0,
-      sprintNumber: 0,
-      attachmentStatus: true,
-      projectCreatorId: 'string',
-      projectCreator: 'string',
-      projectCreatorFullName: 'string',
-      projectAssignedUsersViewModel: [
-        {
-          userId: 'string',
-          userName: 'string',
-          fullName: 'string',
-          projectUsersRoleViewModel: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
-      projectAttachmentsViewModel: [
-        {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          fileName: 'string',
-          filePath: 'string',
-          uploadDate: '2024-04-18T14:20:45.991Z'
-        }
-      ]
-    };
     RsetShowLoading({ value: true });
     const response = await serCreateBoardGet(getIdProject);
     RsetShowLoading({ value: false });
+    console.log(response);
     if (response?.data?.code === 1) {
+      setEditFiledsBoard(response?.data?.data);
       console.log(response);
       const fixUserCombo = StringHelpers.convertComboBox(
         response?.data?.data?.projectAssignedUsersViewModel
       );
-      dispatch(
-        RsetAllUsers({
-          ...main?.allUsers,
-          userAssigned: fixUserCombo
-        })
-      );
+      // dispatch(
+      //   RsetAllUsers({
+      //     ...main?.allUsers,
+      //     userAssigned: fixUserCombo
+      //   })
+      // );
       setShowCreateBoardModal(true);
     }
   });
 
   const handleCreateBoard = () => {
-
+    handleGetSerBoardCreate();
+    setEditFiledsBoard({})
     setShowCreateBoardModal(true);
   };
 
@@ -156,7 +123,7 @@ const AllBoard = () => {
                     </span>
                   </div>
                   <hr />
-                  <Col className=" cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
+                  <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
                     <i className="bi font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
                   </Col>
                   {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
@@ -191,6 +158,8 @@ const AllBoard = () => {
       )}
       {showCreateBoardModal && (
         <CreateBoardModal
+          setEditFiledsBoard={setEditFiledsBoard}
+          editFiledsBoard={editFiledsBoard}
           handleGetBoards={handleGetBoards}
           itemAndIndexProject={itemAndIndexProject}
           itsBoard={itsBoard}

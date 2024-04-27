@@ -19,6 +19,7 @@ const ShowProjects = () => {
   const [editService, setEditService] = useState(false);
   const [itemAndIndexProject, setItemAndIndexProject] = useState({});
   const [editProjectFields, setEditProjectFields] = useState({});
+  const [sprintNum, setSprintNum] = useState(1);
 
   const handleGetProjects = async () => {
     try {
@@ -45,7 +46,7 @@ const ShowProjects = () => {
 
   const handleEditProject = asyncWrapper(async (item, index) => {
     dispatch(RsetShowLoading({ value: true }));
-    setEditService(true)
+    setEditService(true);
     const res = await serViceEditProject(item?.id);
     dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
@@ -58,8 +59,9 @@ const ShowProjects = () => {
   });
 
   const handleCreateProject = () => {
+    setSprintNum(1);
     setEditProjectFields({});
-    setEditService(false)
+    setEditService(false);
     setShowCreateProjectModal(true);
   };
 
@@ -104,11 +106,12 @@ const ShowProjects = () => {
               </div>
             </>
           ))}
-
         </div>
       </Container>
       {showCreateProjectModal && (
         <CreateProjectModal
+          sprintNum={sprintNum}
+          setSprintNum={setSprintNum}
           editService={editService}
           editProjectFields={editProjectFields}
           handleGetProjects={handleGetProjects}

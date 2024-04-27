@@ -14,11 +14,20 @@ import StringHelpers from '../../helpers/StringHelpers';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreateBoardModal, itemAndIndexProject, itsBoard }) => {
+const CreateBoardModal = ({
+  showCreateBoardModal,
+  editFiledsBoard,
+  setEditFiledsBoard,
+  handleGetBoards,
+  setShowCreateBoardModal,
+  itemAndIndexProject,
+  itsBoard
+}) => {
   const { create, main } = useSelector((state) => state);
-  const location = useLocation()
+  const location = useLocation();
   const dispatch = useDispatch();
-  const { reset,
+  const {
+    reset,
     control,
     handleSubmit,
     register,
@@ -27,47 +36,26 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
     getValues
   } = useForm({ reValidateMode: 'onChange' });
   const getIdProject = location?.pathname?.split(':')?.[1];
-  const usersAssigned = itsBoard?.[0]?.boardUsersViewModel?.map((item) => {
+
+  const usersAssigned = editFiledsBoard?.projectAssignedUsersViewModel?.map((item) => {
     return {
       id: item?.userId,
       title: item?.fullName
-    }
-  }
-  )
-  const boardUsersId = itsBoard?.[0]?.boardUsersViewModel?.map((item) => item?.userId)
+    };
+  });
+  const boardUsersId = itsBoard?.[0]?.boardUsersViewModel?.map((item) => item?.userId);
 
-  const handleGetBoard = asyncWrapper(async () => {
-    const postData = {
-      id: "id",
-      projectType: 0,
-      sprintNumber: 0,
-      projectAssignedUsersViewModel: [
-        {
-          userId: "",
-          userName: "",
-          fullName: "",
-          projectUsersRoleViewModel: [
-            {
-              projectRole: 0
-            }
-          ]
-        }
-      ],
-      projectAttachmentsViewModel: []
-    }
-    // const res = await api
-  }
-  )
+  console.log(usersAssigned);
 
   const handleCreateBoard = asyncWrapper(async (data) => {
     setShowCreateBoardModal(false);
     const postDatePost = {
       name: data?.name,
       description: data?.description,
-      createDateTime: StringHelpers.convertDateEn(data?.createDateTime),
-      sprintNumber: data?.sprintNumber,
+      // createDateTime: StringHelpers.convertDateEn(data?.createDateTime),
+      // sprintNumber: data?.sprintNumber,
       projectId: getIdProject,
-      projectType: data?.projectType?.id,
+      // projectType: data?.projectType?.id,
       boardWorkFlowsId: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
       boardUsersId: boardUsersId,
       attachmentsCreateViewModel: []
@@ -84,8 +72,18 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
   });
 
   useEffect(() => {
-    reset({ usersAssigned })
+    reset({ usersAssigned });
   }, [itsBoard]);
+
+  useEffect(() => {
+    reset({
+      ...editFiledsBoard,
+      projectType: StringHelpers?.findCombo(
+        editFiledsBoard?.projectType,
+        main?.allEnums?.projectType
+      )
+    });
+  }, [editFiledsBoard]);
 
   return (
     <>
@@ -115,18 +113,18 @@ const CreateBoardModal = ({ showCreateBoardModal, handleGetBoards, setShowCreate
                   label="نوع:"
                 />
                 <Row className="mt-4">
-                  <SwitchCase
+                  {/* <SwitchCase
                     min={1}
+                    disabled
                     max={20}
                     control={control}
                     name="sprintNumber"
                     range
                     label={`سرعت پروژه:${watch('sprintNumber') || 1}`}
-                  />
+                  /> */}
                 </Row>
                 <Row>
                   <ComboBox
-                    isDisabled
                     isMulti
                     name="usersAssigned"
                     options={usersAssigned}

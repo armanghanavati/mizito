@@ -54,8 +54,6 @@ const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject
     };
   };
 
-
-
   return (
     <>
       <Modal

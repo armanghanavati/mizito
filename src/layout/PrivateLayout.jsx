@@ -56,13 +56,12 @@ const PrivateLayout = ({ children }) => {
   return (
     <>
       <div className="d-flex">
-        <Col className="sideCount vh-100 shadow-lg" md="2">
+        <Col className="sideCount position-relative shadow-lg" xxl="2" md="2">
           <Sidebar />
         </Col>
-        <Col className="bg-whit-100">
+        <Col xxl="10" className="bg-whit-100">
           <Header />
-          {/* <Bords /> */}
-          <div className="position-relative">{children}</div>
+          {children}
         </Col>
       </div>
     </>

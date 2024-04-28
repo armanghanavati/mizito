@@ -30,6 +30,7 @@ const Board = ({ item }) => {
     const resWorkFlows = await serWorkFlows();
     const resTasks = await serTasks(location?.state?.item?.id);
     dispatch(RsetShowLoading({ value: false }));
+    console.log(resTasks);
     if (resWorkFlows?.data?.code === 1) {
       setTasksList(resTasks?.data?.data);
       setWorkflowList(resWorkFlows?.data?.data);
@@ -68,11 +69,11 @@ const Board = ({ item }) => {
       <Col className="bg-light p-3 d-flex justify-content-between">
         <span>تاریخ ساخت پروژه:</span>
       </Col>
-      <Container fluid className="count_WorkFlow d-flex">
+      <Container fluid className="count_WorkFlow d-flex ">
         {workflowList.map((wf, wfIndex) => {
           return (
             <>
-              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="1">
+              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2">
                 <Col
                   xxl="2"
                   className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 bg-warning">
@@ -132,6 +133,7 @@ const Board = ({ item }) => {
       )}
       {showCreateIssuesModal && (
         <CreateTasks
+          handleWorkFlows={handleWorkFlows}
           workFlowItem={workFlowItem}
           showCreateIssuesModal={showCreateIssuesModal}
           setShowCreateIssuesModal={setShowCreateIssuesModal}

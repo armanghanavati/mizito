@@ -1,5 +1,3 @@
-import { Col, Form, Row } from 'react-bootstrap';
-import Input from '../components/Input';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 

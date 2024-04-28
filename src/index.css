@@ -147,9 +147,7 @@ body * {
 
 /* side bar */
 .sideCount {
-  /* background: linear-gradient(0deg, #ec7d46 0%, #f96332 100%); */
   background: #f96332;
-  /* background: #f96332; */
 }
 
 .sideAnimate {
@@ -379,6 +377,5 @@ body * {
 }
 
 .count_WorkFlow {
-  height: max-content;
   overflow-x: scroll !important;
 }

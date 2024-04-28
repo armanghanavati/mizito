@@ -3,7 +3,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import CreateTasks from '../tasks/CreateTasks';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serCreateBoardGet, serGetBoards } from '../../services/masterServices';
+import { serCreateBoardGet, serEditBoard, serGetBoards } from '../../services/masterServices';
 import CreateBoardModal from '../create/CreateBoardModal';
 import EditBoardModal from './EditBoardModal';
 import StringHelpers from '../../helpers/StringHelpers';
@@ -33,9 +33,6 @@ const AllBoard = () => {
       const resGetBoard = await serGetBoards(getIdProject);
       dispatch(RsetShowLoading({ value: false }));
       if (resGetBoard?.data?.code === 1) {
-        dispatch(
-          RsetFieldsEditProject({ userAssigned: resGetBoard?.data?.data[0]?.boardUsersViewModel })
-        );
         setFindBoard(true);
         setAllBoard(resGetBoard?.data?.data);
         const itsBoard = resGetBoard?.data?.data?.map((board) => {
@@ -68,12 +65,12 @@ const AllBoard = () => {
       const fixUserCombo = StringHelpers.convertComboBox(
         response?.data?.data?.projectAssignedUsersViewModel
       );
-      // dispatch(
-      //   RsetAllUsers({
-      //     ...main?.allUsers,
-      //     userAssigned: fixUserCombo
-      //   })
-      // );
+      dispatch(
+        RsetAllUsers({
+          ...main?.allUsers,
+          allUserAssignedBoard: fixUserCombo
+        })
+      );
       setShowCreateBoardModal(true);
     }
   });
@@ -84,10 +81,16 @@ const AllBoard = () => {
     setShowCreateBoardModal(true);
   };
 
-  const handleShowEditBoard = (data, index) => {
+  const handleShowEditBoard = asyncWrapper(async (data, index) => {
+    RsetShowLoading({ value: true })
+    const responseEditBoard = await serEditBoard(location?.state?.item?.id)
+    RsetShowLoading({ value: false })
+    if (responseEditBoard?.data?.code === 1) {
+      setEditFiledsBoard({ ...editFiledsBoard, getEditBoard: responseEditBoard?.data?.data })
+    }
     setItemAndIndexProject({ data, index });
     setShowCreateBoardModal(true);
-  };
+  })
 
   useEffect(() => {
     handleGetBoards();

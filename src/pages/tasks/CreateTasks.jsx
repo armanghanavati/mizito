@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Modal, Form, Row } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetFieldsEditProject, RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { Controller, useForm } from 'react-hook-form';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
@@ -17,7 +17,7 @@ import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlowItem }) => {
+const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlowItem, handleWorkFlows }) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
   const location = useLocation();
@@ -44,7 +44,6 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
     const postData = {
       name: data?.name,
       description: data?.description,
-      priority: 0,
       workFlow: workFlowItem?.id,
       dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
       remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
@@ -56,15 +55,14 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
     };
     const res = await serCreateTask(postData);
     if (res?.data?.code === 1) {
-      console.log(res);
       setShowCreateIssuesModal(false);
+      handleWorkFlows()
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
-      await serWorkFlows();
-      await serTasks(location?.state?.item?.id);
     } else {
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
     }
   });
+  console.log(create?.fieldsEditProject);
 
   return (
     <>
@@ -84,12 +82,12 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
+              <Input xl={6} label="نام وظیفه :" name="name" control={control} />
               <Row>
-                <Input xl={6} label="نام وظیفه :" name="name" control={control} />
                 <ComboBox
                   className=""
                   isMulti
-                  name="assginTo"
+                  name="assignedUsersId"
                   options={fixUsers}
                   xl={6}
                   control={control}
@@ -98,7 +96,7 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
                 <ComboBox
                   className=""
                   isMulti
-                  name="assginTo"
+                  name="verifyUsersId"
                   options={fixUsers}
                   xl={6}
                   control={control}

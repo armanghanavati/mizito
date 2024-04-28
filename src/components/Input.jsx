@@ -56,6 +56,7 @@ const Input = ({
       <Col className="my-4" xs={xs} md={md} xl={xl}>
         <Controller
           name={name}
+
           control={control}
           rules={{
             validate,

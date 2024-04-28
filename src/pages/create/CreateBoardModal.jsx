@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Form, Modal, Row } from 'react-bootstrap';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
@@ -9,7 +9,7 @@ import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serCreateBoardGet, serCreateBoardPost } from '../../services/masterServices';
+import { serCreateBoardGet, serCreateBoardPost, serGetBoards, serWorkFlows } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
@@ -24,6 +24,7 @@ const CreateBoardModal = ({
   itsBoard
 }) => {
   const { create, main } = useSelector((state) => state);
+  const [allWorkFlow, setAllWorkFlow] = useState([]);
   const location = useLocation();
   const dispatch = useDispatch();
   const {
@@ -37,43 +38,54 @@ const CreateBoardModal = ({
   } = useForm({ reValidateMode: 'onChange' });
   const getIdProject = location?.pathname?.split(':')?.[1];
 
+  const fixAllWorkFlow = allWorkFlow?.map((item) => {
+    return {
+      id: item?.id,
+      title: item?.name
+    }
+  })
+
   const usersAssigned = editFiledsBoard?.projectAssignedUsersViewModel?.map((item) => {
     return {
       id: item?.userId,
       title: item?.fullName
     };
   });
-  const boardUsersId = itsBoard?.[0]?.boardUsersViewModel?.map((item) => item?.userId);
-
-  console.log(usersAssigned);
 
   const handleCreateBoard = asyncWrapper(async (data) => {
+    const fixUsersId = data?.usersAssigned?.map((item) => item?.id);
+    const fixWorkFlowsId = data?.boardWorkFlowsId?.map((item) => item?.id);
     setShowCreateBoardModal(false);
+    console.log(data);
     const postDatePost = {
       name: data?.name,
       description: data?.description,
-      // createDateTime: StringHelpers.convertDateEn(data?.createDateTime),
-      // sprintNumber: data?.sprintNumber,
       projectId: getIdProject,
-      // projectType: data?.projectType?.id,
-      boardWorkFlowsId: ['3fa85f64-5717-4562-b3fc-2c963f66afa6'],
-      boardUsersId: boardUsersId,
+      boardWorkFlowsId: fixWorkFlowsId,
+      boardUsersId: fixUsersId,
       attachmentsCreateViewModel: []
     };
+    console.log(postDatePost);
     const resCreateBoard = await serCreateBoardPost(postDatePost);
     console.log(resCreateBoard);
     if (resCreateBoard?.data?.code === 1) {
-      const resGetBoard = await serGetBoards(getIdProject);
-      console.log(resGetBoard);
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      handleGetBoards()
+      dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'success' }));
     } else {
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'danger' }));
     }
   });
 
+  const handleWorkFlows = asyncWrapper(async () => {
+    const responseWorkFlow = await serWorkFlows()
+    if (responseWorkFlow?.data?.code === 1) {
+      setAllWorkFlow(responseWorkFlow?.data?.data)
+    }
+  })
+
   useEffect(() => {
-    reset({ usersAssigned });
-  }, [itsBoard]);
+    handleWorkFlows()
+  }, []);
 
   useEffect(() => {
     reset({
@@ -81,7 +93,9 @@ const CreateBoardModal = ({
       projectType: StringHelpers?.findCombo(
         editFiledsBoard?.projectType,
         main?.allEnums?.projectType
-      )
+      ),
+      name: "",
+
     });
   }, [editFiledsBoard]);
 
@@ -104,7 +118,7 @@ const CreateBoardModal = ({
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input name="name" xl={4} label="نام بورد:" control={control} />
+                <Input errmsg='لطفا نام بورد را وارد کنید' errors={errors} name="name" xl={4} label="نام بورد:" control={control} />
                 <ComboBox
                   isDisabled
                   options={main?.allEnums?.projectType}
@@ -113,15 +127,14 @@ const CreateBoardModal = ({
                   label="نوع:"
                 />
                 <Row className="mt-4">
-                  {/* <SwitchCase
+                  <SwitchCase
                     min={1}
-                    disabled
-                    max={20}
+                    max={editFiledsBoard?.sprintNumber}
                     control={control}
                     name="sprintNumber"
                     range
                     label={`سرعت پروژه:${watch('sprintNumber') || 1}`}
-                  /> */}
+                  />
                 </Row>
                 <Row>
                   <ComboBox
@@ -131,6 +144,14 @@ const CreateBoardModal = ({
                     xl={6}
                     control={control}
                     label="اختصاص به:"
+                  />
+                  <ComboBox
+                    isMulti
+                    name="boardWorkFlowsId"
+                    options={fixAllWorkFlow}
+                    xl={6}
+                    control={control}
+                    label="ستون ها:"
                   />
                 </Row>
                 <Controller

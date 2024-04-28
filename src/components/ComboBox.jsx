@@ -27,13 +27,12 @@ const ComboBox = ({
   isDisabled = false,
   isClearable = false,
   loading = false,
-  placeHolder = '',
   selectedOption,
   optionValue = (option) => option.id,
   optionLabel = (option) => option.title,
   className = '',
   isMulti,
-  palaceHolder = '',
+  placeHolder = 'انتخاب کنید . . .',
   errors,
   field
 }) => {
@@ -59,9 +58,10 @@ const ComboBox = ({
                 {label}
               </label>
               <Select
+
                 isRtl
                 {...field}
-                placeholder={palaceHolder}
+                placeholder={placeHolder}
                 isMulti={isMulti}
                 isLoading={loading || main?.showLoading?.value}
                 onKeyDown={onKeyDown}

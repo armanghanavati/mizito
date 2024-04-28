@@ -50,8 +50,8 @@ export const serGetBoards = (postData) => {
   return axios.get(`${baseURL}api/BoardController/Boards?projectid=${postData}`);
 };
 
-export const serEditBoard = (postData) => {
-  return axios.get(`${baseURL}api/BoardController/EditBoard?boardid=${postData}`);
+export const serEditBoard = (boardId) => {
+  return axios.get(`${baseURL}api/BoardController/EditBoard?boardid=${boardId}`);
 };
 
 export const serPutEditBoard = (postData) => {

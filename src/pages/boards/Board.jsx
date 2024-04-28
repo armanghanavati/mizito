@@ -23,8 +23,6 @@ const Board = ({ item }) => {
   const [tasksList, setTasksList] = useState([]);
   const [allSubTask, setAllSubTask] = useState([]);
 
-  console.log(location?.state);
-
   const handleWorkFlows = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
     const resWorkFlows = await serWorkFlows();
@@ -64,6 +62,10 @@ const Board = ({ item }) => {
     setShowWorkFlow(true);
   };
 
+  const handleEditTask = () => {
+    setShowCreateIssuesModal(true);
+  };
+
   return (
     <>
       <Col className="bg-light p-3 d-flex justify-content-between">
@@ -79,12 +81,12 @@ const Board = ({ item }) => {
                   className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 bg-warning">
                   <span>{wf?.name}</span>
 
-                  <i className="cursorPointer bi bi-sliders d-flex align-items-center" />
+                  <i className=" bi bi-sliders d-flex align-items-center" />
                 </Col>
-                <div className='' >
+                <div className="">
                   <div
                     onClick={() => handleCreateIssue(wf)}
-                    className="d-flex bg-white py-1 justify-content-center cursorPointer align-items-center my-4 border-bottom text-warning ">
+                    className="d-flex py-1 justify-content-center cursorPointer align-items-center my-4 border-bottom text-warning ">
                     <i className="d-flex align-items-center mx-1 text-warning bi bi-plus-circle" />
                     <span>ایجاد وظیفه</span>
                   </div>
@@ -93,10 +95,17 @@ const Board = ({ item }) => {
                     .map((task) => {
                       return (
                         <div
-                          onClick={() => handleShowTask(task)}
-                          className=" bg-white shadow subTask_To_Task d-flex row justify-content-between  cursorPointer my-3 mx-1 p-4"
+                          className=" bg-white position-relative shadow subTask_To_Task d-flex row justify-content-between my-3 mx-1 p-4"
                           key={task?.id}>
-                          <div className="d-flex justify-content-center">{task?.name}</div>
+                          <div className="px-0 d-flex justify-content-center">
+                            <span>{task?.name}</span>
+                            <span onClick={() => handleShowTask(task)}>
+                              <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 end-0 text-secondary rounded-2 bi bi-eye" />
+                            </span>
+                            <span onClick={() => handleEditTask(task)}>
+                              <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 start-0 text-secondary rounded-2 bi bi-gear" />
+                            </span>
+                          </div>
                           <div>
                             {task?.taskSubTasksViewModels?.map((subToTask) => (
                               <Row className="">
@@ -141,6 +150,7 @@ const Board = ({ item }) => {
       )}
       {workFlowItem && (
         <CreateWorkFlow
+          handleWorkFlows={handleWorkFlows}
           workFlowItem={workFlowItem}
           setShowWorkFlow={setShowWorkFlow}
           showWorkFlow={showWorkFlow}

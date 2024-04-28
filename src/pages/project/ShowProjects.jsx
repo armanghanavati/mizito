@@ -67,7 +67,7 @@ const ShowProjects = () => {
 
   return (
     <>
-      <Container className="mt-2">
+      <Container className=" mt-2">
         <h3 className="text-secondary my-4">لیست پروژه‌ها</h3>
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
           <div className="d-flex justify-content-center  rounded-pill">

@@ -36,7 +36,7 @@ const SubTasks = ({ allSubTask }) => {
     const showAllSubTask = allSubTask?.map((subTask) => {
         return (
             <Container fluid >
-                <Row className='d-flex justify-content-between' >
+                <Row className="bg-light d-flex py-2 my-4 rounded-4 justify-content-center">
                     <Col className='d-flex justify-content-between ' xs={12} md={12}>
                         <SwitchCase
                             control={control}
@@ -61,3 +61,69 @@ const SubTasks = ({ allSubTask }) => {
 }
 
 export default SubTasks
+
+
+
+// <Row className="bg-light d-flex py-2 my-4 rounded-4 justify-content-center">
+// <Col xs="12" sm="12" md="12" xl="12" className=" ">
+//   {tax?.productList?.map((item: any) => {
+//     console.log(item);
+//     return (
+//       <Accordion defaultActiveKey="0">
+//         <Col xs="12" xl="12" className="rounded my-2">
+//           <Accordion.Item
+//             style={{
+//               transform: "scale(-1, 1)",
+//               direction: "ltr",
+//             }}
+//             eventKey="0"
+//           >
+//             <Accordion.Header className="fs-5 fw-bold lh-lg textPrimary py-1 px-2 my-1">
+//               <span
+//                 className="text-dark headParaphFit"
+//                 style={{
+//                   transform: "scale(-1, 1)",
+//                   textAlign: "end",
+//                 }}
+//               >
+//                 {` ردیف ${
+//                   item?.settlementType ||
+//                   item?.serviceOrProductDescription
+//                 }`}
+//               </span>
+//             </Accordion.Header>
+//             <Accordion.Body
+//               style={{
+//                 transform: "scale(-1, 1)",
+//                 direction: "rtl",
+//               }}
+//               className="textJustify mx-2 lh-lg textPrimary"
+//             >
+//               <Row>
+//                 <Col
+//                   md="12"
+//                   xl="4"
+//                   className="my-4 d-flex mx-3"
+//                 >
+//                   {item?.totalItemsPrice !== undefined && (
+//                     <>
+//                       <span className="text-dark fw-bold">
+//                         {" "}
+//                         مبلغ کل کالا(ریال):
+//                       </span>
+//                       <span className="text-secondary me-1 ">
+//                         {" "}
+//                         {item?.totalItemsPrice}
+//                       </span>
+//                     </>
+//                   )}
+//                 </Col>
+//               </Row>
+//             </Accordion.Body>
+//           </Accordion.Item>
+//         </Col>
+//       </Accordion>
+//     );
+//   })}
+// </Col>
+// </Row>

@@ -33,6 +33,7 @@ const AllBoard = () => {
       const resGetBoard = await serGetBoards(getIdProject);
       dispatch(RsetShowLoading({ value: false }));
       if (resGetBoard?.data?.code === 1) {
+        console.log(resGetBoard?.data);
         setFindBoard(true);
         setAllBoard(resGetBoard?.data?.data);
         const itsBoard = resGetBoard?.data?.data?.map((board) => {
@@ -77,20 +78,20 @@ const AllBoard = () => {
 
   const handleCreateBoard = () => {
     handleGetSerBoardCreate();
-    setEditFiledsBoard({})
+    setEditFiledsBoard({});
     setShowCreateBoardModal(true);
   };
 
   const handleShowEditBoard = asyncWrapper(async (data, index) => {
-    RsetShowLoading({ value: true })
-    const responseEditBoard = await serEditBoard(location?.state?.item?.id)
-    RsetShowLoading({ value: false })
+    RsetShowLoading({ value: true });
+    const responseEditBoard = await serEditBoard(location?.state?.item?.id);
+    RsetShowLoading({ value: false });
     if (responseEditBoard?.data?.code === 1) {
-      setEditFiledsBoard({ ...editFiledsBoard, getEditBoard: responseEditBoard?.data?.data })
+      setEditFiledsBoard({ ...editFiledsBoard, getEditBoard: responseEditBoard?.data?.data });
     }
     setItemAndIndexProject({ data, index });
     setShowCreateBoardModal(true);
-  })
+  });
 
   useEffect(() => {
     handleGetBoards();

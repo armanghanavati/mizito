@@ -8,6 +8,7 @@ import { serComments, serCreateComment, serGetSubTasks } from '../../services/ma
 import SubTasks from '../subTasks';
 import Comment from '../Comment/index';
 import Input from '../../components/Input';
+import { RsetShowLoading } from '../../hooks/slices/main';
 
 const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask }) => {
   const { create, main } = useSelector((state) => state);
@@ -41,9 +42,15 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
       commentMentionUsersViewModels: [] || [],
       attachmentCreateViewModels: []
     };
+    dispatch(RsetShowLoading({ value: true, btnName: 'sendText' }));
     await serCreateComment(postData);
+    dispatch(RsetShowLoading({ value: false }));
     return handleGetComments();
   });
+
+  useEffect(() => {
+    handleGetComments();
+  }, []);
 
   return (
     <>
@@ -67,6 +74,7 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
               <Row className="align-items-center">
                 <Input label="متن گزارش:" xs={2} xl={10} control={control} name="createComment" />
                 <Btn
+                  loadingName="sendText"
                   className="mt-4"
                   icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
                   variant="outline-primary"

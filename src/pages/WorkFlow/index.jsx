@@ -15,8 +15,9 @@ import StringHelpers from '../../helpers/StringHelpers';
 import { addNewWorkFlowToBoard, serCreateTask } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
+import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow }) => {
+const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow, handleWorkFlows }) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { control, handleSubmit } = useForm({ reValidateMode: 'onChange' });
@@ -31,6 +32,7 @@ const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow }) => {
     const res = await addNewWorkFlowToBoard(postData);
     if (res?.data?.code === 1) {
       console.log(res);
+      handleWorkFlows();
       setShowWorkFlow(false);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
     } else {
@@ -46,7 +48,7 @@ const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow }) => {
           className="d-flex bg-warning text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
-            ایجاد وظیفه
+            ایجاد ستون
           </span>
         </Modal.Header>
         <Modal.Body>

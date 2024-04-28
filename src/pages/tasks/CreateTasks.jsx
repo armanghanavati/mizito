@@ -17,7 +17,12 @@ import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
 
-const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlowItem, handleWorkFlows }) => {
+const CreateTasks = ({
+  showCreateIssuesModal,
+  setShowCreateIssuesModal,
+  workFlowItem,
+  handleWorkFlows
+}) => {
   const { create, main } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(50);
   const location = useLocation();
@@ -31,8 +36,8 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
     getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  console.log(workFlowItem?.id);
-  const fixUsers = create?.fieldsEditProject?.userAssigned?.map((user) => {
+  console.log();
+  const fixUsers = location?.state?.item?.boardUsersViewModel?.map((user) => {
     return {
       id: user?.userId,
       title: user?.fullName
@@ -40,7 +45,8 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
   });
 
   const handleCreateTask = asyncWrapper(async (data) => {
-    console.log(data);
+    const fixTaskAssignedUser = data?.assignedUsersId?.map((item) => item?.id);
+    const fixTaskVerifyUsersId = data?.verifyUsersId?.map((item) => item?.id);
     const postData = {
       name: data?.name,
       description: data?.description,
@@ -49,14 +55,16 @@ const CreateTasks = ({ showCreateIssuesModal, setShowCreateIssuesModal, workFlow
       remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
       attachmentStatus: false,
       boardId: location?.state?.item?.id,
-      taskAssignedUsersId: ['string'],
-      taskVerifyUsersId: [''],
+      taskAssignedUsersId: fixTaskAssignedUser,
+      taskVerifyUsersId: fixTaskVerifyUsersId,
       attachmentCreateViewModels: []
     };
+    console.log(postData);
+
     const res = await serCreateTask(postData);
     if (res?.data?.code === 1) {
       setShowCreateIssuesModal(false);
-      handleWorkFlows()
+      handleWorkFlows();
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
     } else {
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));

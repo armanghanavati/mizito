@@ -9,7 +9,12 @@ import Btn from '../../components/Btn';
 import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serCreateBoardGet, serCreateBoardPost, serGetBoards, serWorkFlows } from '../../services/masterServices';
+import {
+  serCreateBoardGet,
+  serCreateBoardPost,
+  serGetBoards,
+  serWorkFlows
+} from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
@@ -42,8 +47,8 @@ const CreateBoardModal = ({
     return {
       id: item?.id,
       title: item?.name
-    }
-  })
+    };
+  });
 
   const usersAssigned = editFiledsBoard?.projectAssignedUsersViewModel?.map((item) => {
     return {
@@ -69,7 +74,7 @@ const CreateBoardModal = ({
     const resCreateBoard = await serCreateBoardPost(postDatePost);
     console.log(resCreateBoard);
     if (resCreateBoard?.data?.code === 1) {
-      handleGetBoards()
+      handleGetBoards();
       dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'success' }));
     } else {
       dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'danger' }));
@@ -77,14 +82,14 @@ const CreateBoardModal = ({
   });
 
   const handleWorkFlows = asyncWrapper(async () => {
-    const responseWorkFlow = await serWorkFlows()
+    const responseWorkFlow = await serWorkFlows();
     if (responseWorkFlow?.data?.code === 1) {
-      setAllWorkFlow(responseWorkFlow?.data?.data)
+      setAllWorkFlow(responseWorkFlow?.data?.data);
     }
-  })
+  });
 
   useEffect(() => {
-    handleWorkFlows()
+    handleWorkFlows();
   }, []);
 
   useEffect(() => {
@@ -94,8 +99,7 @@ const CreateBoardModal = ({
         editFiledsBoard?.projectType,
         main?.allEnums?.projectType
       ),
-      name: "",
-
+      name: ''
     });
   }, [editFiledsBoard]);
 
@@ -118,7 +122,14 @@ const CreateBoardModal = ({
           <Form>
             <Container fluid className="mb-3">
               <Row>
-                <Input errmsg='لطفا نام بورد را وارد کنید' errors={errors} name="name" xl={4} label="نام بورد:" control={control} />
+                <Input
+                  errmsg="لطفا نام بورد را وارد کنید"
+                  errors={errors}
+                  name="name"
+                  xl={4}
+                  label="نام بورد:"
+                  control={control}
+                />
                 <ComboBox
                   isDisabled
                   options={main?.allEnums?.projectType}

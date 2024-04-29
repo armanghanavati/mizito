@@ -71,7 +71,7 @@ const Board = ({ item }) => {
       <Col className="bg-light p-3 d-flex justify-content-between">
         <span>تاریخ ساخت پروژه:</span>
       </Col>
-      <Container fluid className="count_WorkFlow d-flex ">
+      <Container fluid className="count_WorkFlow d-flex">
         {workflowList.map((wf, wfIndex) => {
           return (
             <>

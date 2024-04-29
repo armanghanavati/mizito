@@ -378,4 +378,5 @@ body * {
 
 .count_WorkFlow {
   overflow-x: scroll !important;
+  height: 600px;
 }

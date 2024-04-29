@@ -12,7 +12,7 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
-import { serCreateTask, serTasks, serWorkFlows } from '../../services/masterServices';
+import { serCreateTask, serPutEditTask, serTasks, serWorkFlows } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
@@ -21,22 +21,18 @@ const CreateTasks = ({
   showCreateIssuesModal,
   setShowCreateIssuesModal,
   workFlowItem,
-  handleWorkFlows
+  handleWorkFlows,
+  getEditTasks
 }) => {
-  const { create, main } = useSelector((state) => state);
-  const [sprintNum, setSprintNum] = useState(50);
   const location = useLocation();
   const dispatch = useDispatch();
   const {
     control,
     handleSubmit,
-    register,
     reset,
     formState: { errors },
-    getValues
   } = useForm({ reValidateMode: 'onChange' });
 
-  console.log();
   const fixUsers = location?.state?.item?.boardUsersViewModel?.map((user) => {
     return {
       id: user?.userId,
@@ -47,30 +43,56 @@ const CreateTasks = ({
   const handleCreateTask = asyncWrapper(async (data) => {
     const fixTaskAssignedUser = data?.assignedUsersId?.map((item) => item?.id);
     const fixTaskVerifyUsersId = data?.verifyUsersId?.map((item) => item?.id);
-    const postData = {
-      name: data?.name,
-      description: data?.description,
-      workFlow: workFlowItem?.id,
-      dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
-      remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
-      attachmentStatus: false,
-      boardId: location?.state?.item?.id,
-      taskAssignedUsersId: fixTaskAssignedUser,
-      taskVerifyUsersId: fixTaskVerifyUsersId,
-      attachmentCreateViewModels: []
-    };
-    console.log(postData);
-
-    const res = await serCreateTask(postData);
-    if (res?.data?.code === 1) {
-      setShowCreateIssuesModal(false);
-      handleWorkFlows();
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    if (getEditTasks) {
+      const postEditData = {
+        id: getEditTasks?.id,
+        name: data?.name,
+        description: data?.description,
+        workFlow: workFlowItem?.id,
+        dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+        remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
+        taskAssignedUsersViewModels: fixTaskAssignedUser,
+        taskVerifyUsersViewModels: fixTaskVerifyUsersId,
+        attachmentEditViewModels: []
+      }
+      const resPutEdit = await serPutEditTask(postEditData)
+      if (resPutEdit?.data?.code === 1) {
+        setShowCreateIssuesModal(false);
+        handleWorkFlows();
+        dispatch(RsetShowToast({ show: true, title: resPutEdit?.data?.msg, bg: 'success' }));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: resPutEdit?.data?.msg, bg: 'danger' }));
+      }
     } else {
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      const postData = {
+        name: data?.name,
+        description: data?.description,
+        workFlow: workFlowItem?.id,
+        dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+        remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
+        attachmentStatus: false,
+        boardId: location?.state?.item?.id,
+        taskAssignedUsersId: fixTaskAssignedUser,
+        taskVerifyUsersId: fixTaskVerifyUsersId,
+        attachmentCreateViewModels: []
+      };
+      const res = await serCreateTask(postData);
+      if (res?.data?.code === 1) {
+        setShowCreateIssuesModal(false);
+        handleWorkFlows();
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      }
     }
   });
-  console.log(create?.fieldsEditProject);
+
+  useEffect(() => {
+    reset({
+      ...getEditTasks,
+      remainderDateTime: StringHelpers?.convertDateFa(getEditTasks?.remainderDateTime),
+    })
+  }, [getEditTasks]);
 
   return (
     <>
@@ -90,7 +112,10 @@ const CreateTasks = ({
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Input xl={6} label="نام وظیفه :" name="name" control={control} />
+              <Row>
+                <Input xl={6} label="نام وظیفه :" name="name" control={control} />
+                <Datepicker minDate={new Date()} name="remainderDateTime" label="تاریخ مهلت:" control={control} />
+              </Row>
               <Row>
                 <ComboBox
                   className=""
@@ -110,10 +135,6 @@ const CreateTasks = ({
                   control={control}
                   label="مسئول تایید:"
                 />
-                <Row>
-                  <Datepicker name="dueDateTime" label="تاریخ ایجاد:" control={control} />
-                  <Datepicker name="remainderDateTime" label="تاریخ پایان:" control={control} />
-                </Row>
                 <Controller
                   name="description"
                   control={control}

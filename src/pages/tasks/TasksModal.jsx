@@ -16,13 +16,8 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
   const {
     control,
     handleSubmit,
-    register,
-    reset,
-    watch,
     formState: { errors },
-    getValues
   } = useForm({ reValidateMode: 'onChange' });
-  const [allow, setAllow] = useState(false);
   const [allCommets, setAllCommets] = useState([]);
 
   console.log(taskItem, allSubTask);
@@ -69,9 +64,10 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
         </Modal.Header>
         <Modal.Body>
           <SubTasks allSubTask={allSubTask} />
-          <div className="border my-4 p-2">
+
+          <div className="border my-4 p-2 bg-light rounded-2">
             <Form>
-              <Row className="align-items-center">
+              <Row className="align-items-center px-2">
                 <Input label="متن گزارش:" xs={2} xl={10} control={control} name="createComment" />
                 <Btn
                   loadingName="sendText"

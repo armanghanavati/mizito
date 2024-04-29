@@ -19,6 +19,7 @@ export const getAllUsers = () => {
   return axios.get(`${baseURL}api/Account/GetAllUsers`);
 };
 
+
 export const createProject = (postData) => {
   return axios.post(`${baseURL}api/ProjectController/CreateProject`, postData);
 };
@@ -83,6 +84,16 @@ export const serCreateTask = (postData) => {
   return axios.post(`${baseURL}api/TaskController/CreateTask`, postData);
 };
 
+// ویرایش وظیفه
+export const serGetEditTask = (taskId) => {
+  return axios.get(`${baseURL}api/TaskController/EditTask?taskid=${taskId}`);
+};
+
+// تایید ویرایش وظیفه
+export const serPutEditTask = (postData) => {
+  return axios.put(`${baseURL}api/TaskController/EditTask`, postData);
+};
+
 // دریافت کامنت ها
 export const serComments = (commentId) => {
   return axios.get(`${baseURL}api/CommentController/Comments?taskOrsubtaskid=${commentId}`);
@@ -92,4 +103,9 @@ export const serComments = (commentId) => {
 export const serCreateComment = (postData) => {
   console.log(postData);
   return axios.post(`${baseURL}api/CommentController/CreateComment`, postData);
+};
+
+// ارسال وظیفه فرعی
+export const serCreateSubTask = (postData) => {
+  return axios.post(`${baseURL}api/SubTaskController/CreateSubTask`, postData);
 };

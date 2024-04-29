@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { serGetSubTasks, serTasks, serWorkFlows } from '../../services/masterServices';
+import { serGetEditTask, serGetSubTasks, serTasks, serWorkFlows } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import AllTasks from '../tasks/AllTasks';
 import { useDispatch } from 'react-redux';
@@ -22,6 +22,7 @@ const Board = ({ item }) => {
   const [workFlowItem, setWorkFlowItem] = useState({});
   const [tasksList, setTasksList] = useState([]);
   const [allSubTask, setAllSubTask] = useState([]);
+  const [getEditTasks, setGetEditTasks] = useState({});
 
   const handleWorkFlows = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
@@ -49,12 +50,17 @@ const Board = ({ item }) => {
 
   const handleShowTask = (task) => {
     handleShowSubTaskToTask(task);
+
     setTaskItem(task);
     setShowTasksModal(true);
   };
 
   const handleCreateIssue = (wf) => {
     setWorkFlowItem(wf);
+    setGetEditTasks({
+      name: "",
+      remainderDateTime: ""
+    })
     setShowCreateIssuesModal(true);
   };
 
@@ -62,9 +68,14 @@ const Board = ({ item }) => {
     setShowWorkFlow(true);
   };
 
-  const handleEditTask = () => {
-    setShowCreateIssuesModal(true);
-  };
+  const handleEditTask = asyncWrapper(async (task) => {
+    const responseTask = await serGetEditTask(task?.id)
+    console.log(responseTask);
+    if (responseTask?.data?.code === 1) {
+      setGetEditTasks(responseTask?.data?.data)
+      setShowCreateIssuesModal(true);
+    }
+  });
 
   return (
     <>
@@ -142,6 +153,8 @@ const Board = ({ item }) => {
       )}
       {showCreateIssuesModal && (
         <CreateTasks
+          setGetEditTasks={setGetEditTasks}
+          getEditTasks={getEditTasks}
           handleWorkFlows={handleWorkFlows}
           workFlowItem={workFlowItem}
           showCreateIssuesModal={showCreateIssuesModal}

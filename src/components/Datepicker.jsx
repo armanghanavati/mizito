@@ -84,7 +84,7 @@ const Datepicker = ({
                                 format={format}
                                 onlyMonthPicker={onlyMonthPicker}
                                 weekDays={weekDays}
-                                className={`input-form green ${isSmallScreen && "rmdp-mobile"
+                                className={`input-form  ${isSmallScreen && "rmdp-mobile"
                                     } ${ltr ? " dir-ltr " : ""} ${className} `}
                                 editable={false}
                                 name={field.name}

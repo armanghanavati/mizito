@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Modal, Form, Row } from 'react-bootstrap';
+import { Container, Modal, Form, Row, Col } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
@@ -9,6 +9,8 @@ import SubTasks from '../subTasks';
 import Comment from '../Comment/index';
 import Input from '../../components/Input';
 import { RsetShowLoading } from '../../hooks/slices/main';
+import DropDown from '../../components/DropDown';
+import ComboBox from '../../components/ComboBox';
 
 const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask }) => {
   const { create, main } = useSelector((state) => state);
@@ -16,7 +18,7 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm({ reValidateMode: 'onChange' });
   const [allCommets, setAllCommets] = useState([]);
 
@@ -64,14 +66,15 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
         </Modal.Header>
         <Modal.Body>
           <SubTasks allSubTask={allSubTask} />
-
           <div className="border my-4 p-2 bg-light rounded-2">
             <Form>
               <Row className="align-items-center px-2">
-                <Input label="متن گزارش:" xs={2} xl={10} control={control} name="createComment" />
+                <Input placeholder="متن گزارش" xs={2} xl={6} className="mt-4" control={control} name="createComment" />
+                <ComboBox control={control}  placeHolder='منشن' className="mb-4" xl={4} xxl={1} />
                 <Btn
+                  xxl={2}
                   loadingName="sendText"
-                  className="mt-4"
+                  className=" mt-4"
                   icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
                   variant="outline-primary"
                   title="ارسال"

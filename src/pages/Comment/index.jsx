@@ -26,8 +26,11 @@ const Comment = ({ taskItem, allCommets }) => {
                 {StringHelpers?.convertDateFa(cmt?.creationDateTime)}
               </span>
             </div>
-            <div className="my-2">
+            <div className="my-2 d-flex justify-content-between">
               <small> {cmt?.text}</small>
+              <span>
+                <i className="text-secondary bi bi-arrow-left-circle-fill cursorPointer" />
+              </span>
             </div>
             <hr />
           </Col>

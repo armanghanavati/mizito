@@ -17,7 +17,7 @@ import {
 } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
 import { useLocation } from 'react-router-dom';
-import { RsetShowToast } from '../../hooks/slices/main';
+import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 
 const CreateBoardModal = ({
   showCreateBoardModal,
@@ -58,6 +58,7 @@ const CreateBoardModal = ({
   });
 
   const handleCreateBoard = asyncWrapper(async (data) => {
+    dispatch(RsetShowLoading({ value: true }));
     const fixUsersId = data?.usersAssigned?.map((item) => item?.id);
     const fixWorkFlowsId = data?.boardWorkFlowsId?.map((item) => item?.id);
     setShowCreateBoardModal(false);
@@ -70,9 +71,8 @@ const CreateBoardModal = ({
       boardUsersId: fixUsersId,
       attachmentsCreateViewModel: []
     };
-    console.log(postDatePost);
     const resCreateBoard = await serCreateBoardPost(postDatePost);
-    console.log(resCreateBoard);
+    dispatch(RsetShowLoading({ value: false }));
     if (resCreateBoard?.data?.code === 1) {
       handleGetBoards();
       dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'success' }));
@@ -82,7 +82,10 @@ const CreateBoardModal = ({
   });
 
   const handleWorkFlows = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
     const responseWorkFlow = await serWorkFlows();
+    dispatch(RsetShowLoading({ value: false }));
+    
     if (responseWorkFlow?.data?.code === 1) {
       setAllWorkFlow(responseWorkFlow?.data?.data);
     }
@@ -139,12 +142,12 @@ const CreateBoardModal = ({
                 />
                 <Row className="mt-4">
                   <SwitchCase
-                    min={1}
+                    min={0}
                     max={editFiledsBoard?.sprintNumber}
                     control={control}
                     name="sprintNumber"
                     range
-                    label={`سرعت پروژه:${watch('sprintNumber') || 1}`}
+                    label={`سرعت پروژه:${watch('sprintNumber')}`}
                   />
                 </Row>
                 <Row>

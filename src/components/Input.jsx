@@ -8,7 +8,6 @@ const Input = ({
   checkedClickToShow = false,
   onChangeClickToShow = () => { },
   clickToShow = false,
-  validMsg = '',
   validTrue = false,
   showCharacter,
   validate,
@@ -24,8 +23,7 @@ const Input = ({
   rest,
   errors,
   addProps = false,
-  errorValidation = false,
-  redux = false,
+  placeholder="",
   ltr = false,
   control,
   defaultValue,
@@ -74,6 +72,7 @@ const Input = ({
                   </Form.Label>
                   <span className="">
                     <Form.Control
+                      placeholder={placeholder}
                       errmsgmin={errmsgmin}
                       errminimum={errminimum}
                       errmsg={errmsg}

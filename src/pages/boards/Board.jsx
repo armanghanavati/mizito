@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
-import { serGetEditTask, serGetSubTasks, serTasks, serWorkFlows } from '../../services/masterServices';
+import {
+  serGetEditTask,
+  serGetSubTasks,
+  serTasks,
+  serWorkFlows
+} from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import AllTasks from '../tasks/AllTasks';
 import { useDispatch } from 'react-redux';
@@ -58,9 +63,9 @@ const Board = ({ item }) => {
   const handleCreateIssue = (wf) => {
     setWorkFlowItem(wf);
     setGetEditTasks({
-      name: "",
-      remainderDateTime: ""
-    })
+      name: '',
+      remainderDateTime: ''
+    });
     setShowCreateIssuesModal(true);
   };
 
@@ -69,10 +74,10 @@ const Board = ({ item }) => {
   };
 
   const handleEditTask = asyncWrapper(async (task) => {
-    const responseTask = await serGetEditTask(task?.id)
+    const responseTask = await serGetEditTask(task?.id);
     console.log(responseTask);
     if (responseTask?.data?.code === 1) {
-      setGetEditTasks(responseTask?.data?.data)
+      setGetEditTasks(responseTask?.data?.data);
       setShowCreateIssuesModal(true);
     }
   });

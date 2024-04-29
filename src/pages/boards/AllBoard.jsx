@@ -123,7 +123,7 @@ const AllBoard = () => {
                       <i
                         onClick={() => handleShowEditBoard(item, index)}
                         className="cursorPointer font15 text-secondary bi bi-gear"
-                      />{' '}
+                      />
                     </span>
                   </div>
                   <hr />

@@ -40,16 +40,19 @@ const CreateTasks = ({
     };
   });
 
+  console.log(getEditTasks);
+
   const handleCreateTask = asyncWrapper(async (data) => {
     const fixTaskAssignedUser = data?.assignedUsersId?.map((item) => item?.id);
     const fixTaskVerifyUsersId = data?.verifyUsersId?.map((item) => item?.id);
-    if (getEditTasks) {
+    console.log(fixTaskAssignedUser, fixTaskVerifyUsersId, data);
+    if (!!getEditTasks?.name) {
       const postEditData = {
         id: getEditTasks?.id,
         name: data?.name,
         description: data?.description,
         workFlow: workFlowItem?.id,
-        dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+        dueDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
         remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
         taskAssignedUsersViewModels: fixTaskAssignedUser,
         taskVerifyUsersViewModels: fixTaskVerifyUsersId,
@@ -68,7 +71,7 @@ const CreateTasks = ({
         name: data?.name,
         description: data?.description,
         workFlow: workFlowItem?.id,
-        dueDateTime: StringHelpers.convertDateEn(data?.dueDateTime),
+        dueDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
         remainderDateTime: StringHelpers.convertDateEn(data?.remainderDateTime),
         attachmentStatus: false,
         boardId: location?.state?.item?.id,
@@ -76,6 +79,8 @@ const CreateTasks = ({
         taskVerifyUsersId: fixTaskVerifyUsersId,
         attachmentCreateViewModels: []
       };
+      console.log(postData);
+
       const res = await serCreateTask(postData);
       if (res?.data?.code === 1) {
         setShowCreateIssuesModal(false);

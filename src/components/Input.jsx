@@ -23,7 +23,7 @@ const Input = ({
   rest,
   errors,
   addProps = false,
-  placeholder="",
+  placeholder = "",
   ltr = false,
   control,
   defaultValue,
@@ -51,7 +51,7 @@ const Input = ({
 }) => {
   return (
     <>
-      <Col className="my-4" xs={xs} md={md} xl={xl}>
+      <Col xs={xs} md={md} xl={xl}>
         <Controller
           name={name}
 

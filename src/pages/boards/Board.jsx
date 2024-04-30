@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import {
+  serGetBoards,
   serGetEditTask,
   serGetSubTasks,
   serTasks,
@@ -16,7 +17,7 @@ import TasksModal from '../tasks/TasksModal';
 import CreateTasks from '../tasks/CreateTasks';
 import CreateWorkFlow from '../WorkFlow/index';
 
-const Board = ({ item }) => {
+const Board = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [workflowList, setWorkflowList] = useState([]);
@@ -28,16 +29,15 @@ const Board = ({ item }) => {
   const [tasksList, setTasksList] = useState([]);
   const [allSubTask, setAllSubTask] = useState([]);
   const [getEditTasks, setGetEditTasks] = useState({});
+  const getIdProject = location?.pathname?.split(':')?.[1];
 
   const handleWorkFlows = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
-    const resWorkFlows = await serWorkFlows();
+    // const resWorkFlows = await serWorkFlows();  
     const resTasks = await serTasks(location?.state?.item?.id);
     dispatch(RsetShowLoading({ value: false }));
-    console.log(resTasks);
-    if (resWorkFlows?.data?.code === 1) {
+    if (resTasks?.data?.code === 1) {
       setTasksList(resTasks?.data?.data);
-      setWorkflowList(resWorkFlows?.data?.data);
     }
   });
 
@@ -62,10 +62,7 @@ const Board = ({ item }) => {
 
   const handleCreateIssue = (wf) => {
     setWorkFlowItem(wf);
-    setGetEditTasks({
-      name: '',
-      remainderDateTime: ''
-    });
+    setGetEditTasks({});
     setShowCreateIssuesModal(true);
   };
 
@@ -82,13 +79,15 @@ const Board = ({ item }) => {
     }
   });
 
+  console.log(tasksList);
+
   return (
     <>
       <Col className="bg-light p-3 d-flex justify-content-between">
         <span>تاریخ ساخت پروژه:</span>
       </Col>
       <Container fluid className="count_WorkFlow d-flex">
-        {workflowList.map((wf, wfIndex) => {
+        {location?.state?.item?.boardWorkFlowsViewModel?.map((wf, wfIndex) => {
           return (
             <>
               <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2">
@@ -106,34 +105,33 @@ const Board = ({ item }) => {
                     <i className="d-flex align-items-center mx-1 text-warning bi bi-plus-circle" />
                     <span>ایجاد وظیفه</span>
                   </div>
-                  {tasksList
-                    ?.filter((task) => task?.workFlow === wf?.id)
-                    .map((task) => {
-                      return (
-                        <div
-                          className=" bg-white position-relative shadow subTask_To_Task d-flex row justify-content-between my-3 mx-1 p-4"
-                          key={task?.id}>
-                          <div className="px-0 d-flex justify-content-center">
-                            <span>{task?.name}</span>
-                            <span onClick={() => handleShowTask(task)}>
-                              <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 end-0 text-secondary rounded-2 bi bi-eye" />
-                            </span>
-                            <span onClick={() => handleEditTask(task)}>
-                              <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 start-0 text-secondary rounded-2 bi bi-gear" />
-                            </span>
-                          </div>
-                          <div>
-                            {task?.taskSubTasksViewModels?.map((subToTask) => (
-                              <Row className="">
-                                <Col className=" my-2 rounded  text-secondary bg-white p-1 ">
-                                  {subToTask?.name}
-                                </Col>
-                              </Row>
-                            ))}
-                          </div>
+                  {tasksList?.filter((task) => task?.workFlow === wf?.id).map((task) => {
+                    console.log(task);
+                    return (
+                      <div
+                        className=" bg-white position-relative shadow subTask_To_Task d-flex row justify-content-between my-3 mx-1 p-4"
+                        key={task?.id}>
+                        <div className="px-0 d-flex justify-content-center">
+                          <span>{task?.name}</span>
+                          <span onClick={() => handleShowTask(task)}>
+                            <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 end-0 text-secondary rounded-2 bi bi-eye" />
+                          </span>
+                          <span onClick={() => handleEditTask(task)}>
+                            <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 start-0 text-secondary rounded-2 bi bi-gear" />
+                          </span>
                         </div>
-                      );
-                    })}
+                        <div>
+                          {task?.taskSubTasksViewModels?.map((subToTask) => (
+                            <Row className="">
+                              <Col className=" my-2 rounded  text-secondary bg-white p-1 ">
+                                {subToTask?.name}
+                              </Col>
+                            </Row>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </Col>
             </>

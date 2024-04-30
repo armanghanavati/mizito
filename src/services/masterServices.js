@@ -105,7 +105,18 @@ export const serCreateComment = (postData) => {
   return axios.post(`${baseURL}api/CommentController/CreateComment`, postData);
 };
 
+// ویرایش کامنت ها
+export const serEditCommentPut = (postData) => {
+  return axios.put(`${baseURL}api/CommentController/EditComment`, postData);
+};
+
+// دریافت ویرایش کامنت ها
+export const serEditCommentGet = (id) => {
+  return axios.get(`${baseURL}api/CommentController/EditComment?commentid=${id}`);
+};
+
 // ارسال وظیفه فرعی
 export const serCreateSubTask = (postData) => {
   return axios.post(`${baseURL}api/SubTaskController/CreateSubTask`, postData);
 };
+

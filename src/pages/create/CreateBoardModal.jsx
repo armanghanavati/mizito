@@ -85,7 +85,6 @@ const CreateBoardModal = ({
     dispatch(RsetShowLoading({ value: true }));
     const responseWorkFlow = await serWorkFlows();
     dispatch(RsetShowLoading({ value: false }));
-    
     if (responseWorkFlow?.data?.code === 1) {
       setAllWorkFlow(responseWorkFlow?.data?.data);
     }
@@ -105,6 +104,8 @@ const CreateBoardModal = ({
       name: ''
     });
   }, [editFiledsBoard]);
+
+  console.log(watch('sprintNumber'), watch("projectType"));
 
   return (
     <>

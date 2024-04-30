@@ -120,3 +120,7 @@ export const serCreateSubTask = (postData) => {
   return axios.post(`${baseURL}api/SubTaskController/CreateSubTask`, postData);
 };
 
+// ارسال وظیفه فرعی
+export const serSubtaskGet = (taskId) => {
+  return axios.get(`${baseURL}api/SubTaskController/SubTasks?taskid=${taskId}`);
+};

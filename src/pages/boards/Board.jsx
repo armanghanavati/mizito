@@ -55,7 +55,6 @@ const Board = () => {
 
   const handleShowTask = (task) => {
     handleShowSubTaskToTask(task);
-
     setTaskItem(task);
     setShowTasksModal(true);
   };
@@ -78,8 +77,6 @@ const Board = () => {
       setShowCreateIssuesModal(true);
     }
   });
-
-  console.log(tasksList);
 
   return (
     <>
@@ -149,6 +146,8 @@ const Board = () => {
       {showTasksModal && (
         <TasksModal
           allSubTask={allSubTask}
+          setAllSubTask={setAllSubTask}
+          handleShowSubTaskToTask={handleShowSubTaskToTask}
           taskItem={taskItem}
           setShowTasksModal={setShowTasksModal}
           showTasksModal={showTasksModal}

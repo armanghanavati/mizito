@@ -13,8 +13,16 @@ import DropDown from '../../components/DropDown';
 import ComboBox from '../../components/ComboBox';
 import { useLocation } from 'react-router-dom';
 
-const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask }) => {
-  const location = useLocation()
+const TasksModal = ({
+  setAllSubTask,
+  handleShowSubTaskToTask,
+
+  setShowTasksModal,
+  showTasksModal,
+  taskItem,
+  allSubTask
+}) => {
+  const location = useLocation();
   const [allCommets, setAllCommets] = useState([]);
   const dispatch = useDispatch();
   const {
@@ -39,7 +47,7 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
   });
 
   const handleCreateComment = asyncWrapper(async (data) => {
-    const fixMentionUsers = data?.commentMentionUsersViewModels?.map((item) => item.id)
+    const fixMentionUsers = data?.commentMentionUsersViewModels?.map((item) => item.id);
     const postData = {
       text: data?.createComment,
       taskJiraId: taskItem?.id || null,
@@ -47,11 +55,11 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
       commentMentionUsersViewModels: fixMentionUsers || [],
       attachmentCreateViewModels: []
     };
-    console.log(postData);
+
     dispatch(RsetShowLoading({ value: true, btnName: 'sendText' }));
     await serCreateComment(postData);
-    setValue("createComment", "")
-    setValue("commentMentionUsersViewModels", [])
+    setValue('createComment', '');
+    setValue('commentMentionUsersViewModels', []);
     dispatch(RsetShowLoading({ value: false }));
     return handleGetComments();
   });
@@ -76,12 +84,34 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
           </span>
         </Modal.Header>
         <Modal.Body>
-          <SubTasks allSubTask={allSubTask} />
+          <SubTasks
+            setAllSubTask={setAllSubTask}
+            handleShowSubTaskToTask={handleShowSubTaskToTask}
+            handleGetComments={handleGetComments}
+            allSubTask={allSubTask}
+            taskItem={taskItem}
+          />
           <div className="border my-4 p-2 bg-light rounded-2">
             <Form>
               <Row className="align-items-end px-2">
-                <Input placeholder="متن گزارش" xs={2} xl={6} className="" control={control} name="createComment" />
-                <ComboBox isMulti options={fixUsers} control={control} placeHolder='منشن' name='commentMentionUsersViewModels' className="" xl={4} xxl={1} />
+                <Input
+                  placeholder="متن گزارش"
+                  xs={2}
+                  xl={6}
+                  className=""
+                  control={control}
+                  name="createComment"
+                />
+                <ComboBox
+                  isMulti
+                  options={fixUsers}
+                  control={control}
+                  placeHolder="منشن"
+                  name="commentMentionUsersViewModels"
+                  className=""
+                  xl={4}
+                  xxl={1}
+                />
                 <Btn
                   xxl={2}
                   loadingName="sendText"
@@ -93,7 +123,13 @@ const TasksModal = ({ setShowTasksModal, showTasksModal, taskItem, allSubTask })
                 />
               </Row>
             </Form>
-            <Comment fixUsers={fixUsers} control={control} allCommets={allCommets} setAllCommets={setAllCommets} taskItem={taskItem} />
+            <Comment
+              fixUsers={fixUsers}
+              control={control}
+              allCommets={allCommets}
+              setAllCommets={setAllCommets}
+              taskItem={taskItem}
+            />
           </div>
         </Modal.Body>
         <Modal.Footer>

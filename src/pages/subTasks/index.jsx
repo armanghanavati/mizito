@@ -6,40 +6,60 @@ import { useForm } from 'react-hook-form';
 import Input from '../../components/Input';
 import asyncWrapper from '../../utils/asyncWrapper';
 import Btn from '../../components/Btn';
+import { useLocation } from 'react-router-dom';
+import { serCreateSubTask, serSubtaskGet } from '../../services/masterServices';
+import { RsetShowLoading } from '../../hooks/slices/main';
 
-const SubTasks = ({ allSubTask }) => {
-  const { control, handleSubmit, formState } = useForm({ reValidateMode: 'onChange' });
+const SubTasks = ({
+  taskItem,
+  allSubTask,
+  handleGetComments,
+  setAllSubTask,
+  handleShowSubTaskToTask
+}) => {
+  // const [allSubTasks, setAllSubTasks] = useState([]);
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors }
+  } = useForm({ reValidateMode: 'onChange' });
+  const location = useLocation();
 
-  const handleCreateSubTask = asyncWrapper(async () => {
+  const handleCreateSubTask = asyncWrapper(async (data) => {
+    RsetShowLoading({ value: true, btnName: 'sendSubTask' });
     const postData = {
-      name: '',
+      name: data?.createComment,
       description: '',
-      priority: 0,
-      workFlow: '',
-      dueDateTime: '',
-      remainderDateTime: '',
-      taskId: '',
+      workFlow: taskItem?.workFlow,
+      dueDateTime: StringHelpers.convertDateEn(new Date()),
+      remainderDateTime: StringHelpers.convertDateEn(new Date()),
+      taskId: taskItem?.id,
       subTaskAssignedUsersViewModels: [''],
       subTaskVerifyUsersViewModels: [''],
       subTaskAttachmentViewModels: []
     };
     const res = await serCreateSubTask(postData);
-    console.log(res);
+    RsetShowLoading({ value: false });
+    if (res?.data?.code === 1) {
+      setAllSubTask(res?.data?.data);
+      handleShowSubTaskToTask(taskItem);
+      setValue('createComment', '');
+    }
   });
 
   const showAllSubTask = allSubTask?.map((subTask) => {
     return (
       <Container fluid>
-        <Row className="d-flex py-2  my-4 rounded-4 justify-content-between">
+        <Row className="d-flex py-2 my-4 rounded-4 justify-content-between">
           <Col
-            // onClick={}
-            className="bg-white py-2 cursorPointer d-flex justify-content-between "
+            className="align-items-center bg-white py-2 d-flex justify-content-between "
             xs={12}
             md={12}>
             <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
             <span>{StringHelpers?.convertDateFa(subTask?.dueDateTime)}</span>
+            <i className=" border pt-2 rounded-pill px-2 bg-secondary text-white  text-secondary bi bi-pencil mx-2 cursorPointer" />
           </Col>
-          {/* <Input  placeholder="موضوع" xs={2} xl={4} control={control} name="createComment" /> */}
         </Row>
       </Container>
     );
@@ -48,7 +68,17 @@ const SubTasks = ({ allSubTask }) => {
   return (
     <div className="border rounded py-2 bg-light">
       <Row className="align-items-center px-3">
-        <Input placeholder='ایجاد وظیفه فرعی' xs={2} xl={10} control={control} name="createComment" />
+        <Input
+          errors={errors}
+          placeholder="ایجاد وظیفه فرعی"
+          xs={2}
+          xl={10}
+          control={control}
+          name="createComment"
+          validation={{
+            required: 'لطفا وظیفه فرعی را وارد کنید'
+          }}
+        />
         <Btn
           loadingName="sendSubTask"
           className="mt-1"

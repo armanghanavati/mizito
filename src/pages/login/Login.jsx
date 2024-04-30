@@ -72,6 +72,7 @@ const Login = ({}) => {
                   </Link>
                 </div> */}
                 <Input
+                  errors={errors}
                   xl={12}
                   errmsg="لطفا نام کاربری خود را وارد کنید"
                   label=":نام کاربری"

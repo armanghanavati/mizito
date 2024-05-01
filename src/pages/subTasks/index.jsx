@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Collapse, Container, Form, Row } from 'react-bootstrap';
 import StringHelpers from '../../helpers/StringHelpers';
 import SwitchCase from '../../components/SwitchCase';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import Input from '../../components/Input';
 import asyncWrapper from '../../utils/asyncWrapper';
 import Btn from '../../components/Btn';
@@ -10,6 +10,7 @@ import { useLocation } from 'react-router-dom';
 import { serCreateSubTask, serSubtaskGet } from '../../services/masterServices';
 import { RsetShowLoading } from '../../hooks/slices/main';
 import EditSubTaskModal from './EditSubTaskModal';
+import ComboBox from '../../components/ComboBox';
 
 const SubTasks = ({
   taskItem,
@@ -19,7 +20,7 @@ const SubTasks = ({
   handleShowSubTaskToTask
 }) => {
   const [subTask, setSubTask] = useState({});
-
+  const [showFieldCollapse, setShowFieldCollapse] = useState(false);
   const [showEditSubTask, setShowEditSubTask] = useState(false);
 
   const {
@@ -54,9 +55,9 @@ const SubTasks = ({
   });
 
   const handleEditSubTask = (subTaskData) => {
-    setShowEditSubTask(true)
-    setSubTask(subTaskData)
-  }
+    setShowEditSubTask(true);
+    setSubTask(subTaskData);
+  };
 
   const showAllSubTask = allSubTask?.map((subTask) => {
     return (
@@ -67,8 +68,11 @@ const SubTasks = ({
             xs={12}
             md={12}>
             <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
-            <span>{StringHelpers?.convertDateFa(subTask?.dueDateTime)}</span>
-            <i onClick={() => handleEditSubTask(subTask)} className=" border pt-2 rounded-pill px-2 bg-secondary text-white  text-secondary bi bi-pencil mx-2 cursorPointer" />
+            <small className='text-secondary' >{StringHelpers?.convertDateFa(subTask?.dueDateTime)}</small>
+            <i
+              onClick={() => handleEditSubTask(subTask)}
+              className=" border pt-2 rounded-pill px-2 bg-primary text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
+            />
           </Col>
         </Row>
       </Container>
@@ -77,29 +81,73 @@ const SubTasks = ({
 
   return (
     <div className="border rounded py-2 bg-light">
-      <Row className="align-items-center px-3">
-        <Input
-          errors={errors}
-          placeholder="ایجاد وظیفه فرعی"
-          xs={2}
-          xl={10}
-          control={control}
-          name="createComment"
-          validation={{
-            required: 'لطفا وظیفه فرعی را وارد کنید'
-          }}
-        />
+      <div className="d-flex justify-content-center">
         <Btn
-          loadingName="sendSubTask"
-          className="mt-1"
-          icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
-          variant="outline-success"
-          title="ارسال"
-          onClick={handleSubmit((data) => handleCreateSubTask(data))}
+          xl={3}
+          icon={<i className="d-flex align-items-center me-2 bi bi-caret-down" />}
+          className="me-3 mt-4 "
+          variant="outline-primary"
+          title="ایجاد وظیفه"
+          onClick={() => setShowFieldCollapse(!showFieldCollapse)}
         />
-      </Row>
+      </div>
+      <Collapse className="" in={showFieldCollapse}>
+        <Row className="align-items-center px-3">
+          <Input
+            className="mt-4"
+            errors={errors}
+            placeholder="ایجاد وظیفه فرعی"
+            xs={2}
+            xl={6}
+            control={control}
+            name="createComment"
+            validation={{
+              required: 'لطفا وظیفه فرعی را وارد کنید'
+            }}
+          />
+          <ComboBox
+            isMulti
+            // options={fixUsers}
+            control={control}
+            placeHolder="منشن"
+            name="commentMentionUsersViewModels"
+            className=""
+            xl={6}
+            xxl={12}
+          />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <>
+                <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
+                <Form.Control {...field} name="description" as="textarea" rows={3} />
+              </>
+            )}
+          />
+          <div className="d-flex justify-content-end">
+            <Btn
+              loadingName="sendSubTask"
+              className="mt-4 text-white"
+              icon={<i className="d-flex align-items-end bi me-2 bi-send" />}
+              variant="primary"
+              title="ارسال"
+              onClick={handleSubmit((data) => handleCreateSubTask(data))}
+            />
+          </div>
+        </Row>
+      </Collapse>
       {showAllSubTask}
-      {showEditSubTask && <EditSubTaskModal reset={reset} handleSubmit={handleSubmit} subTask={subTask} setShowEditSubTask={setShowEditSubTask} showEditSubTask={showEditSubTask} control={control} />}
+      {showEditSubTask && (
+        <EditSubTaskModal
+          reset={reset}
+          handleSubmit={handleSubmit}
+          subTask={subTask}
+          setShowEditSubTask={setShowEditSubTask}
+          showEditSubTask={showEditSubTask}
+          control={control}
+        />
+      )}
     </div>
   );
 };

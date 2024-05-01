@@ -27,12 +27,12 @@ const Btn = ({
             className={`${className} d-flex w-100 px-4 align-items-center justify-content-center`}
             variant={variant}
             onClick={onClick}>
-            {icon}
             {main.showLoading?.btnName === loadingName ? (
               <Spinner className="my-1" animation="border" size="sm" role="status" />
             ) : (
               title
             )}
+            {icon}
           </Button>
         ) : (
           <button
@@ -53,6 +53,3 @@ const Btn = ({
 };
 
 export default Btn;
-
-
-

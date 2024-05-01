@@ -40,7 +40,9 @@ const TasksModal = ({
   });
 
   const handleGetComments = asyncWrapper(async () => {
+    console.log(taskItem);
     const res = await serComments(taskItem?.id);
+    console.log(res, taskItem?.id);
     if (res?.data?.code === 1) {
       setAllCommets(res?.data?.data);
     }

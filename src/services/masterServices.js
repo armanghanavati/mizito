@@ -124,3 +124,14 @@ export const serCreateSubTask = (postData) => {
 export const serSubtaskGet = (taskId) => {
   return axios.get(`${baseURL}api/SubTaskController/SubTasks?taskid=${taskId}`);
 };
+
+// دریافت ویرایش وظیفه فرعی
+export const serEditGetSubtask = (subTaskId) => {
+  return axios.get(`${baseURL}api/SubTaskController/EditSubTask?subTaskid=${subTaskId}`);
+};
+
+// دریافت ویرایش وظیفه فرعی
+export const serPutEditSubTask = (postData) => {
+  return axios.put(`${baseURL}api/SubTaskController/EditSubTask `, postData);
+};
+

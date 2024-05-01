@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import StringHelpers from '../../helpers/StringHelpers';
 import SwitchCase from '../../components/SwitchCase';
@@ -9,6 +9,7 @@ import Btn from '../../components/Btn';
 import { useLocation } from 'react-router-dom';
 import { serCreateSubTask, serSubtaskGet } from '../../services/masterServices';
 import { RsetShowLoading } from '../../hooks/slices/main';
+import EditSubTaskModal from './EditSubTaskModal';
 
 const SubTasks = ({
   taskItem,
@@ -17,11 +18,15 @@ const SubTasks = ({
   setAllSubTask,
   handleShowSubTaskToTask
 }) => {
-  // const [allSubTasks, setAllSubTasks] = useState([]);
+  const [subTask, setSubTask] = useState({});
+
+  const [showEditSubTask, setShowEditSubTask] = useState(false);
+
   const {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors }
   } = useForm({ reValidateMode: 'onChange' });
   const location = useLocation();
@@ -48,6 +53,11 @@ const SubTasks = ({
     }
   });
 
+  const handleEditSubTask = (subTaskData) => {
+    setShowEditSubTask(true)
+    setSubTask(subTaskData)
+  }
+
   const showAllSubTask = allSubTask?.map((subTask) => {
     return (
       <Container fluid>
@@ -58,7 +68,7 @@ const SubTasks = ({
             md={12}>
             <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
             <span>{StringHelpers?.convertDateFa(subTask?.dueDateTime)}</span>
-            <i className=" border pt-2 rounded-pill px-2 bg-secondary text-white  text-secondary bi bi-pencil mx-2 cursorPointer" />
+            <i onClick={() => handleEditSubTask(subTask)} className=" border pt-2 rounded-pill px-2 bg-secondary text-white  text-secondary bi bi-pencil mx-2 cursorPointer" />
           </Col>
         </Row>
       </Container>
@@ -89,6 +99,7 @@ const SubTasks = ({
         />
       </Row>
       {showAllSubTask}
+      {showEditSubTask && <EditSubTaskModal reset={reset} handleSubmit={handleSubmit} subTask={subTask} setShowEditSubTask={setShowEditSubTask} showEditSubTask={showEditSubTask} control={control} />}
     </div>
   );
 };

@@ -94,6 +94,12 @@ export const serPutEditTask = (postData) => {
   return axios.put(`${baseURL}api/TaskController/EditTask`, postData);
 };
 
+// حذف وظیفه
+export const serDeleteTask = (tasId) => {
+  return axios.delete(`${baseURL}api/TaskController/DeleteTask?taskid=${tasId}`);
+};
+
+
 // دریافت کامنت ها
 export const serComments = (commentId) => {
   return axios.get(`${baseURL}api/CommentController/Comments?taskOrsubtaskid=${commentId}`);

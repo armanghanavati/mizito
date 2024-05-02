@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useLocation } from 'react-router-dom';
 import {
+  serDeleteTask,
   serGetBoards,
   serGetEditTask,
   serGetSubTasks,
@@ -10,21 +11,24 @@ import {
 } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import AllTasks from '../tasks/AllTasks';
-import { useDispatch } from 'react-redux';
-import { RsetShowLoading } from '../../hooks/slices/main';
+import { useDispatch, useSelector } from 'react-redux';
+import { RsetDeleteModal, RsetShowLoading } from '../../hooks/slices/main';
 import ShowTasksModal from '../tasks/TasksModal';
 import TasksModal from '../tasks/TasksModal';
 import CreateTasks from '../tasks/CreateTasks';
 import CreateWorkFlow from '../WorkFlow/index';
+import DeleteModal from '../../common/DeleteModal';
 
 const Board = () => {
+  const { main } = useSelector((state) => state)
   const location = useLocation();
   const dispatch = useDispatch();
+  const [taskItem, setTaskItem] = useState({});
+  const [taskItemDelete, setTaskItemDelete] = useState({});
   const [workflowList, setWorkflowList] = useState([]);
   const [showTasksModal, setShowTasksModal] = useState(false);
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [showWorkFlow, setShowWorkFlow] = useState(false);
-  const [taskItem, setTaskItem] = useState({});
   const [workFlowItem, setWorkFlowItem] = useState({});
   const [tasksList, setTasksList] = useState([]);
   const [allSubTask, setAllSubTask] = useState([]);
@@ -78,10 +82,35 @@ const Board = () => {
     }
   });
 
+  const handleDeleteTaskAnswerYes = asyncWrapper(async () => {
+    const res = await serDeleteTask(taskItemDelete?.id);
+    if (res?.data?.code === 1) {
+      handleWorkFlows()
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      handleWorkFlows()
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  })
+
+  const handleDeleteTask = (task) => {
+    setTaskItemDelete(task)
+    dispatch(RsetDeleteModal({ value: true, name: "DELETE_TASK" }))
+  }
+
+  useEffect(() => {
+    if (main?.deleteModal?.name === "DELETE_TASK")
+      console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF");
+    if (main?.deleteModal?.answer === "yes") {
+      console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+      handleDeleteTaskAnswerYes()
+    }
+  }, [main?.deleteModal?.answer]);
+
   return (
     <>
       <Col className="bg-light p-3 d-flex justify-content-between">
-        <span>تاریخ ساخت پروژه:</span>
+        <span className='' >تاریخ ساخت پروژه:</span>
       </Col>
       <Container fluid className="count_WorkFlow d-flex">
         {location?.state?.item?.boardWorkFlowsViewModel?.map((wf, wfIndex) => {
@@ -92,8 +121,10 @@ const Board = () => {
                   xxl="2"
                   className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 col-xxl-12 py-1 bg-warning">
                   <span>{wf?.name}</span>
-
-                  <i className=" bi bi-sliders d-flex align-items-center" />
+                  <div className='d-flex gap-2'>
+                    <i className=" bi bi-sliders d-flex align-items-center" />
+                    <i className=" bi bi-trash d-flex align-items-center" />
+                  </div>
                 </Col>
                 <div className="">
                   <div
@@ -106,15 +137,14 @@ const Board = () => {
                     console.log(task);
                     return (
                       <div
-                        className=" bg-white position-relative shadow subTask_To_Task d-flex row justify-content-between my-3 mx-1 p-4"
+                        className="rounded-1  bg-white position-relative shadow-sm subTask_To_Task d-flex row justify-content-between my-3 mx-1 p-4"
                         key={task?.id}>
                         <div className="px-0 d-flex justify-content-center">
-                          <span>{task?.name}</span>
-                          <span onClick={() => handleShowTask(task)}>
-                            <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 end-0 text-secondary rounded-2 bi bi-eye" />
-                          </span>
-                          <span onClick={() => handleEditTask(task)}>
-                            <i className="cursorPointer border-bottom pt-1 px-2 position-absolute top-0 start-0 text-secondary rounded-2 bi bi-gear" />
+                          <span className='text-secondary' >{task?.name}</span>
+                          <span className='py-3 position-absolute top-0 start-0  '>
+                            <i onClick={() => handleShowTask(task)} className="cursorPointer border-bottom  px-2 mx-1 my-3 text-warning rounded-2 bi bi-eye" />
+                            <i onClick={() => handleDeleteTask(task)} className="cursorPointer text-warning border-bottom bi bi-trash d-flex py-1 px-2 mx-1 my-3 align-items-center rounded-2" />
+                            <i onClick={() => handleEditTask(task)} className="cursorPointer border-bottom px-2 mx-1 my-3 text-warning rounded-2 bi bi-gear" />
                           </span>
                         </div>
                         <div>
@@ -171,6 +201,8 @@ const Board = () => {
           showWorkFlow={showWorkFlow}
         />
       )}
+      {!!main?.deleteModal?.value === true && <DeleteModal />}
+
     </>
   );
 };

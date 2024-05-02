@@ -3,24 +3,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 const initialState = {
   messageModal: { title: '', show: false },
   showToast: { title: '', bg: '', show: false },
-  showModal: { showModal: false, typeModal: 0, showModal2: false, typeModal2: 0 },
   showQuestionModal: { show: false, answer: false },
   allUsers: [],
   showLoading: { btnName: '', value: false },
   allEnums: {},
-  projStatus: {},
-  projType: {},
-  projPriorty: {},
-  projRole: {},
-  userRole: {}
+  deleteModal: { value: false, name: "", answer: "" },
 };
-
-//  -> Reset overtime form
-// export const handleGetAllUser = createAsyncThunk(
-//     "MainSlice/handleGetAllUser",
-//     (obj, { dispatch }) => {
-//     }
-// );
 
 const MainSlice = createSlice({
   name: 'main',
@@ -52,7 +40,10 @@ const MainSlice = createSlice({
     },
     RsetShowToast: (state, { payload }) => {
       return { ...state, showToast: payload };
-    }
+    },
+    RsetDeleteModal: (state, { payload }) => {
+      return { ...state, deleteModal: payload };
+    },
   }
 });
 
@@ -66,6 +57,7 @@ export const {
   RsetAllUsers,
   RsetProjRole,
   RsetUserRole,
+  RsetDeleteModal,
   RsetShowToast
 } = MainSlice.actions;
 export default MainSlice.reducer;

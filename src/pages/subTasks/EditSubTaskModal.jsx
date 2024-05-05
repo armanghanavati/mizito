@@ -30,7 +30,7 @@ const EditSubTaskModal = ({
     const postData = {
       id: subTask?.id,
       name: data?.createComment,
-      description: data?.description,
+      description: 'data?.description',
       workFlow: subTask?.workFlow,
       dueDateTime: StringHelpers.convertDateEn(new Date()),
       doneStatus: true,
@@ -77,7 +77,7 @@ const EditSubTaskModal = ({
               placeholder=""
               xs={2}
               xl={6}
-              className=""
+              className="my-2"
               control={control}
               name="createComment"
             />
@@ -92,7 +92,7 @@ const EditSubTaskModal = ({
               xxl={12}
             />
             <Datepicker name="remainderDateTime" label="تاریخ مهلت:" control={control} />
-            <Controller
+            {/* <Controller
               name="description"
               control={control}
               render={({ field }) => (
@@ -101,7 +101,7 @@ const EditSubTaskModal = ({
                   <Form.Control {...field} name="description" as="textarea" rows={3} />
                 </>
               )}
-            />
+            /> */}
           </Row>
         </Form>
       </Modal.Body>

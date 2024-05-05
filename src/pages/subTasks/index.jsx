@@ -18,7 +18,6 @@ const SubTasks = ({
   taskItem,
   handleAllTasks,
   allSubTask,
-  handleGetComments,
   setAllSubTask,
   handleShowSubTaskToTask
 }) => {
@@ -36,8 +35,15 @@ const SubTasks = ({
   const location = useLocation();
   const dispatch = useDispatch();
   const { main } = useSelector((state) => state);
+  const allUserAssignedBoard = location?.state?.item?.boardUsersViewModel?.map((user) => {
+    return {
+      id: user?.userId,
+      title: user?.fullName
+    };
+  });
+
   const handleCreateSubTask = asyncWrapper(async (data) => {
-    RsetShowLoading({ value: true, btnName: 'sendSubTask' });
+    dispatch(RsetShowLoading({ value: true, btnName: 'sendSubTask' }));
     const postData = {
       name: data?.createComment,
       description: '',
@@ -50,11 +56,15 @@ const SubTasks = ({
       subTaskAttachmentViewModels: []
     };
     const res = await serCreateSubTask(postData);
-    RsetShowLoading({ value: false });
+    dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
-      setAllSubTask(res?.data?.data);
+      setAllSubTask((prev) => ({
+        ...prev,
+        allSubTask: res?.data?.data
+      }));
       handleShowSubTaskToTask(taskItem);
       setValue('createComment', '');
+      setValue('commentMentionUsersViewModels', '');
     }
   });
 
@@ -64,10 +74,11 @@ const SubTasks = ({
   };
 
   const handleDeleteSubTaskAnswerYes = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
     const res = await serDeleteSubTask(subTaskItemDelete?.id);
-    console.log(subTaskItemDelete);
+    dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
-      handleShowSubTaskToTask(subTaskItemDelete);
+      handleShowSubTaskToTask(taskItem);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
     } else {
       handleWorkFlows();
@@ -88,37 +99,39 @@ const SubTasks = ({
     dispatch(RsetDeleteModal({ value: true, name: 'DELETE_SUBTASK' }));
   };
 
-  const showAllSubTask = allSubTask?.map((subTask) => {
-    return (
-      <Container fluid>
-        <Row className="d-flex py-2 rounded-4 justify-content-between">
-          <Col
-            className="align-items-center bg-white py-2 d-flex justify-content-between "
-            xs={12}
-            md={12}>
-            <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
-            <small className="text-secondary">
-              {StringHelpers?.convertDateFa(subTask?.dueDateTime)}
-            </small>
-            <i
-              onClick={() => handleEditSubTask(subTask)}
-              className="pt-2 rounded-pill px-2 bg-warning text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
-            />
-            <i
-              onClick={() => handleDeleteSubTask(subTask)}
-              className="pt-2 rounded-pill px-2 bg-warning text-white  text-secondary bi bi-trash  cursorPointer"
-            />
-          </Col>
-        </Row>
-      </Container>
-    );
-  });
+  const showAllSubTask = Object.values(allSubTask)
+    ?.reverse()
+    .map((subTask) => {
+      return (
+        <Container fluid>
+          <Row className="d-flex border-bottom py-2 rounded-4 justify-content-between">
+            <Col
+              className="align-items-center bg-white py-2 d-flex justify-content-between "
+              xs={12}
+              md={12}>
+              <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
+              <small className="text-secondary">
+                {StringHelpers?.convertDateFa(subTask?.dueDateTime)}
+              </small>
+              <i
+                onClick={() => handleEditSubTask(subTask)}
+                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
+              />
+              <i
+                onClick={() => handleDeleteSubTask(subTask)}
+                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"
+              />
+            </Col>
+          </Row>
+        </Container>
+      );
+    });
 
   return (
     <>
       <div className="border  py-2 rounded shadow-sm bg-light">
         <Col
-          className="d-flex shadow-sm bg-warning align-items-center justify-content-center my-2 rounded-start-pill"
+          className="d-flex shadow-sm sideCount align-items-center justify-content-center my-2 rounded-start-pill"
           xxl={2}
           xl={4}
           md={6}
@@ -126,7 +139,7 @@ const SubTasks = ({
           <h5 className="d-flex align-items-center mt-2 py-2 text-white">ایجاد وظیفه‌ فرعی</h5>
         </Col>
         <div className="rounded bg-white m-3 ">
-          <Row className="align-items-center px-3">
+          <Row className="d-flex align-items-center px-3">
             <Input
               className="mt-4"
               errors={errors}
@@ -140,8 +153,12 @@ const SubTasks = ({
               }}
             />
             <ComboBox
+              errors={errors}
+              validation={{
+                required: 'لطفا منشن را انتخاب کنید'
+              }}
               isMulti
-              // options={fixUsers}
+              options={allUserAssignedBoard}
               control={control}
               placeHolder="منشن"
               name="commentMentionUsersViewModels"

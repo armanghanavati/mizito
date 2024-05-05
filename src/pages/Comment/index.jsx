@@ -72,7 +72,7 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
     <div className="m-3 rounded bg-white p-3">
       {allCommets?.map((cmt, index) => {
         return (
-          <Row className="py-1 ">
+          <Row className="py-1 bg-danger">
             <div className="">
               <span className="text-secondary ms-2">{cmt?.creatorFullName}</span>
               <span className="text-secondary">

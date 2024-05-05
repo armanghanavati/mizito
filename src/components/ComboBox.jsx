@@ -58,29 +58,33 @@ const ComboBox = ({
                 }  align-items-center input-label input-label-sm lg:input-label-base`}>
                 {label}
               </label>
-              <Select
-                isRtl
-                {...field}
-                placeholder={placeHolder}
-                isMulti={isMulti}
-                isLoading={loading || main?.showLoading?.value}
-                onKeyDown={onKeyDown}
-                isDisabled={isDisabled}
-                options={options}
-                isClearable={isClearable}
-                getOptionLabel={optionLabel}
-                getOptionValue={optionValue}
-                menuPortalTarget={document.body}
-                className={`select ${className}`}
-                loadingMessage={() => 'درحال بارگذاری'}
-                noOptionsMessage={() => 'موجود نیست'}
-                styles={{
-                  menuPortal: (base) => ({ ...base, zIndex: 9999 })
-                }}
-              />
-              {errors?.[name] && (
-                <span className="text-danger font12"> {errors?.[name]?.message} </span>
-              )}
+              <div className="position-relative">
+                <Select
+                  isRtl
+                  {...field}
+                  placeholder={placeHolder}
+                  isMulti={isMulti}
+                  isLoading={loading || main?.showLoading?.value}
+                  onKeyDown={onKeyDown}
+                  isDisabled={isDisabled}
+                  options={options}
+                  isClearable={isClearable}
+                  getOptionLabel={optionLabel}
+                  getOptionValue={optionValue}
+                  menuPortalTarget={document.body}
+                  className={`${errors?.[name] ? 'border rounded border-danger' : ''}  select ${className}`}
+                  loadingMessage={() => 'درحال بارگذاری'}
+                  noOptionsMessage={() => 'موجود نیست'}
+                  styles={{
+                    menuPortal: (base) => ({ ...base, zIndex: 9999 })
+                  }}
+                />
+                {errors?.[name] && (
+                  <span className="position-absolute text-danger font12">
+                    {errors?.[name]?.message}
+                  </span>
+                )}
+              </div>
             </Col>
           </>
         )}

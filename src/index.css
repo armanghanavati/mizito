@@ -14,6 +14,13 @@ body * {
   src: url('./assets/fonts/IRANSansWeb_FaNum.woff') format('woff');
 }
 
+@font-face {
+  font-family: 'iranSansEngNum';
+  src: url('./assets/fonts/iranSans.eot') format('eot');
+  src: url('./assets/fonts/iranSans.ttf') format('ttf');
+  src: url('./assets/fonts/iranSans.woff') format('woff');
+}
+
 .headerFit {
   height: 100px;
 }
@@ -113,6 +120,10 @@ body * {
 
 .maxW-100 {
   max-width: 100%;
+}
+
+.maxH-100 {
+  max-height: 100px;
 }
 
 .bg-whit-100 {
@@ -384,4 +395,48 @@ body * {
 .fit_Count_Projects {
   position: absolute;
   top: 60px;
+}
+
+/* progress */
+
+.progress-bar {
+  display: flex;
+  flex-direction: inherit !important;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--bs-progress-bar-color);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--bs-progress-bar-bg);
+  transition: var(--bs-progress-bar-transition);
+}
+
+.step {
+  color: white;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  background-color: #664de5;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.stepMaster {
+  user-select: none;
+  cursor: pointer;
+  padding: 10px;
+  height: 15px;
+  width: 15px;
+  border: 2px solid;
+  border-radius: 50%;
+  transform: scale(-1, 1);
 }

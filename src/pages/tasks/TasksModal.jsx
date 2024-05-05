@@ -57,7 +57,7 @@ const TasksModal = ({
       commentMentionUsersViewModels: fixMentionUsers || [],
       attachmentCreateViewModels: []
     };
-    dispatch(RsetShowLoading({ value: true, btnName: 'sendText' }));
+    dispatch(RsetShowLoading({ value: true, btnName: 'sendCommented' }));
     await serCreateComment(postData);
     setValue('createComment', '');
     setValue('commentMentionUsersViewModels', []);
@@ -95,7 +95,7 @@ const TasksModal = ({
           />
           <div className="border mt-4 py-2 bg-light shadow-sm rounded">
             <Col
-              className="d-flex shadow-sm bg-warning align-items-center justify-content-center my-2 rounded-start-pill"
+              className="d-flex shadow-sm sideCount align-items-center justify-content-center my-2 rounded-start-pill"
               xxl={2}
               xl={4}
               md={6}
@@ -103,7 +103,7 @@ const TasksModal = ({
               <h5 className="d-flex align-items-center mt-2 py-2 text-white">ایجاد گزارش</h5>
             </Col>
             <Form className="rounded bg-white m-3 ">
-              <Row className="align-items-center px-3">
+              <Row className=" align-items-center px-3">
                 <Input
                   errors={errors}
                   validation={{
@@ -116,7 +116,7 @@ const TasksModal = ({
                   placeholder="متن گزارش"
                   xs={2}
                   xl={6}
-                  className=""
+                  className="mt-4"
                   control={control}
                   name="createComment"
                 />
@@ -139,7 +139,7 @@ const TasksModal = ({
                   xxl={1}
                 />
                 <Btn
-                  loadingName="sendSubTask"
+                  loadingName="sendCommented"
                   className="mt-4"
                   icon={<i className="d-flex align-items-end bi me-1 bi-send" />}
                   variant="outline-warning"

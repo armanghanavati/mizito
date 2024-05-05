@@ -80,7 +80,6 @@ export const addNewWorkFlowToBoard = (postData) => {
 export const serTasks = (id) => {
   return axios.get(`${baseURL}api/TaskController/Tasks?boardid=${id}`);
 };
-
 // لیست تمامی ساب تسک ها
 export const serGetSubTasks = (id) => {
   return axios.get(`${baseURL}api/SubTaskController/SubTasks?taskid=${id}`);
@@ -118,7 +117,7 @@ export const serDeleteSubTask = (subTaskId) => {
 
 // دریافت کامنت ها
 export const serComments = (commentId) => {
-  return axios.get(`${baseURL}api/CommentController/Comments?taskOrsubtaskid=${commentId}`);
+  return axios.get(`${baseURL}api/CommentController/Comments?parentId=${commentId}`);
 };
 
 // ارسال کامنت ها

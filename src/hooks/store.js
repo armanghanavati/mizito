@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import homeSlice from './slices/homeSlice';
 import MainSlice from './slices/main';
-import createSlice from './slices/createSlice';
+import boardSlice from './slices/boardSlice';
 
 const rootReducer = {
   home: homeSlice,
   main: MainSlice,
-  create: createSlice
+  board: boardSlice
 };
 
 export const store = configureStore({

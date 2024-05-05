@@ -1,0 +1,64 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { RsetShowLoading, RsetShowToast } from './main';
+import { serGetBoards } from '../../services/masterServices';
+
+const initialState = {
+  shoModal: { show: false },
+  fieldsEditProject: {},
+  getAllBoard: [],
+  itsBoard: []
+};
+
+//  -> Reset overtime form
+// export const handleGetAllUser = createAsyncThunk(
+//     "CreateSlice/handleGetAllUser",
+//     (obj, { dispatch }) => {
+//     }
+// );
+
+export const handleGetBoards = createAsyncThunk(
+  'board/handleGetBoards',
+  async (getIdProject, { dispatch }) => {
+    dispatch(RsetShowLoading({ value: true }));
+    if (!!getIdProject) {
+      const resGetBoard = await serGetBoards(getIdProject);
+      dispatch(RsetShowLoading({ value: false }));
+      console.log(resGetBoard, 'Redux');
+      if (resGetBoard?.data?.code === 1) {
+        dispatch(RsetGetAllBoard(resGetBoard?.data?.data));
+
+        const itsBoard = resGetBoard?.data?.data?.map((board) => {
+          return board;
+        });
+        dispatch(RsetItsBoard(itsBoard));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
+      }
+    } else {
+      dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
+    }
+  }
+);
+
+const boardSlice = createSlice({
+  name: 'board',
+  initialState,
+  reducers: {
+    RsetShowCreateModal: (state, { payload }) => {
+      return { ...state, shoModal: payload };
+    },
+    RsetFieldsEditProject: (state, { payload }) => {
+      return { ...state, fieldsEditProject: payload };
+    },
+    RsetGetAllBoard: (state, { payload }) => {
+      return { ...state, getAllBoard: payload };
+    },
+    RsetItsBoard: (state, { payload }) => {
+      return { ...state, itsBoard: payload };
+    }
+  }
+});
+
+export const { RsetShowCreateModal, RsetGetAllBoard, RsetFieldsEditProject, RsetItsBoard } =
+  boardSlice.actions;
+export default boardSlice.reducer;

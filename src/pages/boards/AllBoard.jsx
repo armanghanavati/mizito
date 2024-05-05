@@ -10,10 +10,15 @@ import StringHelpers from '../../helpers/StringHelpers';
 import { RsetAllUsers, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import Board from './Board';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
+import {
+  RsetFieldsEditProject,
+  RsetItsBoard,
+  handleGetBoards
+} from '../../hooks/slices/boardSlice';
+import MainTitle from '../../components/MainTitle';
 
 const AllBoard = () => {
-  const { create, main } = useSelector((state) => state);
+  const { board, main } = useSelector((state) => state);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -21,41 +26,19 @@ const AllBoard = () => {
   const [itemAndIndexProject, setItemAndIndexProject] = useState({});
   const [editFiledsBoard, setEditFiledsBoard] = useState({});
   const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
-  const [findBoard, setFindBoard] = useState(false);
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
   const [showEditBoardModal, setShowEditBoardModal] = useState(false);
-  const [allBoard, setAllBoard] = useState([]);
-  const [itsBoard, setItsBoard] = useState([]);
-
-  const handleGetBoards = asyncWrapper(async () => {
-    dispatch(RsetShowLoading({ value: true }));
-    if (!!getIdProject) {
-      const resGetBoard = await serGetBoards(getIdProject);
-      dispatch(RsetShowLoading({ value: false }));
-      if (resGetBoard?.data?.code === 1) {
-        console.log(resGetBoard?.data);
-        setFindBoard(true);
-        setAllBoard(resGetBoard?.data?.data);
-        const itsBoard = resGetBoard?.data?.data?.map((board) => {
-          return board;
-        });
-        setItsBoard(itsBoard);
-      } else {
-        console.log(resGetBoard);
-        dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
-      }
-    } else {
-      dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
-    }
-  });
 
   const handleRedirectBoard = (item, index) => {
+    dispatch(RsetItsBoard(item));
     navigate(`/users/board:${getIdProject}`, {
       state: { item, index }
     });
   };
 
-  const handleGetSerBoardCreate = asyncWrapper(async () => {
+  const handleCreateBoard = asyncWrapper(async () => {
+    setEditFiledsBoard({});
+    setShowCreateBoardModal(true);
     RsetShowLoading({ value: true });
     const response = await serCreateBoardGet(getIdProject);
     RsetShowLoading({ value: false });
@@ -76,12 +59,6 @@ const AllBoard = () => {
     }
   });
 
-  const handleCreateBoard = () => {
-    handleGetSerBoardCreate();
-    setEditFiledsBoard({});
-    setShowCreateBoardModal(true);
-  };
-
   const handleShowEditBoard = asyncWrapper(async (data, index) => {
     RsetShowLoading({ value: true });
     const responseEditBoard = await serEditBoard(location?.state?.item?.id);
@@ -94,57 +71,53 @@ const AllBoard = () => {
   });
 
   useEffect(() => {
-    handleGetBoards();
+    dispatch(handleGetBoards(getIdProject));
   }, []);
 
   return (
     <>
+      <div className="p-4 mb-3 mx-0 shadow bg-white d-flex align-items-center justify-content-between text-secondary">
+        <span>{board?.getAllBoard?.[0]?.projectName}</span>
+        <span>
+          تاریخ ساخت بورد: {StringHelpers.convertDateFa(board?.getAllBoard?.[0]?.createDateTime)}
+        </span>
+        <span>سرعت پروژه: {board?.getAllBoard?.[0]?.sprintNumber}</span>
+      </div>
       <Container>
-        <div className="p-4 d-flex align-items-center justify-content-between text-secondary">
-          <span>{allBoard?.[0]?.projectName}</span>
-          <span>تاریخ ساخت بورد: {StringHelpers.convertDateFa(allBoard?.[0]?.createDateTime)}</span>
-          <span>سرعت پروژه: {allBoard?.[0]?.sprintNumber}</span>
-        </div>
-        <hr />
-        <h3 className="text-secondary py-3">لیست بوردها</h3>
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-          {allBoard?.map((item, index) => {
-            return (
-              <div key={index} className="">
-                <Col
-                  className="my-3 bg-white shadow-sm p-3 rounded-3"
-                  md="12"
-                  lg="12"
-                  xl="12"
-                  xxl="12">
-                  <div className=" d-flex justify-content-between">
-                    <span>{item?.name}</span>
-                    <span>
-                      <i
-                        onClick={() => handleShowEditBoard(item, index)}
-                        className="cursorPointer font15 text-secondary bi bi-gear"
-                      />
-                    </span>
-                  </div>
-                  <hr />
-                  <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
-                    <i className="bi font70 text-warning bg-light d-flex justify-content-center py-4 bi-eye" />
+        <div className="shadow border bg-light rounded">
+          <MainTitle title="لیست بوردها" />
+          <div className="mx-2 p-3 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+            <div
+              onClick={handleCreateBoard}
+              className="d-flex justify-content-center  rounded-pill">
+              <i className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle" />
+            </div>
+            {board?.getAllBoard?.map((item, index) => {
+              return (
+                <div key={index} className="">
+                  <Col
+                    className="my-3 text_animate_side bg-white shadow-sm p-3 rounded-3"
+                    md="12"
+                    lg="12"
+                    xl="12"
+                    xxl="12">
+                    <div className=" d-flex justify-content-between">
+                      <span className="text-dark fw-bold">{item?.name}</span>
+                      <span>
+                        <i
+                          onClick={() => handleShowEditBoard(item, index)}
+                          className="cursorPointer font15 text-secondary bi bi-gear"
+                        />
+                      </span>
+                    </div>
+                    <hr />
+                    <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
+                      <i className="border rounded bi font70 text-secondary bg-light d-flex justify-content-center py-4 bi-eye" />
+                    </Col>
                   </Col>
-                  {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
-                <div className=" ">توضیحات: {item?.description} </div>
-                <div className=" ">تاریخ شروع: {item?.dueDateTime} </div>
-                <div className=" ">تاریخ پایان: {item?.endDateTime} </div>
-                <div className=" ">سازنده: {item?.projectCreatorFullName} </div>
-                <div className=" ">اولویت پروژه:{item?.projectPriority} </div>
-                <div className=" ">وضعیت پروژه:{item?.projectStatus} </div>
-                <div className=" ">نوع پروژه:{item?.projectType} </div>
-                <div className=" ">سرعت پروژه:{item?.sprintNumber} </div> */}
-                </Col>
-              </div>
-            );
-          })}
-          <div onClick={handleCreateBoard} className="d-flex justify-content-center  rounded-pill">
-            <i className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle" />
+                </div>
+              );
+            })}
           </div>
         </div>
       </Container>
@@ -166,7 +139,6 @@ const AllBoard = () => {
           editFiledsBoard={editFiledsBoard}
           handleGetBoards={handleGetBoards}
           itemAndIndexProject={itemAndIndexProject}
-          itsBoard={itsBoard}
           showCreateBoardModal={showCreateBoardModal}
           setShowCreateBoardModal={setShowCreateBoardModal}
         />
@@ -176,3 +148,15 @@ const AllBoard = () => {
 };
 
 export default AllBoard;
+
+{
+  /* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
+                <div className=" ">توضیحات: {item?.description} </div>
+                <div className=" ">تاریخ شروع: {item?.dueDateTime} </div>
+                <div className=" ">تاریخ پایان: {item?.endDateTime} </div>
+                <div className=" ">سازنده: {item?.projectCreatorFullName} </div>
+                <div className=" ">اولویت پروژه:{item?.projectPriority} </div>
+                <div className=" ">وضعیت پروژه:{item?.projectStatus} </div>
+                <div className=" ">نوع پروژه:{item?.projectType} </div>
+                <div className=" ">سرعت پروژه:{item?.sprintNumber} </div> */
+}

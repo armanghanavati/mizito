@@ -6,7 +6,7 @@ import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
 import {
@@ -26,9 +26,8 @@ const CreateBoardModal = ({
   handleGetBoards,
   setShowCreateBoardModal,
   itemAndIndexProject,
-  itsBoard
 }) => {
-  const { create, main } = useSelector((state) => state);
+  const { board, main } = useSelector((state) => state);
   const [allWorkFlow, setAllWorkFlow] = useState([]);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -86,6 +85,7 @@ const CreateBoardModal = ({
     const responseWorkFlow = await serWorkFlows();
     dispatch(RsetShowLoading({ value: false }));
     if (responseWorkFlow?.data?.code === 1) {
+      console.log(responseWorkFlow);
       setAllWorkFlow(responseWorkFlow?.data?.data);
     }
   });

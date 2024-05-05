@@ -69,7 +69,7 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
   }, [editComment]);
 
   return (
-    <div className="my-2 bg-light p-3">
+    <div className="m-3 rounded bg-white p-3">
       {allCommets?.map((cmt, index) => {
         return (
           <Row className="py-1 ">

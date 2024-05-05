@@ -380,3 +380,8 @@ body * {
   overflow-x: scroll !important;
   height: 600px;
 }
+
+.fit_Count_Projects {
+  position: absolute;
+  top: 60px;
+}

@@ -16,7 +16,7 @@ import { useLocation } from 'react-router-dom';
 const TasksModal = ({
   setAllSubTask,
   handleShowSubTaskToTask,
-
+  handleAllTasks,
   setShowTasksModal,
   showTasksModal,
   taskItem,
@@ -57,7 +57,6 @@ const TasksModal = ({
       commentMentionUsersViewModels: fixMentionUsers || [],
       attachmentCreateViewModels: []
     };
-
     dispatch(RsetShowLoading({ value: true, btnName: 'sendText' }));
     await serCreateComment(postData);
     setValue('createComment', '');
@@ -74,29 +73,46 @@ const TasksModal = ({
     <>
       <Modal
         className="p-0"
-        size="lg"
+        size="xl"
         show={showTasksModal}
         onHide={() => setShowTasksModal(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-          className="d-flex bg-primary text-white justify-content-center"
+          className="d-flex bg-warning text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
             وظیفه
           </span>
         </Modal.Header>
-        <Modal.Body>
+        <Modal.Body className="">
           <SubTasks
+            handleAllTasks={handleAllTasks}
             setAllSubTask={setAllSubTask}
             handleShowSubTaskToTask={handleShowSubTaskToTask}
             handleGetComments={handleGetComments}
             allSubTask={allSubTask}
             taskItem={taskItem}
           />
-          <div className="border my-4 p-2 bg-light rounded-2">
-            <Form>
-              <Row className="align-items-end px-2">
+          <div className="border mt-4 py-2 bg-light shadow-sm rounded">
+            <Col
+              className="d-flex shadow-sm bg-warning align-items-center justify-content-center my-2 rounded-start-pill"
+              xxl={2}
+              xl={4}
+              md={6}
+              xs={12}>
+              <h5 className="d-flex align-items-center mt-2 py-2 text-white">ایجاد گزارش</h5>
+            </Col>
+            <Form className="rounded bg-white m-3 ">
+              <Row className="align-items-center px-3">
                 <Input
+                  errors={errors}
+                  validation={{
+                    required: 'لطفا متن گزارش را وارد کنید',
+                    minLength: {
+                      message: 'متن گزارش باید بیشتر از 2 حرف باشد',
+                      value: 2
+                    }
+                  }}
                   placeholder="متن گزارش"
                   xs={2}
                   xl={6}
@@ -106,6 +122,14 @@ const TasksModal = ({
                 />
                 <ComboBox
                   isMulti
+                  validation={{
+                    required: 'لطفا متن گزارش را وارد کنید',
+                    minLength: {
+                      message: 'متن گزارش باید بیشتر از 2 حرف باشد',
+                      value: 2
+                    }
+                  }}
+                  errors={errors}
                   options={fixUsers}
                   control={control}
                   placeHolder="منشن"
@@ -115,23 +139,22 @@ const TasksModal = ({
                   xxl={1}
                 />
                 <Btn
-                  xxl={2}
-                  loadingName="sendText"
-                  className=""
-                  icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
-                  variant="outline-primary"
+                  loadingName="sendSubTask"
+                  className="mt-4"
+                  icon={<i className="d-flex align-items-end bi me-1 bi-send" />}
+                  variant="outline-warning"
                   title="ارسال"
                   onClick={handleSubmit((data) => handleCreateComment(data))}
                 />
               </Row>
+              <Comment
+                fixUsers={fixUsers}
+                control={control}
+                allCommets={allCommets}
+                setAllCommets={setAllCommets}
+                taskItem={taskItem}
+              />
             </Form>
-            <Comment
-              fixUsers={fixUsers}
-              control={control}
-              allCommets={allCommets}
-              setAllCommets={setAllCommets}
-              taskItem={taskItem}
-            />
           </div>
         </Modal.Body>
         <Modal.Footer>

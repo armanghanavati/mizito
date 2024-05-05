@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Modal, Form, Row } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal, handleGetBoards } from '../../hooks/slices/boardSlice';
 import { Controller, useForm } from 'react-hook-form';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
@@ -12,31 +12,64 @@ import persian_fa from 'react-date-object/locales/persian_fa';
 import persian from 'react-date-object/calendars/persian';
 import { DateObject } from 'react-multi-date-picker';
 import StringHelpers from '../../helpers/StringHelpers';
-import { addNewWorkFlowToBoard, serCreateTask } from '../../services/masterServices';
+import {
+  addNewWorkFlowToBoard,
+  serCreateTask,
+  serGetWorkFlows,
+  serPutEditWorkFlow
+} from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useLocation } from 'react-router-dom';
 import { RsetShowToast } from '../../hooks/slices/main';
+import ColorPicker from '../../components/ColorPicker';
 
-const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow, handleWorkFlows }) => {
+const CreateWorkFlow = ({
+  setWorkflowEditItem,
+  workflowEditItem,
+  setShowWorkFlow,
+  showWorkFlow,
+  handleWorkFlows
+}) => {
+  const { board } = useSelector((state) => state);
   const location = useLocation();
+  const [color, setColor] = useState('');
   const dispatch = useDispatch();
-  const { control, handleSubmit } = useForm({ reValidateMode: 'onChange' });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ reValidateMode: 'onChange' });
+  const getIdProject = location?.pathname?.split(':')?.[1];
 
-  const handleCreateTask = asyncWrapper(async (data) => {
-    console.log(data);
-    const postData = {
-      name: data?.name,
-      description: data?.description,
-      boardId: location?.state?.item?.id
-    };
-    const res = await addNewWorkFlowToBoard(postData);
-    if (res?.data?.code === 1) {
-      console.log(res);
-      handleWorkFlows();
-      setShowWorkFlow(false);
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+  const handleCreateWorkFlow = asyncWrapper(async (data) => {
+    if (!!workflowEditItem?.name) {
+      const postData = {
+        id: workflowEditItem?.id,
+        name: data?.name,
+        description: 'data?.description',
+        color: color
+      };
+      const res = await serPutEditWorkFlow(postData);
+      if (res?.data?.code === 1) {
+        setShowWorkFlow(false);
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+        dispatch(handleGetBoards(getIdProject));
+      }
     } else {
-      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      const postData = {
+        name: data?.name,
+        color: color,
+        description: 'data?.description',
+        boardId: location?.state?.item?.id
+      };
+      const res = await addNewWorkFlowToBoard(postData);
+      if (res?.data?.code === 1) {
+        dispatch(handleGetBoards(getIdProject));
+        setShowWorkFlow(false);
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+      }
     }
   });
 
@@ -54,10 +87,27 @@ const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow, handleWorkFlows }) => {
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Row>
-                <Input xl={6} label="نام :" name="name" control={control} />
-                <ComboBox className="" name="color" xl={6} control={control} label="رنگ:" />
-                <Controller
+              <div className="d-flex gap-4">
+                <Input
+                  errors={errors}
+                  validation={{
+                    required: 'لطفا نام بورد را وارد کنید',
+                    minLength: {
+                      message: 'نام کاربری باید بیشتر از 2 حرف باشد',
+                      value: 2
+                    }
+                  }}
+                  maxLength={10}
+                  xl={6}
+                  label="نام بورد:"
+                  name="name"
+                  control={control}
+                />
+                <div className="d-flex w-100 align-items-end">
+                  <ColorPicker color={color} setColor={setColor} />
+                </div>
+              </div>
+              {/* <Controller
                   name="description"
                   control={control}
                   render={({ field }) => (
@@ -66,8 +116,7 @@ const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow, handleWorkFlows }) => {
                       <Form.Control {...field} name="description" as="textarea" rows={3} />
                     </>
                   )}
-                />
-              </Row>
+                /> */}
             </Container>
           </Form>
         </Modal.Body>
@@ -76,7 +125,7 @@ const CreateWorkFlow = ({ setShowWorkFlow, showWorkFlow, handleWorkFlows }) => {
           <Btn
             variant="outline-warning"
             title="تایید"
-            onClick={handleSubmit((data) => handleCreateTask(data))}
+            onClick={handleSubmit((data) => handleCreateWorkFlow(data))}
           />
         </Modal.Footer>
       </Modal>

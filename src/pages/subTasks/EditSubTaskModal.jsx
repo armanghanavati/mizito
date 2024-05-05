@@ -63,7 +63,7 @@ const EditSubTaskModal = ({
       onHide={() => setShowEditSubTask(false)}>
       <Modal.Header
         style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-        className="d-flex bg-info text-white  justify-content-center"
+        className="d-flex bg-warning text-white  justify-content-center"
         closeButton>
         <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
           ایجاد وظیفه فرعی

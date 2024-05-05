@@ -7,7 +7,7 @@ const initialState = {
   allUsers: [],
   showLoading: { btnName: '', value: false },
   allEnums: {},
-  deleteModal: { value: false, name: "", answer: "" },
+  deleteModal: { value: false, name: '', answer: '' }
 };
 
 const MainSlice = createSlice({
@@ -43,7 +43,7 @@ const MainSlice = createSlice({
     },
     RsetDeleteModal: (state, { payload }) => {
       return { ...state, deleteModal: payload };
-    },
+    }
   }
 });
 

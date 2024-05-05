@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Modal, Form, Row } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
-import { RsetFieldsEditProject, RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetFieldsEditProject, RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import { Controller, useForm } from 'react-hook-form';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';

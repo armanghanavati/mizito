@@ -19,7 +19,6 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   async function (response) {
-    console.log(response);
     if (
       !!response?.data?.ErrorCode &&
       response?.data?.ErrorCode !== 0 &&
@@ -34,7 +33,6 @@ axios.interceptors.response.use(
     return response;
   },
   async function (error) {
-    console.log(error);
     try {
       const expectedErrors =
         error.response &&

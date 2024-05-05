@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Btn from '../../components/Btn';
 import { useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import CreateBoardModal from './CreateBoardModal';
 import CreateProjectModal from './CreateProjectModal';
 import CreateTasks from '../tasks/CreateTasks';

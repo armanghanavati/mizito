@@ -6,13 +6,13 @@ import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { serEditBoard, serPutEditBoard } from '../../services/masterServices';
 
 const EditBoardModal = ({ showEditBoardModal, setShowEditBoardModal }) => {
-  const { create } = useSelector((state) => state);
+  const { board } = useSelector((state) => state);
   const [sprintNum, setSprintNum] = useState(0);
   const dispatch = useDispatch();
   const {
@@ -26,7 +26,7 @@ const EditBoardModal = ({ showEditBoardModal, setShowEditBoardModal }) => {
   const handleCreateBoard = asyncWrapper(async (data) => {
     setShowEditBoardModal(false);
     const postData = {
-      id: create?.fieldsEditProject?.editProjectData?.id,
+      id: board?.fieldsEditProject?.editProjectData?.id,
       name: data?.name,
       description: data?.description,
       sprintNumber: sprintNum,

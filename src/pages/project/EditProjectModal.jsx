@@ -6,11 +6,11 @@ import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject }) => {
-  const { create } = useSelector((state) => state);
+  const { board } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
     control,

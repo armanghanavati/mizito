@@ -61,7 +61,7 @@ const PrivateLayout = ({ children }) => {
         </Col>
         <Col xxl="10" className="bg-whit-100">
           <Header />
-          {children}
+          <div className='my-3' >{children}</div>
         </Col>
       </div>
     </>

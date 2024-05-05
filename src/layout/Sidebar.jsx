@@ -10,10 +10,10 @@ import {
 } from 'react-bootstrap';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../hooks/slices/boardSlice';
 
 const Sidebar = () => {
-  const { create } = useSelector((state) => state);
+  const { board } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   return (
@@ -49,7 +49,7 @@ const Sidebar = () => {
           <i className="font20 fw-bold bi bi-clipboard2-check" />
           <span className="me-2 text-light">گزارش کار</span>
         </div>
-        {create?.fieldsEditProject?.editProjectData?.id && (
+        {board?.fieldsEditProject?.editProjectData?.id && (
           <div className="my-2">
             <NavLink
               onClick={() => dispatch(RsetShowCreateModal({ show: true }))}

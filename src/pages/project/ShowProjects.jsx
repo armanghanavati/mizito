@@ -4,15 +4,16 @@ import { serViceEditProject, serviceProjects } from '../../services/masterServic
 import EditProjectModal from './EditProjectModal';
 import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import { useDispatch, useSelector } from 'react-redux';
-import { RsetFieldsEditProject } from '../../hooks/slices/createSlice';
+import { RsetFieldsEditProject } from '../../hooks/slices/boardSlice';
 import CreateProjectModal from '../create/CreateProjectModal';
 import asyncWrapper from '../../utils/asyncWrapper';
 import { useNavigate } from 'react-router-dom';
+import MainTitle from '../../components/MainTitle';
 
 const ShowProjects = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { create } = useSelector((state) => state);
+  const { board } = useSelector((state) => state);
   const [allProjectList, setAllProjectList] = useState([]);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
   const [showEditProject, setShowEditProject] = useState(false);
@@ -40,7 +41,7 @@ const ShowProjects = () => {
   }, []);
 
   const handleNavigateToBoard = asyncWrapper(async (id) => {
-    dispatch(RsetFieldsEditProject({ ...create?.fieldsEditProject, projectId: id }));
+    dispatch(RsetFieldsEditProject({ ...board?.fieldsEditProject, projectId: id }));
     navigate(`/users/allBoardForm:${id}`);
   });
 
@@ -68,32 +69,43 @@ const ShowProjects = () => {
   return (
     <>
       <Container className=" mt-2">
-        <h3 className="text-secondary fw-bold my-4">لیست پروژه‌ها</h3>
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
-          <div className="d-flex justify-content-center  rounded-pill">
-            <i
-              onClick={handleCreateProject}
-              className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle"
-            />
-          </div>
-          {allProjectList?.map((item, index) => (
-            <>
-              <div key={index} className=" col mb-4">
-                <Col className=" text_animate_side shadow-sm  p-3 rounded-3" md="12" lg="12" xl="12" xxl="12">
-                  <div className=" d-flex justify-content-between">
-                    <span>{item?.name}</span>
-                    <span>
+        <div className="shadow-sm border bg-white border rounded">
+          <MainTitle title="لیست پروژه‌ها" />
+          <div className="m-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">
+            <div className="d-flex justify-content-center  rounded-pill">
+              <i
+                onClick={handleCreateProject}
+                className="cursorPointer d-flex align-items-center mx-1 font70 text-secondary bi bi-plus-circle"
+              />
+            </div>
+            {allProjectList?.map((item, index) => (
+              <>
+                <div key={index} className="col mb-4">
+                  <Col
+                    className=" text_animate_side shadow-sm  p-3 rounded-3"
+                    md="12"
+                    lg="12"
+                    xl="12"
+                    xxl="12">
+                    <div className="d-flex justify-content-between">
+                      <span className="fw-bold" style={{ color: item?.color || 'black' }}>
+                        {item?.name}
+                      </span>
+                      <span>
+                        <i
+                          onClick={() => handleEditProject(item, index)}
+                          className="cursorPointer font15 text-secondary bi bi-gear"
+                        />
+                      </span>
+                    </div>
+                    <hr className="text-secondary" />
+                    <Col onClick={() => handleNavigateToBoard(item?.id)} className="cursorPointer">
                       <i
-                        onClick={() => handleEditProject(item, index)}
-                        className="cursorPointer font15 text-secondary bi bi-gear"
-                      />{' '}
-                    </span>
-                  </div>
-                  <hr className='text-secondary' />
-                  <Col onClick={() => handleNavigateToBoard(item?.id)} className=" cursorPointer">
-                    <i className="bi border rounded-3 font70 text-secondary bg-light d-flex justify-content-center py-4 bi-eye" />
-                  </Col>
-                  {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
+                        style={{ backgroundColor: 'light', color: item?.color || 'gray' }}
+                        className="bi border bg-light rounded-3 font70 d-flex justify-content-center py-4 bi-eye"
+                      />
+                    </Col>
+                    {/* <div className=" ">تاریخ ایجاد پروژه: {item?.createDateTime} </div>
                 <div className=" ">توضیحات: {item?.description} </div>
                 <div className=" ">تاریخ شروع: {item?.dueDateTime} </div>
                 <div className=" ">تاریخ پایان: {item?.endDateTime} </div>
@@ -102,10 +114,11 @@ const ShowProjects = () => {
                 <div className=" ">وضعیت پروژه:{item?.projectStatus} </div>
                 <div className=" ">نوع پروژه:{item?.projectType} </div>
                 <div className=" ">سرعت پروژه:{item?.sprintNumber} </div> */}
-                </Col>
-              </div>
-            </>
-          ))}
+                  </Col>
+                </div>
+              </>
+            ))}
+          </div>
         </div>
       </Container>
       {showCreateProjectModal && (

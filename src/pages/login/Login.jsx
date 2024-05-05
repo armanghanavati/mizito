@@ -73,6 +73,7 @@ const Login = ({}) => {
                 </div> */}
                 <Input
                   errors={errors}
+                  xxl={12}
                   xl={12}
                   errmsg="لطفا نام کاربری خود را وارد کنید"
                   label=":نام کاربری"
@@ -98,6 +99,7 @@ const Login = ({}) => {
                   // showCharacter
                   errors={errors}
                   label=":رمز عبور"
+                  xxl={12}
                   xl={12}
                   important
                   validation={{

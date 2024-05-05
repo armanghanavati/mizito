@@ -13,13 +13,13 @@ const ComboBox = ({
   name = '',
   xs = 12,
   md = 6,
-  xl = 4,
+  xl = 6,
   label = '',
   options,
   onKeyDown,
-  onBlur = () => { },
+  onBlur = () => {},
   defaultValue = {},
-  onChange = () => { },
+  onChange = () => {},
   validation,
   control = true,
   important = false,
@@ -51,10 +51,11 @@ const ComboBox = ({
         }}
         render={({ field }) => (
           <>
-            <Col className="" xs={xs} md={md} xl={xl}>
+            <Col className="my-2" xs={xs} md={md} xl={xl}>
               <label
-                className={`ms-3 mb-2 ${important && 'star'
-                  }  align-items-center input-label input-label-sm lg:input-label-base`}>
+                className={`ms-3 mb-2 ${
+                  important && 'star'
+                }  align-items-center input-label input-label-sm lg:input-label-base`}>
                 {label}
               </label>
               <Select

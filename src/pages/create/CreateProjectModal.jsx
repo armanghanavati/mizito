@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Modal, Form, Row } from 'react-bootstrap';
 import Btn from '../../components/Btn';
 import { useSelector, useDispatch } from 'react-redux';
-import { RsetShowCreateModal } from '../../hooks/slices/createSlice';
+import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
 import { Controller, useForm } from 'react-hook-form';
 import Datepicker from '../../components/Datepicker';
 import ComboBox from '../../components/ComboBox';
@@ -12,6 +12,7 @@ import { createProject, serPutEditProject } from '../../services/masterServices'
 import StringHelpers from '../../helpers/StringHelpers';
 import { RsetShowToast } from '../../hooks/slices/main';
 import asyncWrapper from '../../utils/asyncWrapper';
+import ColorPicker from '../../components/ColorPicker';
 
 const CreateProjectModal = ({
   editService,
@@ -23,7 +24,8 @@ const CreateProjectModal = ({
   setSprintNum,
   handleGetProjects
 }) => {
-  const { create, main } = useSelector((state) => state);
+  const [color, setColor] = useState('');
+  const { board, main } = useSelector((state) => state);
   const dispatch = useDispatch();
   const {
     control,
@@ -58,6 +60,7 @@ const CreateProjectModal = ({
     if (editService) {
       const postData = {
         id: data?.id,
+        color: color,
         name: data?.name,
         description: data?.description,
         dueDateTime: null,
@@ -78,6 +81,7 @@ const CreateProjectModal = ({
     } else {
       const postData = {
         name: data?.name,
+        color: color,
         description: data?.description,
         dueDateTime: null,
         projectPriority: data?.projectPriority?.id,
@@ -151,9 +155,9 @@ const CreateProjectModal = ({
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Row className='' >
+              <Row className="">
                 <Input xl={6} label="نام پروژه:" name="name" control={control} />
-                <Controller
+                {/* <Controller
                   name="attachmentsCreateViewModel"
                   control={control}
                   render={({ field }) => (
@@ -164,7 +168,7 @@ const CreateProjectModal = ({
                       </Form.Group>
                     </>
                   )}
-                />
+                /> */}
                 <ComboBox
                   options={main?.allEnums?.priorityList}
                   name="projectPriority"
@@ -216,6 +220,7 @@ const CreateProjectModal = ({
                     control={control}
                     label="اختصاص به:"
                   />
+                  <ColorPicker color={color} setColor={setColor} />
                 </Row>
                 <Controller
                   name="description"

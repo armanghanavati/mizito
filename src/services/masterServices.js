@@ -19,7 +19,6 @@ export const getAllUsers = () => {
   return axios.get(`${baseURL}api/Account/GetAllUsers`);
 };
 
-
 export const createProject = (postData) => {
   return axios.post(`${baseURL}api/ProjectController/CreateProject`, postData);
 };
@@ -64,6 +63,14 @@ export const serWorkFlows = () => {
   return axios.get(`${baseURL}api/WorkFlowController/WorkFlows`);
 };
 
+export const serGetWorkFlow = (wfId) => {
+  return axios.get(`${baseURL}api/WorkFlowController/EditWorkFlows?workflowid=${wfId}`);
+};
+
+export const serPutEditWorkFlow = (postData) => {
+  return axios.put(`${baseURL}api/WorkFlowController/EditWorkFlow`, postData);
+};
+
 // اضافه کردن یک ستون به بورد
 export const addNewWorkFlowToBoard = (postData) => {
   return axios.post(`${baseURL}api/WorkFlowController/AddNewWorkFlowToBoard`, postData);
@@ -99,6 +106,15 @@ export const serDeleteTask = (tasId) => {
   return axios.delete(`${baseURL}api/TaskController/DeleteTask?taskid=${tasId}`);
 };
 
+// حذف ستون
+export const serDeleteWorkFlow = (workFlowId) => {
+  return axios.delete(`${baseURL}api/WorkFlowController/DeleteWorkFlow?wfid=${workFlowId}`);
+};
+
+// حذف ساب تسک
+export const serDeleteSubTask = (subTaskId) => {
+  return axios.delete(`${baseURL}api/SubTaskController/DeleteSubTask?subTaskid=${subTaskId}`);
+};
 
 // دریافت کامنت ها
 export const serComments = (commentId) => {
@@ -141,3 +157,6 @@ export const serPutEditSubTask = (postData) => {
   return axios.put(`${baseURL}api/SubTaskController/EditSubTask `, postData);
 };
 
+export const serGetWorkFlows = (boardId) => {
+  return axios.get(`${baseURL}api/WorkFlowController/BoardWorkFlows?boardid=${boardId}`);
+};

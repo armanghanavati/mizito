@@ -123,8 +123,12 @@ body * {
 }
 
 .maxH-100 {
-  max-height: 100px;
+  max-height: 54px;
 }
+/* 
+.mixH-100 {
+  min-height: 100px;
+} */
 
 .bg-whit-100 {
   background-color: #f7ecf6;
@@ -132,6 +136,35 @@ body * {
 
 .text-whit-100 {
   color: #f7ecf6;
+}
+
+/* scroll */
+body::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: orange; /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: gray(37, 37, 37, 0.401); /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid rgb(255, 255, 255); /* creates padding around scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+}
+.scroll_Master::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+.scroll_Master::-webkit-scrollbar-track {
+  border-radius: 20px; /* roundness of the scroll thumb */
+  background: rgba(226, 197, 160, 0.577); /* color of the tracking area */
+}
+
+.scroll_Master::-webkit-scrollbar-thumb {
+  background-color: rgb(107, 107, 199); /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
 }
 
 /* color */

@@ -118,7 +118,7 @@ const ShowProjects = () => {
                         style={{ backgroundColor: 'light', color: item?.color || 'gray' }}
                         className="bi border bg-light rounded-3 font70 d-flex justify-content-center py-4 bi-eye"
                       />
-                      <Row className="">
+                      <Row className="overflow-auto scroll_Master maxH-100 mixH-100">
                         {item?.projectAssignedUsersViewModel?.map((item) => (
                           <Col xl="4" className=" my-2">
                             {fixStyleUserProjecs(item)}

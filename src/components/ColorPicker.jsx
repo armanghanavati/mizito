@@ -29,7 +29,7 @@ const ColorPicker = ({ color, setColor }) => {
       <Collapse className="" in={showFieldCollapse}>
         <Row className="justify-content-center">
           <CirclePicker
-            className="d-flex border align-items-center ps-4 rounded-3 pt-3 justify-content-center"
+            className="d-flex border mt-3 align-items-center ps-4 rounded-3 pt-3 justify-content-center"
             color={color}
             onChange={handleChange}
           />

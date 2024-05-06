@@ -6,7 +6,7 @@ import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { Controller, useForm } from 'react-hook-form';
 import Btn from '../../components/Btn';
-import { RsetShowCreateModal } from '../../hooks/slices/boardSlice';
+import { RsetShowCreateModal, handleGetBoards } from '../../hooks/slices/boardSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
 import {
@@ -18,17 +18,20 @@ import {
 import StringHelpers from '../../helpers/StringHelpers';
 import { useLocation } from 'react-router-dom';
 import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
+import ColorPicker from '../../components/ColorPicker';
+
 
 const CreateBoardModal = ({
   showCreateBoardModal,
   editFiledsBoard,
   setEditFiledsBoard,
-  handleGetBoards,
   setShowCreateBoardModal,
   itemAndIndexProject,
 }) => {
   const { board, main } = useSelector((state) => state);
   const [allWorkFlow, setAllWorkFlow] = useState([]);
+  const [color, setColor] = useState("");
+
   const location = useLocation();
   const dispatch = useDispatch();
   const {
@@ -41,7 +44,6 @@ const CreateBoardModal = ({
     getValues
   } = useForm({ reValidateMode: 'onChange' });
   const getIdProject = location?.pathname?.split(':')?.[1];
-
   const fixAllWorkFlow = allWorkFlow?.map((item) => {
     return {
       id: item?.id,
@@ -61,22 +63,61 @@ const CreateBoardModal = ({
     const fixUsersId = data?.usersAssigned?.map((item) => item?.id);
     const fixWorkFlowsId = data?.boardWorkFlowsId?.map((item) => item?.id);
     setShowCreateBoardModal(false);
-    console.log(data);
-    const postDatePost = {
-      name: data?.name,
-      description: data?.description,
-      projectId: getIdProject,
-      boardWorkFlowsId: fixWorkFlowsId,
-      boardUsersId: fixUsersId,
-      attachmentsCreateViewModel: []
-    };
-    const resCreateBoard = await serCreateBoardPost(postDatePost);
-    dispatch(RsetShowLoading({ value: false }));
-    if (resCreateBoard?.data?.code === 1) {
-      handleGetBoards();
-      dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'success' }));
+    if (!!editFiledsBoard?.projectType) {
+      const postData = {
+        id: "",
+        name: "",
+        description: "",
+        sprintNumber: 0,
+        color: "",
+        boardWorkFlowsId: [""],
+        boardUsersId: [""],
+        attachmentsEditViewModel: [
+          {
+            id: ""
+          }
+        ]
+      }
+      // {
+      //   id: board?.fieldsEditProject?.editProjectData?.id,
+      //   name: data?.name,
+      //   description: data?.description,
+      //   sprintNumber: sprintNum,
+      //   boardWorkFlowsId: [
+      //     // '3fa85f64-5717-4562-b3fc-2c963f66afa6'
+      //   ],
+      //   boardUsersId: ['string'],
+      //   attachmentsEditViewModel: [
+      //     // {
+      //     //   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      //     //   fileName: 'string',
+      //     //   filePath: 'string',
+      //     //   uploadDate: 'string',
+      //     //   attachCreatorId: 'string'
+      //     // }
+      //   ]
+      // };
+      const resEditBoards = await serPutEditBoard(postData);
+      console.log(resEditBoards);
     } else {
-      dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'danger' }));
+      const postDatePost = {
+        name: data?.name,
+        color: color,
+        description: data?.description,
+        projectId: getIdProject,
+        boardWorkFlowsId: fixWorkFlowsId,
+        boardUsersId: fixUsersId,
+        attachmentsCreateViewModel: []
+      };
+      const resCreateBoard = await serCreateBoardPost(postDatePost);
+      dispatch(RsetShowLoading({ value: false }));
+      if (resCreateBoard?.data?.code === 1) {
+        dispatch(handleGetBoards(getIdProject));
+        // handleGetBoards();
+        dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'success' }));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: resCreateBoard?.data?.msg, bg: 'danger' }));
+      }
     }
   });
 
@@ -96,7 +137,7 @@ const CreateBoardModal = ({
 
   useEffect(() => {
     reset({
-      ...editFiledsBoard,
+      ...editFiledsBoard?.getEditBoard,
       projectType: StringHelpers?.findCombo(
         editFiledsBoard?.projectType,
         main?.allEnums?.projectType
@@ -104,8 +145,6 @@ const CreateBoardModal = ({
       name: ''
     });
   }, [editFiledsBoard]);
-
-  console.log(watch('sprintNumber'), watch("projectType"));
 
   return (
     <>
@@ -125,8 +164,9 @@ const CreateBoardModal = ({
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Row>
+              <Row className='d-flex align-items-end' >
                 <Input
+                  className=''
                   errmsg="لطفا نام بورد را وارد کنید"
                   errors={errors}
                   name="name"
@@ -141,44 +181,35 @@ const CreateBoardModal = ({
                   control={control}
                   label="نوع:"
                 />
-                <Row className="mt-4">
-                  <SwitchCase
-                    min={0}
-                    max={editFiledsBoard?.sprintNumber}
-                    control={control}
-                    name="sprintNumber"
-                    range
-                    label={`سرعت پروژه:${watch('sprintNumber')}`}
-                  />
-                </Row>
-                <Row>
-                  <ComboBox
-                    isMulti
-                    name="usersAssigned"
-                    options={usersAssigned}
-                    xl={6}
-                    control={control}
-                    label="اختصاص به:"
-                  />
-                  <ComboBox
-                    isMulti
-                    name="boardWorkFlowsId"
-                    options={fixAllWorkFlow}
-                    xl={6}
-                    control={control}
-                    label="ستون ها:"
-                  />
-                </Row>
-                <Controller
-                  name="description"
+              </Row>
+              <Row className="mt-4">
+                <SwitchCase
+                  min={0}
+                  max={editFiledsBoard?.sprintNumber}
                   control={control}
-                  render={({ field }) => (
-                    <>
-                      <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
-                      <Form.Control {...field} name="description" as="textarea" rows={3} />
-                    </>
-                  )}
+                  name="sprintNumber"
+                  range
+                  label={`سرعت پروژه:${watch('sprintNumber')}`}
                 />
+              </Row>
+              <Row className='mt-4'>
+                <ComboBox
+                  isMulti
+                  name="usersAssigned"
+                  options={usersAssigned}
+                  xl={6}
+                  control={control}
+                  label="اختصاص به:"
+                />
+                <ComboBox
+                  isMulti
+                  name="boardWorkFlowsId"
+                  options={fixAllWorkFlow}
+                  xl={6}
+                  control={control}
+                  label="ستون ها:"
+                />
+                <ColorPicker color={color} setColor={setColor} />
               </Row>
             </Container>
           </Form>

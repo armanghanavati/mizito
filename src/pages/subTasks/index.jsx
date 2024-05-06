@@ -13,6 +13,7 @@ import EditSubTaskModal from './EditSubTaskModal';
 import ComboBox from '../../components/ComboBox';
 import MainTitle from '../../components/MainTitle';
 import { useDispatch, useSelector } from 'react-redux';
+import FileAttachment from '../../components/FileAttachment';
 
 const SubTasks = ({
   taskItem,
@@ -115,6 +116,8 @@ const SubTasks = ({
               onClick={() => handleEditSubTask(subTask)}
               className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
             />
+
+            <FileAttachment />
             <i
               onClick={() => handleDeleteSubTask(subTask)}
               className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"

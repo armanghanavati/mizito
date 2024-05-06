@@ -136,6 +136,11 @@ export const serEditCommentGet = (id) => {
   return axios.get(`${baseURL}api/CommentController/EditComment?commentid=${id}`);
 };
 
+// حذف کامنت
+export const serDeleteCommented = (cmtId) => {
+  return axios.delete(`${baseURL}api/CommentController/DeleteComment?commentid=${cmtId}`);
+};
+
 // ارسال وظیفه فرعی
 export const serCreateSubTask = (postData) => {
   return axios.post(`${baseURL}api/SubTaskController/CreateSubTask`, postData);
@@ -159,3 +164,9 @@ export const serPutEditSubTask = (postData) => {
 export const serGetWorkFlows = (boardId) => {
   return axios.get(`${baseURL}api/WorkFlowController/BoardWorkFlows?boardid=${boardId}`);
 };
+
+// ایجاد فایل
+export const serCreateAttachment = (postData) => {
+  return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData);
+};
+

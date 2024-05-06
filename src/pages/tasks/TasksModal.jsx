@@ -23,7 +23,7 @@ const TasksModal = ({
   allSubTask
 }) => {
   const location = useLocation();
-  const [allCommets, setAllCommets] = useState([]);
+  const [allCommets, setAllCommets] = useState({});
   const dispatch = useDispatch();
   const {
     control,
@@ -44,7 +44,11 @@ const TasksModal = ({
     console.log(res, taskItem?.id);
     if (res?.data?.code === 1) {
       setAllCommets((prev) => (
-        [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        {
+          ...prev,
+          ...res?.data?.data
+        }
+        // [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       ))
     }
   });
@@ -150,6 +154,7 @@ const TasksModal = ({
                 />
               </Row>
               <Comment
+                handleGetComments={handleGetComments}
                 fixUsers={fixUsers}
                 control={control}
                 allCommets={allCommets}

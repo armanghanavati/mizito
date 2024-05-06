@@ -13,6 +13,7 @@ import { serEditBoard, serPutEditBoard } from '../../services/masterServices';
 
 const EditBoardModal = ({ showEditBoardModal, setShowEditBoardModal }) => {
   const { board } = useSelector((state) => state);
+  const getIdProject = location?.pathname?.split(':')?.[1];
   const [sprintNum, setSprintNum] = useState(0);
   const dispatch = useDispatch();
   const {
@@ -44,7 +45,6 @@ const EditBoardModal = ({ showEditBoardModal, setShowEditBoardModal }) => {
         // }
       ]
     };
-    const res = await serPutEditBoard(postData);
     console.log(res);
   });
 

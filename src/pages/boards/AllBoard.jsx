@@ -45,7 +45,6 @@ const AllBoard = () => {
     console.log(response);
     if (response?.data?.code === 1) {
       setEditFiledsBoard(response?.data?.data);
-      console.log(response);
       const fixUserCombo = StringHelpers.convertComboBox(
         response?.data?.data?.projectAssignedUsersViewModel
       );
@@ -61,7 +60,8 @@ const AllBoard = () => {
 
   const handleShowEditBoard = asyncWrapper(async (data, index) => {
     RsetShowLoading({ value: true });
-    const responseEditBoard = await serEditBoard(location?.state?.item?.id);
+    const responseEditBoard = await serEditBoard(data?.id);
+    console.log(responseEditBoard);
     RsetShowLoading({ value: false });
     if (responseEditBoard?.data?.code === 1) {
       setEditFiledsBoard({ ...editFiledsBoard, getEditBoard: responseEditBoard?.data?.data });
@@ -102,7 +102,9 @@ const AllBoard = () => {
                     xl="12"
                     xxl="12">
                     <div className=" d-flex justify-content-between">
-                      <span className="text-dark fw-bold">{item?.name}</span>
+                      <span
+                        style={{ color: item?.color || 'black' }}
+                        className="fw-bold">{item?.name}</span>
                       <span>
                         <i
                           onClick={() => handleShowEditBoard(item, index)}
@@ -112,7 +114,9 @@ const AllBoard = () => {
                     </div>
                     <hr />
                     <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
-                      <i className="border rounded bi font70 text-secondary bg-light d-flex justify-content-center py-4 bi-eye" />
+                      <i
+                        style={{ backgroundColor: 'light', color: item?.color || 'gray' }}
+                        className="border rounded bi font70 bg-light d-flex justify-content-center py-4 bi-eye" />
                     </Col>
                   </Col>
                 </div>

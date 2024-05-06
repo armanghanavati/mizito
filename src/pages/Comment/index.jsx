@@ -4,14 +4,17 @@ import StringHelpers from '../../helpers/StringHelpers';
 import Input from '../../components/Input';
 import Btn from '../../components/Btn';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serEditCommentGet, serEditCommentPut } from '../../services/masterServices';
+import { serDeleteCommented, serEditCommentGet, serEditCommentPut } from '../../services/masterServices';
 import { useForm } from 'react-hook-form';
 import ComboBox from '../../components/ComboBox';
 import { useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { RsetDeleteModal, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 
-const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
+const Comment = ({ allCommets, fixUsers, setAllCommets, handleGetComments }) => {
   const [editComment, setEditComment] = useState({});
+  const [commentedItemDelete, setCommentedItemDelete] = useState({});
+  const dispatch = useDispatch()
   const { main } = useSelector((state) => state);
   const {
     control,
@@ -68,13 +71,34 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
     });
   }, [editComment]);
 
-  const handleDeleteComment = () => {
+  const handleDeleteCommentedAnswerYes = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
+    const res = await serDeleteCommented(commentedItemDelete?.id);
+    dispatch(RsetShowLoading({ value: false }));
+    if (res?.data?.code === 1) {
+      handleGetComments()
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  });
 
-  }
+  useEffect(() => {
+    if (main?.deleteModal?.name === 'DELETE_COMMENTED') {
+      if (main?.deleteModal?.answer === 'yes') {
+        handleDeleteCommentedAnswerYes();
+      }
+    }
+  }, [main?.deleteModal?.answer]);
+
+  const handleDeleteCommented = (cmt, index) => {
+    setCommentedItemDelete(cmt);
+    dispatch(RsetDeleteModal({ value: true, name: 'DELETE_COMMENTED' }));
+  };
 
   return (
     <div className="m-3 rounded bg-white p-3">
-      {allCommets?.reverse()?.map((cmt, index) => {
+      {Object.values(allCommets)?.reverse()?.map((cmt, index) => {
         return (
           <Row className="py-1">
             <div className="">
@@ -89,7 +113,7 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
                 className=" text-secondary bi bi-pencil mx-2 cursorPointer"
               />
               <i
-                onClick={() => handleDeleteComment(cmt, index)}
+                onClick={() => handleDeleteCommented(cmt, index)}
                 className=" text-secondary bi bi-trash mx-2 cursorPointer"
               />
               <i className="text-secondary bi bi-arrow-left-circle-fill me-2 cursorPointer" />

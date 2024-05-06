@@ -23,19 +23,27 @@ export const handleGetBoards = createAsyncThunk(
     if (!!getIdProject) {
       const resGetBoard = await serGetBoards(getIdProject);
       dispatch(RsetShowLoading({ value: false }));
-      console.log(resGetBoard, 'Redux');
+      console.log(resGetBoard, getIdProject, 'Redux');
       if (resGetBoard?.data?.code === 1) {
         dispatch(RsetGetAllBoard(resGetBoard?.data?.data));
-
         const itsBoard = resGetBoard?.data?.data?.map((board) => {
           return board;
         });
+        console.log(itsBoard);
         dispatch(RsetItsBoard(itsBoard));
       } else {
+        dispatch(RsetGetAllBoard([]));
         dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
       }
     } else {
-      dispatch(RsetShowToast({ show: true, title: resGetBoard?.data?.msg, bg: 'danger' }));
+      dispatch(RsetGetAllBoard([]));
+      dispatch(
+        RsetShowToast({
+          show: true,
+          title: 'مشکلی در سرور پیش آمده است لطفا دوباره امتحان کنید',
+          bg: 'danger'
+        })
+      );
     }
   }
 );

@@ -99,33 +99,31 @@ const SubTasks = ({
     dispatch(RsetDeleteModal({ value: true, name: 'DELETE_SUBTASK' }));
   };
 
-  const showAllSubTask = Object.values(allSubTask)
-    ?.reverse()
-    .map((subTask) => {
-      return (
-        <Container fluid>
-          <Row className="d-flex border-bottom py-2 rounded-4 justify-content-between">
-            <Col
-              className="align-items-center bg-white py-2 d-flex justify-content-between "
-              xs={12}
-              md={12}>
-              <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
-              <small className="text-secondary">
-                {StringHelpers?.convertDateFa(subTask?.dueDateTime)}
-              </small>
-              <i
-                onClick={() => handleEditSubTask(subTask)}
-                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
-              />
-              <i
-                onClick={() => handleDeleteSubTask(subTask)}
-                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"
-              />
-            </Col>
-          </Row>
-        </Container>
-      );
-    });
+  const showAllSubTask = Object.values(allSubTask)?.reverse()?.map((subTask) => {
+    return (
+      <Container fluid>
+        <Row className="d-flex border-bottom py-2 rounded-4 justify-content-between">
+          <Col
+            className="align-items-center bg-white py-2 d-flex justify-content-between "
+            xs={12}
+            md={12}>
+            <SwitchCase control={control} name="" className=" me-0" label={subTask?.name} />
+            <small className="text-secondary">
+              {StringHelpers?.convertDateFa(subTask?.dueDateTime)}
+            </small>
+            <i
+              onClick={() => handleEditSubTask(subTask)}
+              className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
+            />
+            <i
+              onClick={() => handleDeleteSubTask(subTask)}
+              className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"
+            />
+          </Col>
+        </Row>
+      </Container>
+    );
+  });
 
   return (
     <>

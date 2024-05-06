@@ -68,11 +68,15 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
     });
   }, [editComment]);
 
+  const handleDeleteComment = () => {
+
+  }
+
   return (
     <div className="m-3 rounded bg-white p-3">
-      {allCommets?.map((cmt, index) => {
+      {allCommets?.reverse()?.map((cmt, index) => {
         return (
-          <Row className="py-1 bg-danger">
+          <Row className="py-1">
             <div className="">
               <span className="text-secondary ms-2">{cmt?.creatorFullName}</span>
               <span className="text-secondary">
@@ -84,7 +88,11 @@ const Comment = ({ allCommets, fixUsers, setAllCommets }) => {
                 onClick={() => handleEditComment(cmt, index)}
                 className=" text-secondary bi bi-pencil mx-2 cursorPointer"
               />
-              <i className="text-secondary bi bi-arrow-left-circle-fill cursorPointer" />
+              <i
+                onClick={() => handleDeleteComment(cmt, index)}
+                className=" text-secondary bi bi-trash mx-2 cursorPointer"
+              />
+              <i className="text-secondary bi bi-arrow-left-circle-fill me-2 cursorPointer" />
             </Col>
             <Row className="my-1 d-flex justify-content-between">
               {cmt?.editMode === true ? (

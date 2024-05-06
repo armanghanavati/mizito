@@ -40,11 +40,12 @@ const TasksModal = ({
   });
 
   const handleGetComments = asyncWrapper(async () => {
-    console.log(taskItem);
     const res = await serComments(taskItem?.id);
     console.log(res, taskItem?.id);
     if (res?.data?.code === 1) {
-      setAllCommets(res?.data?.data);
+      setAllCommets((prev) => (
+        [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      ))
     }
   });
 
@@ -52,8 +53,9 @@ const TasksModal = ({
     const fixMentionUsers = data?.commentMentionUsersViewModels?.map((item) => item.id);
     const postData = {
       text: data?.createComment,
-      taskJiraId: taskItem?.id || null,
-      subTaskId: '' || null,
+      parentId: taskItem?.id,
+      // taskJiraId: taskItem?.id || null,
+      // subTaskId: '' || null,
       commentMentionUsersViewModels: fixMentionUsers || [],
       attachmentCreateViewModels: []
     };
@@ -122,14 +124,14 @@ const TasksModal = ({
                 />
                 <ComboBox
                   isMulti
-                  validation={{
-                    required: 'لطفا متن گزارش را وارد کنید',
-                    minLength: {
-                      message: 'متن گزارش باید بیشتر از 2 حرف باشد',
-                      value: 2
-                    }
-                  }}
-                  errors={errors}
+                  // validation={{
+                  //   required: 'لطفا متن گزارش را وارد کنید',
+                  //   minLength: {
+                  //     message: 'متن گزارش باید بیشتر از 2 حرف باشد',
+                  //     value: 2
+                  //   }
+                  // }}
+                  // errors={errors}
                   options={fixUsers}
                   control={control}
                   placeHolder="منشن"

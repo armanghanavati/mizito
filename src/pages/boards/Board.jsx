@@ -206,10 +206,10 @@ const Board = () => {
                               />
                             </span>
                           </div>
-                          <div>
+                          <div className=''>
                             {task?.taskSubTasksViewModels?.map((subToTask) => (
                               <Row className="">
-                                <Col className=" my-2 rounded  text-secondary bg-white p-1 ">
+                                <Col className="overflow-auto scroll_Master my-2 rounded  text-secondary bg-white p-1 ">
                                   {subToTask?.name}
                                 </Col>
                               </Row>

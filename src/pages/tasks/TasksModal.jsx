@@ -43,13 +43,11 @@ const TasksModal = ({
     const res = await serComments(taskItem?.id);
     console.log(res, taskItem?.id);
     if (res?.data?.code === 1) {
-      setAllCommets((prev) => (
-        {
-          ...prev,
-          ...res?.data?.data
-        }
-        // [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      ))
+      setAllCommets((prev) => ({
+        ...prev,
+        ...res?.data?.data
+      }));
+      // [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     }
   });
 
@@ -154,6 +152,7 @@ const TasksModal = ({
                 />
               </Row>
               <Comment
+              handleShowSubTaskToTask={handleShowSubTaskToTask}
                 handleGetComments={handleGetComments}
                 fixUsers={fixUsers}
                 control={control}

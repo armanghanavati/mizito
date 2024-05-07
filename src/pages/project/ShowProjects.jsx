@@ -28,7 +28,6 @@ const ShowProjects = () => {
       const res = await serviceProjects();
       dispatch(RsetShowLoading({ value: false }));
       if (res?.data?.code === 1) {
-        console.log(res?.data?.data);
         setAllProjectList(res?.data?.data);
       }
     } catch (error) {

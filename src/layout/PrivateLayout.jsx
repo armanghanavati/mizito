@@ -43,7 +43,7 @@ const PrivateLayout = ({ children }) => {
   const handleGetAllUsers = asyncWrapper(async () => {
     const res = await getAllUsers();
     if (res?.data?.code === 1) {
-      dispatch(RsetAllUsers(res?.data?.data));
+      dispatch(RsetAllUsers(...res?.data?.data));
     }
   });
 

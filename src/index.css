@@ -422,7 +422,7 @@ body::-webkit-scrollbar-thumb {
 
 .count_WorkFlow {
   overflow-x: scroll !important;
-  height: 600px;
+  height: calc(100vh - 171px);
 }
 
 .fit_Count_Projects {

@@ -142,7 +142,8 @@ const CreateBoardModal = ({
         editFiledsBoard?.projectType,
         main?.allEnums?.projectType
       ),
-      name: ''
+      name: '',
+      sprintNumber: editFiledsBoard?.sprintNumber
     });
   }, [editFiledsBoard]);
 

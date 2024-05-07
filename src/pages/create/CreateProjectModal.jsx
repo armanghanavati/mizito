@@ -39,7 +39,10 @@ const CreateProjectModal = ({
   } = useForm({ reValidateMode: 'onChange' });
   const typeValue = watch('projectType');
 
-  const addUsersFilter = main?.allUsers?.map((item) => {
+  console.log(main?.allUsers);
+
+  const addUsersFilter = Object.values(main?.allUsers)?.map((item) => {
+    console.log(item);
     return {
       id: item?.id,
       title: item?.fullName

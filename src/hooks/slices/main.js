@@ -4,7 +4,7 @@ const initialState = {
   messageModal: { title: '', show: false },
   showToast: { title: '', bg: '', show: false },
   showQuestionModal: { show: false, answer: false },
-  allUsers: [],
+  allUsers: {},
   showLoading: { btnName: '', value: false },
   allEnums: {},
   deleteModal: { value: false, name: '', answer: '' }

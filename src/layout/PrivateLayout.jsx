@@ -18,7 +18,6 @@ import asyncWrapper from '../utils/asyncWrapper';
 
 const PrivateLayout = ({ children }) => {
   const dispatch = useDispatch();
-  const { main } = useSelector((state) => state);
 
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
@@ -43,7 +42,7 @@ const PrivateLayout = ({ children }) => {
   const handleGetAllUsers = asyncWrapper(async () => {
     const res = await getAllUsers();
     if (res?.data?.code === 1) {
-      dispatch(RsetAllUsers(...res?.data?.data));
+      dispatch(RsetAllUsers(res?.data?.data));
     }
   });
 
@@ -59,7 +58,7 @@ const PrivateLayout = ({ children }) => {
         <Col className="sideCount position-relative shadow-lg" xxl="2" md="2">
           <Sidebar />
         </Col>
-        <Col xxl="10" className="bg-whit-100">
+        <Col xxl="10" className=" bg-whit-100">
           <Header />
           <div className='my-3' >{children}</div>
         </Col>

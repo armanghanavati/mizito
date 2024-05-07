@@ -29,13 +29,10 @@ const CreateProjectModal = ({
   const dispatch = useDispatch();
   const {
     control,
-    setValue,
     handleSubmit,
-    register,
     reset,
     watch,
     formState: { errors },
-    getValues
   } = useForm({ reValidateMode: 'onChange' });
   const typeValue = watch('projectType');
 
@@ -159,7 +156,8 @@ const CreateProjectModal = ({
           <Form>
             <Container fluid className="mb-3">
               <Row className="">
-                <Input xl={6} label="نام پروژه:" name="name" control={control} />
+                <Input
+                  xl={6} label="نام پروژه:" name="name" control={control} />
                 {/* <Controller
                   name="attachmentsCreateViewModel"
                   control={control}

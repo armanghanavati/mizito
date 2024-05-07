@@ -8,7 +8,7 @@ import asyncWrapper from '../../utils/asyncWrapper';
 import Btn from '../../components/Btn';
 import { useLocation } from 'react-router-dom';
 import { serCreateSubTask, serDeleteSubTask, serSubtaskGet } from '../../services/masterServices';
-import { RsetDeleteModal, RsetShowLoading } from '../../hooks/slices/main';
+import { RsetDeleteModal, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import EditSubTaskModal from './EditSubTaskModal';
 import ComboBox from '../../components/ComboBox';
 import MainTitle from '../../components/MainTitle';
@@ -24,7 +24,6 @@ const SubTasks = ({
 }) => {
   const [subTaskItemDelete, setSubTaskItemDelete] = useState({});
   const [subTask, setSubTask] = useState({});
-  const [showFieldCollapse, setShowFieldCollapse] = useState(false);
   const [showEditSubTask, setShowEditSubTask] = useState(false);
   const {
     control,
@@ -80,6 +79,7 @@ const SubTasks = ({
     dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
       handleShowSubTaskToTask(taskItem);
+      console.log(taskItem, res?.data?.msg);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
     } else {
       handleWorkFlows();
@@ -119,7 +119,7 @@ const SubTasks = ({
                 className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
               />
 
-              {/* <FileAttachment /> */}
+              <FileAttachment />
               <i
                 onClick={() => handleDeleteSubTask(subTask)}
                 className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"
@@ -155,6 +155,7 @@ const SubTasks = ({
                 required: 'لطفا وظیفه فرعی را وارد کنید'
               }}
             />
+
             <ComboBox
               // errors={errors}
               // validation={{
@@ -182,7 +183,9 @@ const SubTasks = ({
         </div>
         {showEditSubTask && (
           <EditSubTaskModal
+            taskItem={taskItem}
             reset={reset}
+            handleShowSubTaskToTask={handleShowSubTaskToTask}
             handleSubmit={handleSubmit}
             subTask={subTask}
             setShowEditSubTask={setShowEditSubTask}

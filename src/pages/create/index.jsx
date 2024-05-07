@@ -37,7 +37,6 @@ const Create = () => {
       )}
       {showCreateIssuesModal && (
         <CreateTasks
-
           showCreateIssuesModal={showCreateIssuesModal}
           setShowCreateIssuesModal={setShowCreateIssuesModal}
         />

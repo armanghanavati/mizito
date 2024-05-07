@@ -10,7 +10,7 @@ import SwitchCase from '../../components/SwitchCase';
 import Input from '../../components/Input';
 import { createProject, serPutEditProject } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
-import { RsetShowToast } from '../../hooks/slices/main';
+import { RsetMessageModal, RsetShowToast } from '../../hooks/slices/main';
 import asyncWrapper from '../../utils/asyncWrapper';
 import ColorPicker from '../../components/ColorPicker';
 
@@ -32,7 +32,7 @@ const CreateProjectModal = ({
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
+    formState: { errors }
   } = useForm({ reValidateMode: 'onChange' });
   const typeValue = watch('projectType');
 
@@ -67,11 +67,17 @@ const CreateProjectModal = ({
         projectPriority: data?.projectPriority?.id,
         projectStatus: data?.projectStatus?.id,
         projectType: data?.projectType?.id,
-        sprintNumber: typeValue === 0 ? 0 : sprintNum,
+        sprintNumber: typeValue?.id === 0 ? 0 : sprintNum,
         projectAssignedUsersViewModel: handleUsersAssgin,
         attachmentEditViewModels: []
       };
-      console.log(postData);
+      // console.log(watch('projectType')?.id, sprintNum);
+      // if (editProjectFields?.projectType === 0) {
+      //   if (sprintNum !== 0) {
+      //     dispatch(RsetMessageModal({ value: true  }));
+      //     dispatch(RsetShowToast({ show: true, title: 'dsfsdfsdfsdf', bg: 'success' }));
+      //   }
+      // }
       const res = await serPutEditProject(postData);
       if (res?.data?.code === 1) {
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
@@ -134,6 +140,7 @@ const CreateProjectModal = ({
 
   useEffect(() => {
     handleEditFields();
+    console.log(editProjectFields?.sprintNumber);
     setSprintNum(editProjectFields?.sprintNumber);
   }, [editProjectFields]);
 
@@ -156,8 +163,7 @@ const CreateProjectModal = ({
           <Form>
             <Container fluid className="mb-3">
               <Row className="">
-                <Input
-                  xl={6} label="نام پروژه:" name="name" control={control} />
+                <Input xl={6} label="نام پروژه:" name="name" control={control} />
                 {/* <Controller
                   name="attachmentsCreateViewModel"
                   control={control}
@@ -183,20 +189,21 @@ const CreateProjectModal = ({
                   label="وضعیت:"
                 />
                 <ComboBox
+                  validate={() => {}}
                   options={main?.allEnums?.projectType}
                   name="projectType"
                   control={control}
                   label="نوع:"
                 />
                 <Row className="mt-4">
-                  {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum || 1}`}
+                  {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum || 0}`}
                   <Form.Label> </Form.Label>
                   <Form.Range
                     disabled={watch('projectType')?.id === 0 ? true : false}
                     type="range"
                     value={sprintNum}
                     onChecked={true}
-                    min={1}
+                    min={0}
                     max={20}
                     onChange={(e) => setSprintNum(Number(e.target.value))}
                     // disabled={watch('projectType')?.id === 1 ? false : true}

@@ -5,19 +5,28 @@ import ComboBox from '../../components/ComboBox';
 import Btn from '../../components/Btn';
 import { serEditGetSubtask, serPutEditSubTask } from '../../services/masterServices';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import StringHelpers from '../../helpers/StringHelpers';
 import Datepicker from '../../components/Datepicker';
+import { RsetShowToast } from '../../hooks/slices/main';
+import { useDispatch } from 'react-redux';
 
 const EditSubTaskModal = ({
+  handleShowSubTaskToTask,
   setShowEditSubTask,
-  control,
+  taskItem,
   subTask,
-  handleSubmit,
-  reset,
   showEditSubTask
 }) => {
+  const dispatch = useDispatch();
   const [editFieldSubTask, setEditFieldSubTask] = useState({});
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors }
+  } = useForm({ reValidateMode: 'onChange' });
 
   const handleGetEditSubTask = asyncWrapper(async () => {
     console.log(subTask);
@@ -29,7 +38,7 @@ const EditSubTaskModal = ({
   const handleFixEditSubTask = asyncWrapper(async (data) => {
     const postData = {
       id: subTask?.id,
-      name: data?.createComment,
+      name: data?.createEditComment,
       description: 'data?.description',
       workFlow: subTask?.workFlow,
       dueDateTime: StringHelpers.convertDateEn(new Date()),
@@ -42,7 +51,11 @@ const EditSubTaskModal = ({
     };
     const res = await serPutEditSubTask(postData);
     if (res?.data?.code === 1) {
+      handleShowSubTaskToTask(taskItem);
       setShowEditSubTask(false);
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
     }
   });
 
@@ -79,7 +92,7 @@ const EditSubTaskModal = ({
               xl={6}
               className="my-2"
               control={control}
-              name="createComment"
+              name="createEditComment"
             />
             <ComboBox
               isMulti

@@ -50,6 +50,10 @@ export const serGetBoards = (postData) => {
   return axios.get(`${baseURL}api/BoardController/Boards?projectid=${postData}`);
 };
 
+export const serDeleteBoard = (boardId) => {
+  return axios.delete(`${baseURL}api/BoardController/DeleteBoard?boardid=${boardId}`);
+};
+
 export const serEditBoard = (boardId) => {
   return axios.get(`${baseURL}api/BoardController/EditBoard?boardid=${boardId}`);
 };
@@ -169,4 +173,3 @@ export const serGetWorkFlows = (boardId) => {
 export const serCreateAttachment = (postData) => {
   return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData);
 };
-

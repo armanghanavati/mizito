@@ -206,7 +206,7 @@ const Board = () => {
                               />
                             </span>
                           </div>
-                          <div className=''>
+                          <div className="">
                             {task?.taskSubTasksViewModels?.map((subToTask) => (
                               <Row className="">
                                 <Col className="overflow-auto scroll_Master my-2 rounded  text-secondary bg-white p-1 ">
@@ -263,7 +263,6 @@ const Board = () => {
           showWorkFlow={showWorkFlow}
         />
       )}
-      {!!main?.deleteModal?.value === true && <DeleteModal />}
     </>
   );
 };

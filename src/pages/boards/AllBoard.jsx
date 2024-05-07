@@ -3,11 +3,21 @@ import { Col, Container, Row } from 'react-bootstrap';
 import CreateTasks from '../tasks/CreateTasks';
 import { useDispatch, useSelector } from 'react-redux';
 import asyncWrapper from '../../utils/asyncWrapper';
-import { serCreateBoardGet, serEditBoard, serGetBoards } from '../../services/masterServices';
+import {
+  serCreateBoardGet,
+  serDeleteBoard,
+  serEditBoard,
+  serGetBoards
+} from '../../services/masterServices';
 import CreateBoardModal from '../create/CreateBoardModal';
 import EditBoardModal from './EditBoardModal';
 import StringHelpers from '../../helpers/StringHelpers';
-import { RsetAllUsers, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
+import {
+  RsetAllUsers,
+  RsetDeleteModal,
+  RsetShowLoading,
+  RsetShowToast
+} from '../../hooks/slices/main';
 import Board from './Board';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
@@ -23,11 +33,11 @@ const AllBoard = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const getIdProject = location?.pathname?.split(':')?.[1];
-  const [itemAndIndexProject, setItemAndIndexProject] = useState({});
+  const [itemBoard, setItemBoard] = useState({});
+  const [deleteBoard, setDeleteBoard] = useState({});
+
   const [editFiledsBoard, setEditFiledsBoard] = useState({});
-  const [showCreateIssuesModal, setShowCreateIssuesModal] = useState(false);
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
-  const [showEditBoardModal, setShowEditBoardModal] = useState(false);
 
   const handleRedirectBoard = (item, index) => {
     dispatch(RsetItsBoard(item));
@@ -37,13 +47,12 @@ const AllBoard = () => {
   };
 
   const handleCreateBoard = asyncWrapper(async () => {
-    setEditFiledsBoard({});
     setShowCreateBoardModal(true);
-    RsetShowLoading({ value: true });
+    dispatch(RsetShowLoading({ value: true }));
     const response = await serCreateBoardGet(getIdProject);
-    RsetShowLoading({ value: false });
-    console.log(response);
+    dispatch(RsetShowLoading({ value: false }));
     if (response?.data?.code === 1) {
+      console.log(response?.data);
       setEditFiledsBoard(response?.data?.data);
       const fixUserCombo = StringHelpers.convertComboBox(
         response?.data?.data?.projectAssignedUsersViewModel
@@ -64,11 +73,39 @@ const AllBoard = () => {
     console.log(responseEditBoard);
     RsetShowLoading({ value: false });
     if (responseEditBoard?.data?.code === 1) {
-      setEditFiledsBoard({ ...editFiledsBoard, getEditBoard: responseEditBoard?.data?.data });
+      setEditFiledsBoard(responseEditBoard?.data?.data);
     }
-    setItemAndIndexProject({ data, index });
+    console.log(console.log(data, index));
+    setItemBoard(data);
     setShowCreateBoardModal(true);
   });
+
+  const handleDeleteBoardAnswerYes = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
+    const res = await serDeleteBoard(deleteBoard?.id);
+    console.log(res);
+    dispatch(RsetShowLoading({ value: false }));
+    if (res?.data?.code === 1) {
+      dispatch(handleGetBoards(getIdProject));
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  });
+
+  useEffect(() => {
+    if (main?.deleteModal?.name === 'DELETE_BOARD') {
+      if (main?.deleteModal?.answer === 'yes') {
+        handleDeleteBoardAnswerYes();
+      }
+    }
+  }, [main?.deleteModal?.answer]);
+
+  const handleDeleteBoard = (boardItem) => {
+    setDeleteBoard(boardItem);
+    console.log(boardItem);
+    dispatch(RsetDeleteModal({ value: true, name: 'DELETE_BOARD' }));
+  };
 
   useEffect(() => {
     dispatch(handleGetBoards(getIdProject));
@@ -102,13 +139,17 @@ const AllBoard = () => {
                     xl="12"
                     xxl="12">
                     <div className=" d-flex justify-content-between">
-                      <span
-                        style={{ color: item?.color || 'black' }}
-                        className="fw-bold">{item?.name}</span>
+                      <span style={{ color: item?.color || 'black' }} className="fw-bold">
+                        {item?.name}
+                      </span>
                       <span>
                         <i
                           onClick={() => handleShowEditBoard(item, index)}
-                          className="cursorPointer font15 text-secondary bi bi-gear"
+                          className="cursorPointer font15 text-secondary mx-2 bi bi-gear"
+                        />
+                        <i
+                          onClick={() => handleDeleteBoard(item)}
+                          className="cursorPointer font15 text-secondary bi bi-trash"
                         />
                       </span>
                     </div>
@@ -116,7 +157,8 @@ const AllBoard = () => {
                     <Col className="cursorPointer" onClick={() => handleRedirectBoard(item, index)}>
                       <i
                         style={{ backgroundColor: 'light', color: item?.color || 'gray' }}
-                        className="border rounded bi font70 bg-light d-flex justify-content-center py-4 bi-eye" />
+                        className="border rounded bi font70 bg-light d-flex justify-content-center py-4 bi-eye"
+                      />
                     </Col>
                   </Col>
                 </div>
@@ -125,24 +167,18 @@ const AllBoard = () => {
           </div>
         </div>
       </Container>
-      {showCreateIssuesModal && (
+      {/* {showCreateIssuesModal && (
         <CreateTasks
           showCreateIssuesModal={showCreateIssuesModal}
           setShowCreateIssuesModal={setShowCreateIssuesModal}
         />
-      )}
-      {showEditBoardModal && (
-        <EditBoardModal
-          showEditBoardModal={showEditBoardModal}
-          setShowEditBoardModal={setShowEditBoardModal}
-        />
-      )}
+      )} */}
       {showCreateBoardModal && (
         <CreateBoardModal
           setEditFiledsBoard={setEditFiledsBoard}
           editFiledsBoard={editFiledsBoard}
           handleGetBoards={handleGetBoards}
-          itemAndIndexProject={itemAndIndexProject}
+          itemBoard={itemBoard}
           showCreateBoardModal={showCreateBoardModal}
           setShowCreateBoardModal={setShowCreateBoardModal}
         />

@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 import { Col } from 'react-bootstrap';
 import { getAllUsers, getUserRole, serAllEnums } from '../services/masterServices';
 import { useDispatch, useSelector } from 'react-redux';
-import {
+import main, {
   RsetAllEnums,
   RsetAllUsers,
   RsetProjPriorty,
@@ -15,10 +15,12 @@ import {
 } from '../hooks/slices/main';
 import StringHelpers from '../helpers/StringHelpers';
 import asyncWrapper from '../utils/asyncWrapper';
+import MessageAlert from '../components/MessageAlert';
+import DeleteModal from '../common/DeleteModal';
 
 const PrivateLayout = ({ children }) => {
   const dispatch = useDispatch();
-
+  const { main } = useSelector((state) => state);
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
     if (resRole?.data?.code === 1) {
@@ -60,9 +62,11 @@ const PrivateLayout = ({ children }) => {
         </Col>
         <Col xxl="10" className=" bg-whit-100">
           <Header />
-          <div className='my-3' >{children}</div>
+          <div className="my-3">{children}</div>
         </Col>
       </div>
+      {!!main?.messageModal?.value && <MessageAlert />}
+      {!!main?.deleteModal?.value && <DeleteModal />}
     </>
   );
 };

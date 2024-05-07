@@ -13,6 +13,7 @@ import {
   serCreateBoardGet,
   serCreateBoardPost,
   serGetBoards,
+  serPutEditBoard,
   serWorkFlows
 } from '../../services/masterServices';
 import StringHelpers from '../../helpers/StringHelpers';
@@ -20,17 +21,15 @@ import { useLocation } from 'react-router-dom';
 import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import ColorPicker from '../../components/ColorPicker';
 
-
 const CreateBoardModal = ({
   showCreateBoardModal,
   editFiledsBoard,
-  setEditFiledsBoard,
   setShowCreateBoardModal,
-  itemAndIndexProject,
+  itemBoard
 }) => {
   const { board, main } = useSelector((state) => state);
   const [allWorkFlow, setAllWorkFlow] = useState([]);
-  const [color, setColor] = useState("");
+  const [color, setColor] = useState('');
 
   const location = useLocation();
   const dispatch = useDispatch();
@@ -63,45 +62,31 @@ const CreateBoardModal = ({
     const fixUsersId = data?.usersAssigned?.map((item) => item?.id);
     const fixWorkFlowsId = data?.boardWorkFlowsId?.map((item) => item?.id);
     setShowCreateBoardModal(false);
-    if (!!editFiledsBoard?.projectType) {
+    console.log(!!editFiledsBoard?.id);
+    if (!!editFiledsBoard?.id) {
       const postData = {
-        id: "",
-        name: "",
-        description: "",
-        sprintNumber: 0,
-        color: "",
-        boardWorkFlowsId: [""],
-        boardUsersId: [""],
-        attachmentsEditViewModel: [
-          {
-            id: ""
-          }
-        ]
-      }
-      // {
-      //   id: board?.fieldsEditProject?.editProjectData?.id,
-      //   name: data?.name,
-      //   description: data?.description,
-      //   sprintNumber: sprintNum,
-      //   boardWorkFlowsId: [
-      //     // '3fa85f64-5717-4562-b3fc-2c963f66afa6'
-      //   ],
-      //   boardUsersId: ['string'],
-      //   attachmentsEditViewModel: [
-      //     // {
-      //     //   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      //     //   fileName: 'string',
-      //     //   filePath: 'string',
-      //     //   uploadDate: 'string',
-      //     //   attachCreatorId: 'string'
-      //     // }
-      //   ]
-      // };
+        id: itemBoard?.id,
+        name: data?.boardName,
+        // description: '',
+        sprintNumber: editFiledsBoard?.projectType === 0 ? 0 : data?.sprintNumber,
+        color: color,
+        boardWorkFlowsId: fixWorkFlowsId,
+        boardUsersId: fixUsersId,
+        attachmentsEditViewModel: []
+      };
+      console.log(postData);
       const resEditBoards = await serPutEditBoard(postData);
       console.log(resEditBoards);
+      dispatch(RsetShowLoading({ value: false }));
+      if (resEditBoards?.data?.code === 1) {
+        dispatch(RsetShowToast({ show: true, title: resEditBoards?.data?.msg, bg: 'success' }));
+        dispatch(handleGetBoards(getIdProject));
+      } else {
+        dispatch(RsetShowToast({ show: true, title: resEditBoards?.data?.msg, bg: 'danger' }));
+      }
     } else {
       const postDatePost = {
-        name: data?.name,
+        name: data?.boardName,
         color: color,
         description: data?.description,
         projectId: getIdProject,
@@ -137,13 +122,15 @@ const CreateBoardModal = ({
 
   useEffect(() => {
     reset({
-      ...editFiledsBoard?.getEditBoard,
+      ...editFiledsBoard,
+      boardName: editFiledsBoard?.name,
       projectType: StringHelpers?.findCombo(
         editFiledsBoard?.projectType,
         main?.allEnums?.projectType
       ),
-      name: '',
-      sprintNumber: editFiledsBoard?.sprintNumber
+      sprintNumber: editFiledsBoard?.sprintNumber,
+      usersAssigned: StringHelpers?.findCombo(editFiledsBoard?.usersAssigned),
+      boardWorkFlowsId: StringHelpers?.findCombo(editFiledsBoard?.boardWorkFlowsId)
     });
   }, [editFiledsBoard]);
 
@@ -165,12 +152,11 @@ const CreateBoardModal = ({
         <Modal.Body>
           <Form>
             <Container fluid className="mb-3">
-              <Row className='d-flex align-items-end' >
+              <Row className="d-flex align-items-end">
                 <Input
-                  className=''
                   errmsg="لطفا نام بورد را وارد کنید"
                   errors={errors}
-                  name="name"
+                  name="boardName"
                   xl={4}
                   label="نام بورد:"
                   control={control}
@@ -185,15 +171,16 @@ const CreateBoardModal = ({
               </Row>
               <Row className="mt-4">
                 <SwitchCase
+                  disabled={editFiledsBoard?.projectType === 0 ? true : false}
                   min={0}
                   max={editFiledsBoard?.sprintNumber}
                   control={control}
                   name="sprintNumber"
                   range
-                  label={`سرعت پروژه:${watch('sprintNumber')}`}
+                  label={`سرعت پروژه:${watch('sprintNumber') || editFiledsBoard?.projectType}`}
                 />
               </Row>
-              <Row className='mt-4'>
+              <Row className="mt-4">
                 <ComboBox
                   isMulti
                   name="usersAssigned"

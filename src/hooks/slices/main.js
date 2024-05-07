@@ -14,6 +14,9 @@ const MainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
+    RsetMessageModal: (state, actions) => {
+      return { ...state, messageModal: actions.payload };
+    },
     RsetShowLoading: (state, actions) => {
       return { ...state, showLoading: actions.payload };
     },
@@ -49,6 +52,7 @@ const MainSlice = createSlice({
 
 export const {
   RsetProjPriorty,
+  RsetMessageModal,
   RsetProjType,
   RsetProjStatus,
   RsetAllEnums,

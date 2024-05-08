@@ -74,10 +74,10 @@ const Comment = ({
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
       const newData = allCommets?.map((itemComments) => {
         if (cmt?.id === itemComments?.id) {
-          return ({
+          return {
             ...itemComments,
             editMode: false
-          });
+          };
         }
         return itemComments;
       });
@@ -125,7 +125,7 @@ const Comment = ({
 
   return (
     <div className="m-3 rounded bg-white p-3">
-      {allCommets?.map((cmt, index) => {
+      {Object.values(allCommets)?.map((cmt, index) => {
         return (
           <Row className="py-1">
             <div className="">
@@ -166,7 +166,6 @@ const Comment = ({
                     variant="outline-warning"
                     title="ویرایش"
                     onClick={handleSubmit((data) => handleEditTextComment(cmt, data))}
-
                   />
                 </Col>
               ) : (

@@ -4,15 +4,14 @@ import { RsetShowToast } from '../hooks/slices/main';
 
 axios.interceptors.request.use(
   function (config) {
+    console.log(config);
     if (!!localStorage.getItem('tokenId')) {
       config.headers.Authorization = `Bearer ${localStorage.getItem('tokenId')}`;
     }
-    if (
-      config.url.includes("AttachmentController/CreateAttachment")
-    ) {
-      config.headers["Content-Type"] = "multipart/form-data";
+    if (config.url.includes('AttachmentController/CreateAttachment')) {
+      config.headers['Content-Type'] = 'multipart/form-data';
     } else {
-      config.headers["Content-Type"] = "application/json";
+      config.headers['Content-Type'] = 'application/json';
     }
     return config;
   },
@@ -23,6 +22,7 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   async function (response) {
+    console.log(response);
     if (
       !!response?.data?.ErrorCode &&
       response?.data?.ErrorCode !== 0 &&
@@ -47,7 +47,10 @@ axios.interceptors.response.use(
         store.dispatch(
           RsetShowToast({
             show: true,
-            title: error?.response?.data?.msg || 'مشکلی در سرور به وجود آمده است لطفا دوباره امتحان کنید', bg: 'danger'
+            title:
+              error?.response?.data?.msg ||
+              'مشکلی در سرور به وجود آمده است لطفا دوباره امتحان کنید',
+            bg: 'danger'
           })
         );
       }

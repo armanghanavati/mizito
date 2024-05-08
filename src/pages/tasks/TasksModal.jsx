@@ -149,6 +149,7 @@ const TasksModal = ({
                 />
               </Row>
               <Comment
+              
                 handleShowSubTaskToTask={handleShowSubTaskToTask}
                 handleGetComments={handleGetComments}
                 fixUsers={fixUsers}

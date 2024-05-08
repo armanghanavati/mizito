@@ -27,6 +27,10 @@ export const serviceProjects = () => {
   return axios.get(`${baseURL}api/ProjectController/Projects`);
 };
 
+export const serDeleteProjects = (projectid) => {
+  return axios.delete(`${baseURL}api/ProjectController/DeleteProject?projectid=${projectid}`);
+};
+
 export const serViceEditProject = (postData) => {
   return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 };
@@ -171,14 +175,5 @@ export const serGetWorkFlows = (boardId) => {
 
 // ایجاد فایل
 export const serCreateAttachment = (postData) => {
-  return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData)
+  return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData);
 };
-
-// فایل
-// export const serCreateAttachment = (postData) => {
-//   return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData, {
-//     headers: {
-//       "Content-Type": "multipart/form-data",
-//     },
-//   })
-// };

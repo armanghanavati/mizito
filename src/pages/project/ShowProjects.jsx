@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, ProgressBar } from 'react-bootstrap';
-import { serViceEditProject, serviceProjects } from '../../services/masterServices';
+import {
+  serDeleteProjects,
+  serViceEditProject,
+  serviceProjects
+} from '../../services/masterServices';
 import EditProjectModal from './EditProjectModal';
-import { RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
+import { RsetDeleteModal, RsetShowLoading, RsetShowToast } from '../../hooks/slices/main';
 import { useDispatch, useSelector } from 'react-redux';
 import { RsetFieldsEditProject } from '../../hooks/slices/boardSlice';
 import CreateProjectModal from '../create/CreateProjectModal';
@@ -13,12 +17,12 @@ import MainTitle from '../../components/MainTitle';
 const ShowProjects = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { board } = useSelector((state) => state);
+  const { board, main } = useSelector((state) => state);
   const [allProjectList, setAllProjectList] = useState([]);
   const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
-  const [showEditProject, setShowEditProject] = useState(false);
   const [editService, setEditService] = useState(false);
   const [itemAndIndexProject, setItemAndIndexProject] = useState({});
+  const [deleteItem, setDeleteItem] = useState({});
   const [editProjectFields, setEditProjectFields] = useState({});
   const [sprintNum, setSprintNum] = useState(1);
 
@@ -79,6 +83,31 @@ const ShowProjects = () => {
     );
   };
 
+  const handleDeleteProjrctAnswerYes = asyncWrapper(async () => {
+    dispatch(RsetShowLoading({ value: true }));
+    const res = await serDeleteProjects(deleteItem?.id);
+    dispatch(RsetShowLoading({ value: false }));
+    if (res?.data?.code === 1) {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      handleGetProjects();
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
+  });
+
+  useEffect(() => {
+    if (main?.deleteModal?.name === 'DELETE_PROJECT') {
+      if (main?.deleteModal?.answer === 'yes') {
+        handleDeleteProjrctAnswerYes();
+      }
+    }
+  }, [main?.deleteModal?.answer]);
+
+  const handleDeleteProject = (prj) => {
+    setDeleteItem(prj);
+    dispatch(RsetDeleteModal({ value: true, name: 'DELETE_PROJECT' }));
+  };
+
   return (
     <>
       <Container className=" mt-2">
@@ -107,7 +136,11 @@ const ShowProjects = () => {
                       <span>
                         <i
                           onClick={() => handleEditProject(item, index)}
-                          className="cursorPointer font15 text-secondary bi bi-gear"
+                          className="cursorPointer font15 mx-2 text-secondary bi bi-gear"
+                        />
+                        <i
+                          onClick={() => handleDeleteProject(item, index)}
+                          className="cursorPointer font15 text-secondary bi bi-trash"
                         />
                       </span>
                     </div>

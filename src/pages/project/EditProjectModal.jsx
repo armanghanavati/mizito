@@ -63,7 +63,7 @@ const EditProjectModal = ({ showEditProject, setShowEditProject, itemEditProject
         onHide={() => setShowEditProject(false)}>
         <Modal.Header
           style={{ transform: 'scale(-1, 1)', direction: 'ltr' }}
-          className="d-flex sideCount text-white justify-content-center"
+          className="d-flex bg-white text-white justify-content-center"
           closeButton>
           <span style={{ transform: 'scale(-1, 1)' }} className="fw-bold">
             ویرایش پروژه

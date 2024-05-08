@@ -171,5 +171,14 @@ export const serGetWorkFlows = (boardId) => {
 
 // ایجاد فایل
 export const serCreateAttachment = (postData) => {
-  return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData);
+  return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData)
 };
+
+// فایل
+// export const serCreateAttachment = (postData) => {
+//   return axios.post(`${baseURL}api/AttachmentController/CreateAttachment`, postData, {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   })
+// };

@@ -11,7 +11,7 @@ import logo from '../../assets/hostcolor2000-300x300.jpg';
 import { RsetShowLoading } from '../../hooks/slices/main';
 import asyncWrapper from '../../utils/asyncWrapper';
 
-const Login = ({}) => {
+const Login = ({ }) => {
   const [showPass, setShowPass] = useState(false);
   const {
     control,
@@ -51,7 +51,7 @@ const Login = ({}) => {
   return (
     <Container fluid className="vh-100">
       <Row className="vh-100">
-        <div className="d-flex  sideCount  justify-content-center align-items-center">
+        <div className="d-flex  bg-white  justify-content-center align-items-center">
           <Col
             xs="12"
             sm="9"

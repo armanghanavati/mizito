@@ -12,7 +12,7 @@ const GeneralLayout = ({ children }) => {
           {/* <Bords /> */}
           {children}
         </Col>
-        <Col className="sideCount shadow-lg" md="2">
+        <Col className="bg-white shadow-lg" md="2">
           <Sidebar />
         </Col>
       </div>

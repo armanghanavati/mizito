@@ -21,6 +21,7 @@ const CreateTasks = ({
   showCreateIssuesModal,
   setShowCreateIssuesModal,
   workFlowItem,
+  handleAllTasks,
   handleWorkFlows,
   getEditTasks
 }) => {
@@ -61,6 +62,7 @@ const CreateTasks = ({
       const resPutEdit = await serPutEditTask(postEditData)
       if (resPutEdit?.data?.code === 1) {
         setShowCreateIssuesModal(false);
+        handleAllTasks()
         handleWorkFlows();
         dispatch(RsetShowToast({ show: true, title: resPutEdit?.data?.msg, bg: 'success' }));
       } else {
@@ -84,6 +86,7 @@ const CreateTasks = ({
       const res = await serCreateTask(postData);
       if (res?.data?.code === 1) {
         setShowCreateIssuesModal(false);
+        handleAllTasks()
         handleWorkFlows();
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
       } else {

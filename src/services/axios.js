@@ -7,9 +7,13 @@ axios.interceptors.request.use(
     if (!!localStorage.getItem('tokenId')) {
       config.headers.Authorization = `Bearer ${localStorage.getItem('tokenId')}`;
     }
-    config.headers.post = {
-      'Content-Type': 'application/json'
-    };
+    if (
+      config.url.includes("AttachmentController/CreateAttachment")
+    ) {
+      config.headers["Content-Type"] = "multipart/form-data";
+    } else {
+      config.headers["Content-Type"] = "application/json";
+    }
     return config;
   },
   function (error) {

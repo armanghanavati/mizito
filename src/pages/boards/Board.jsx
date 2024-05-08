@@ -245,6 +245,7 @@ const Board = () => {
       )}
       {showCreateIssuesModal && (
         <CreateTasks
+          handleAllTasks={handleAllTasks}
           setGetEditTasks={setGetEditTasks}
           getEditTasks={getEditTasks}
           handleWorkFlows={handleWorkFlows}
@@ -255,6 +256,8 @@ const Board = () => {
       )}
       {workFlowItem && (
         <CreateWorkFlow
+
+          handleAllTasks={handleAllTasks}
           setWorkflowEditItem={setWorkflowEditItem}
           workflowEditItem={workflowEditItem}
           handleWorkFlows={handleWorkFlows}

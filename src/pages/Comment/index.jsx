@@ -19,17 +19,17 @@ const Comment = ({
   allCommets,
   fixUsers,
   taskItem,
-  setAllCommets,
   handleGetComments,
+  setAllCommets,
   handleShowSubTaskToTask
 }) => {
   const [editComment, setEditComment] = useState({});
   const [commentedItemDelete, setCommentedItemDelete] = useState({});
   const dispatch = useDispatch();
+  // const fixAllComment = Object.values(allCommets)?.reverse()
   const { main } = useSelector((state) => state);
   const {
     control,
-    setValue,
     reset,
     handleSubmit,
     formState: { errors }
@@ -41,7 +41,8 @@ const Comment = ({
   });
 
   const handleEditComment = (data, index) => {
-    console.log(data?.id);
+    console.log(data, index);
+
     handleSerEditComments(data, index);
     let temporaryList = [];
     allCommets?.map((itemComments, indexComments) => {
@@ -61,14 +62,30 @@ const Comment = ({
   };
 
   const handleEditTextComment = asyncWrapper(async (cmt, data) => {
+    console.log(cmt, data);
     const postData = {
       id: cmt?.id,
-      text: data?.text,
+      text: data?.textCommented,
       commentMentionUsersViewModels: [''],
       attachmentCreateViewModels: []
     };
     const res = await serEditCommentPut(postData);
-    console.log(res);
+    if (res?.data?.code === 1) {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      const newData = allCommets?.map((itemComments) => {
+        if (cmt?.id === itemComments?.id) {
+          return ({
+            ...itemComments,
+            editMode: false
+          });
+        }
+        return itemComments;
+      });
+      setAllCommets(newData);
+      handleGetComments();
+    } else {
+      dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
+    }
   });
 
   useEffect(() => {
@@ -84,12 +101,10 @@ const Comment = ({
   const handleDeleteCommentedAnswerYes = asyncWrapper(async () => {
     dispatch(RsetShowLoading({ value: true }));
     const res = await serDeleteCommented(commentedItemDelete?.id);
-    console.log(res);
     dispatch(RsetShowLoading({ value: false }));
     if (res?.data?.code === 1) {
-      console.log(taskItem?.id);
-      handleShowSubTaskToTask(taskItem?.id);
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
+      handleGetComments();
     } else {
       dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'danger' }));
     }
@@ -103,69 +118,68 @@ const Comment = ({
     }
   }, [main?.deleteModal?.answer]);
 
-  const handleDeleteCommented = (cmt, index) => {
+  const handleDeleteCommented = (cmt) => {
     setCommentedItemDelete(cmt);
     dispatch(RsetDeleteModal({ value: true, name: 'DELETE_COMMENTED' }));
   };
 
   return (
     <div className="m-3 rounded bg-white p-3">
-      {Object.values(allCommets)
-        ?.reverse()
-        ?.map((cmt, index) => {
-          return (  
-            <Row className="py-1">
-              <div className="">
-                <span className="text-secondary ms-2">{cmt?.creatorFullName}</span>
-                <span className="text-secondary">
-                  {StringHelpers?.convertDateFa(cmt?.creationDateTime)}
-                </span>
-              </div>
-              <Col className="d-flex justify-content-end">
-                <i
-                  onClick={() => handleEditComment(cmt, index)}
-                  className=" text-secondary bi bi-pencil mx-2 cursorPointer"
-                />
-                <i
-                  onClick={() => handleDeleteCommented(cmt, index)}
-                  className=" text-secondary bi bi-trash mx-2 cursorPointer"
-                />
-                <i className="text-secondary bi bi-arrow-left-circle-fill me-2 cursorPointer" />
-              </Col>
-              <Row className="my-1 d-flex justify-content-between">
-                {cmt?.editMode === true ? (
-                  <Col className="d-flex align-items-end mb-4">
-                    <Input xs={2} xl={6} control={control} name="text" />
-                    <ComboBox
-                      name="commentMentionUsersViewModels"
-                      options={fixUsers}
-                      control={control}
-                      placeHolder="منشن"
-                      className=" mx-2"
-                      xl={4}
-                      xxl={1}
-                    />
-                    <Btn
-                      xxl={2}
-                      loadingName="sendText"
-                      className="mx-1 "
-                      icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
-                      variant="primary"
-                      title="ویرایش"
-                      onClick={handleSubmit((data) => handleEditTextComment(cmt, data))}
-                    />
-                  </Col>
-                ) : (
-                  <small className="mb-4"> {cmt?.text}</small>
-                )}
-                {/* <Col xxl="12" className="">
+      {allCommets?.map((cmt, index) => {
+        return (
+          <Row className="py-1">
+            <div className="">
+              <span className="text-secondary ms-2">{cmt?.creatorFullName}</span>
+              <span className="text-secondary">
+                {StringHelpers?.convertDateFa(cmt?.creationDateTime)}
+              </span>
+            </div>
+            <Col className="d-flex justify-content-end">
+              <i
+                onClick={() => handleEditComment(cmt, index)}
+                className=" text-secondary bi bi-pencil mx-2 cursorPointer"
+              />
+              <i
+                onClick={() => handleDeleteCommented(cmt, index)}
+                className=" text-secondary bi bi-trash mx-2 cursorPointer"
+              />
+              <i className="text-secondary bi bi-arrow-left-circle-fill me-2 cursorPointer" />
+            </Col>
+            <Row className="my-1 d-flex justify-content-between">
+              {cmt?.editMode === true ? (
+                <Col className="d-flex align-items-end mb-4">
+                  <Input xs={2} xl={6} control={control} name="textCommented" />
+                  <ComboBox
+                    name="commentMentionUsersViewModels"
+                    options={fixUsers}
+                    control={control}
+                    placeHolder="منشن"
+                    className=" mx-2"
+                    xl={4}
+                    xxl={1}
+                  />
+                  <Btn
+                    xxl={2}
+                    loadingName="sendText"
+                    className="mx-1 "
+                    icon={<i className="d-flex align-items-center bi ms-1 bi-send" />}
+                    variant="outline-warning"
+                    title="ویرایش"
+                    onClick={handleSubmit((data) => handleEditTextComment(cmt, data))}
+
+                  />
+                </Col>
+              ) : (
+                <small className="mb-4"> {cmt?.text}</small>
+              )}
+              {/* <Col xxl="12" className="">
                 ارسال به:
               </Col> */}
-              </Row>
-              <hr />
             </Row>
-          );
-        })}
+            <hr />
+          </Row>
+        );
+      })}
     </div>
   );
 };

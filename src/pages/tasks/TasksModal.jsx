@@ -12,6 +12,7 @@ import { RsetShowLoading } from '../../hooks/slices/main';
 import DropDown from '../../components/DropDown';
 import ComboBox from '../../components/ComboBox';
 import { useLocation } from 'react-router-dom';
+import FileAttachment from '../../components/FileAttachment';
 
 const TasksModal = ({
   setAllSubTask,
@@ -41,12 +42,8 @@ const TasksModal = ({
 
   const handleGetComments = asyncWrapper(async () => {
     const res = await serComments(taskItem?.id);
-    console.log(res, taskItem?.id);
     if (res?.data?.code === 1) {
-      setAllCommets((prev) => ({
-        ...prev,
-        ...res?.data?.data
-      }));
+      setAllCommets(res?.data?.data);
       // [...prev, ...res.data.data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     }
   });
@@ -99,12 +96,12 @@ const TasksModal = ({
           />
           <div className="border mt-4 py-2 bg-light shadow-sm rounded">
             <Col
-              className="d-flex shadow-sm sideCount align-items-center justify-content-center my-2 rounded-start-pill"
+              className="d-flex shadow-sm bg-white align-items-center justify-content-center my-2 rounded-start-pill"
               xxl={2}
               xl={4}
               md={6}
               xs={12}>
-              <h5 className="d-flex align-items-center mt-2 py-2 text-white">ایجاد گزارش</h5>
+              <h5 className="d-flex align-items-center mt-2 py-2 text-DarkPrimary">ایجاد گزارش</h5>
             </Col>
             <Form className="rounded bg-white m-3 ">
               <Row className=" align-items-center px-3">
@@ -152,7 +149,7 @@ const TasksModal = ({
                 />
               </Row>
               <Comment
-              handleShowSubTaskToTask={handleShowSubTaskToTask}
+                handleShowSubTaskToTask={handleShowSubTaskToTask}
                 handleGetComments={handleGetComments}
                 fixUsers={fixUsers}
                 control={control}

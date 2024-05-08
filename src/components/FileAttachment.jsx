@@ -2,11 +2,9 @@ import React, { useRef, useState } from 'react';
 import { serCreateAttachment } from '../services/masterServices';
 import asyncWrapper from '../utils/asyncWrapper';
 import { useDispatch } from 'react-redux';
-import { RsetShowLoading } from '../hooks/slices/main';
+import { RsetShowLoading, RsetShowToast } from '../hooks/slices/main';
 
 const FileAttachment = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [message, setMessage] = useState('');
   const hiddenFileInput = useRef(null);
   const dispatch = useDispatch();
 
@@ -24,19 +22,19 @@ const FileAttachment = () => {
 
   const handleFileChange = asyncWrapper(async (event) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
-    // formData.append('filearray', selectedFile);
-    // formData.append('filesize', selectedFile.size);
-    // const formData = new FormData();
-    // formData.append('path', 'upload\\attachfile\\');
-    console.log(event);
-    const postData = event?.target?.files;
+    console.log(file);
+    const formData = new FormData();
+    formData.append('file', file);
     // const data = await toBase64(postData);
     dispatch(RsetShowLoading({ value: true }));
-    const response = await serCreateAttachment(postData);
+    const response = await serCreateAttachment(formData);
     dispatch(RsetShowLoading({ value: false }));
-
-    console.log(response);
+    if (response?.data?.code === 1) {
+      dispatch(RsetShowToast({ show: true, title: response?.data?.msg, bg: 'success' }));
+    }
+    else {
+      dispatch(RsetShowToast({ show: true, title: response?.data?.msg, bg: 'danger' }));
+    }
   });
 
   //   const toBase64 = (file) =>
@@ -48,10 +46,9 @@ const FileAttachment = () => {
   //     });
 
   return (
-    <div>
-      <i
-        onClick={handleIconClick}
-        className="pt-2 rounded-pill px-2 sideCount text-white text-secondary bi bi-pin-angle mx-2 cursorPointer"
+    <div className='mt-2' >
+      <i onClick={handleIconClick}
+        className="rounded-pill ps-2 bg-DarkPrimary text-secondary bi bi-pin-angle cursorPointer"
       />
       <input
         type="file"

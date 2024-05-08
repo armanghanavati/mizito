@@ -25,6 +25,7 @@ import ColorPicker from '../../components/ColorPicker';
 
 const CreateWorkFlow = ({
   setWorkflowEditItem,
+  handleAllTasks,
   workflowEditItem,
   setShowWorkFlow,
   showWorkFlow,
@@ -52,6 +53,8 @@ const CreateWorkFlow = ({
       const res = await serPutEditWorkFlow(postData);
       if (res?.data?.code === 1) {
         setShowWorkFlow(false);
+        handleAllTasks()
+        handleWorkFlows()
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));
         dispatch(handleGetBoards(getIdProject));
       }
@@ -64,6 +67,7 @@ const CreateWorkFlow = ({
       };
       const res = await addNewWorkFlowToBoard(postData);
       if (res?.data?.code === 1) {
+        handleWorkFlows()
         dispatch(handleGetBoards(getIdProject));
         setShowWorkFlow(false);
         dispatch(RsetShowToast({ show: true, title: res?.data?.msg, bg: 'success' }));

@@ -116,13 +116,12 @@ const SubTasks = ({
               </small>
               <i
                 onClick={() => handleEditSubTask(subTask)}
-                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-pencil mx-2 cursorPointer"
+                className="pt-2 rounded-pill px-2 bg-white text-secondary bi bi-pencil mx-2 cursorPointer"
               />
-
               <FileAttachment />
               <i
                 onClick={() => handleDeleteSubTask(subTask)}
-                className="pt-2 rounded-pill px-2 sideCount text-white  text-secondary bi bi-trash  cursorPointer"
+                className="pt-2 rounded-pill px-2 bg-white text-secondary bi bi-trash  cursorPointer"
               />
             </Col>
           </Row>
@@ -134,12 +133,12 @@ const SubTasks = ({
     <>
       <div className="border  py-2 rounded shadow-sm bg-light">
         <Col
-          className="d-flex shadow-sm sideCount align-items-center justify-content-center my-2 rounded-start-pill"
+          className="d-flex shadow-sm bg-white align-items-center justify-content-center my-2 rounded-start-pill"
           xxl={2}
           xl={4}
           md={6}
           xs={12}>
-          <h5 className="d-flex align-items-center mt-2 py-2 text-white">ایجاد وظیفه‌ فرعی</h5>
+          <h5 className="d-flex align-items-center mt-2 py-2 text-DarkPrimary">ایجاد وظیفه‌ فرعی</h5>
         </Col>
         <div className="rounded bg-white m-3 ">
           <Row className="d-flex align-items-center px-3">

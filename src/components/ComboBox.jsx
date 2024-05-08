@@ -17,9 +17,9 @@ const ComboBox = ({
   label = '',
   options,
   onKeyDown,
-  onBlur = () => {},
+  onBlur = () => { },
   defaultValue = {},
-  onChange = () => {},
+  onChange = () => { },
   validation,
   control = true,
   important = false,
@@ -51,11 +51,10 @@ const ComboBox = ({
         }}
         render={({ field }) => (
           <>
-            <Col className="my-2" xs={xs} md={md} xl={xl}>
+            <Col className="" xs={xs} md={md} xl={xl}>
               <label
-                className={`ms-3 mb-2 ${
-                  important && 'star'
-                }  align-items-center input-label input-label-sm lg:input-label-base`}>
+                className={`ms-3 mb-2 ${important && 'star'
+                  }  align-items-center input-label input-label-sm lg:input-label-base`}>
                 {label}
               </label>
               <div className="position-relative">

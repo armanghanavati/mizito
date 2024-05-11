@@ -11,13 +11,14 @@ import {
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RsetShowCreateModal } from '../hooks/slices/boardSlice';
+import Partners from './Partners';
 
 const Sidebar = () => {
-  const { board } = useSelector((state) => state);
+  const { board, main } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   return (
-    <div className="col-2 position-fixed">
+    <div className="col-12">
       <div className=" m-3">
         <span className="d-flex justify-content-center my-4"> لوگو </span>
         {/* <hr className="bg-white my-4 text-DarkPrimary" /> */}
@@ -104,6 +105,7 @@ const Sidebar = () => {
         <span className="me-2 text-light">تخته ها</span>
       </div> */}
       </div>
+      <Partners />
     </div>
   );
 };

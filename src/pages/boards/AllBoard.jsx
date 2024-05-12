@@ -111,6 +111,8 @@ const AllBoard = () => {
     dispatch(handleGetBoards(getIdProject));
   }, []);
 
+  console.log(board?.getAllBoard);
+
   return (
     <>
       <div className="p-4 mb-3 mx-0 shadow bg-white d-flex align-items-center justify-content-between text-secondary">
@@ -160,6 +162,25 @@ const AllBoard = () => {
                         className="border rounded bi font70 bg-light d-flex justify-content-center py-4 bi-eye"
                       />
                     </Col>
+                    <div className="d-flex gap-3 mt-2">
+                      {item?.boardUsersViewModel?.map((userInfo, index) => {
+                        const imgaeLocation = userInfo?.imagePath;
+                        console.log(imgaeLocation);
+                        return (
+                          <div>
+                            { (
+                              <img
+                                className="rounded-pill c"
+                                src={imgaeLocation}
+                                width={35}
+                                height={35}
+                              />
+                            ) || <i className="text-secondary bi bi-person" />
+                            }
+                          </div>
+                        );
+                      })}
+                    </div>
                   </Col>
                 </div>
               );

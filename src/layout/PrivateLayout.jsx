@@ -57,7 +57,7 @@ const PrivateLayout = ({ children }) => {
   return (
     <>
       <div className="v-100 d-flex">
-        <Col className="bg-white position-relative shadow-lg" xxl="2" md="2">
+        <Col className="bg-white shadow-lg" xxl="2" md="2">
           <Sidebar />
         </Col>
         <Col xxl="10" className=" bg-whit-100">

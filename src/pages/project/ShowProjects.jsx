@@ -164,9 +164,9 @@ const ShowProjects = () => {
                           className="eng_Num"
                           style={{ transform: 'scale(-1, 1)' }}
                           variant=""
-                          label={`${50}%`}
+                          label={`${item?.projectProgressBar}%`}
                           animated
-                          now={50}
+                          now={item?.projectProgressBar}
                         />
                       </div>
                     </Col>

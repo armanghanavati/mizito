@@ -11,7 +11,7 @@ import logo from '../../assets/hostcolor2000-300x300.jpg';
 import { RsetShowLoading } from '../../hooks/slices/main';
 import asyncWrapper from '../../utils/asyncWrapper';
 
-const Login = ({ }) => {
+const Login = ({}) => {
   const [showPass, setShowPass] = useState(false);
   const {
     control,

@@ -81,6 +81,7 @@ export default class StringHelpers {
     return fixData;
   }
   static findCombo(data, state) {
+    console.log(data, state);
     const fixCombo = state?.filter((item) => item?.id === data);
     return fixCombo;
   }

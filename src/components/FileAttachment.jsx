@@ -12,14 +12,6 @@ const FileAttachment = () => {
     hiddenFileInput.current.click();
   };
 
-  // const handleFileChange = (event) => {
-  //   // if (file.size >= 512000 * 10 * 3) {
-  //   //   setMessage('حجم فایل بیش از 15 مگابایت است');
-  //   //   setMessageColor('red');
-  //   //   return;
-  //   // }
-  // };
-
   const handleFileChange = asyncWrapper(async (event) => {
     const file = event.target.files[0];
     console.log(file);
@@ -37,13 +29,6 @@ const FileAttachment = () => {
     }
   });
 
-  //   const toBase64 = (file) =>
-  //     new Promise((resolve, reject) => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(file);
-  //       reader.onload = () => resolve(reader.result.split(',')[1]);
-  //       reader.onerror = (error) => reject(error);
-  //     });
 
   return (
     <div className='mt-2' >
@@ -61,6 +46,15 @@ const FileAttachment = () => {
 };
 
 export default FileAttachment;
+
+
+//   const toBase64 = (file) =>
+//     new Promise((resolve, reject) => {
+//       const reader = new FileReader();
+//       reader.readAsDataURL(file);
+//       reader.onload = () => resolve(reader.result.split(',')[1]);
+//       reader.onerror = (error) => reject(error);
+//     });
 
 // import React, { useState } from 'react';
 

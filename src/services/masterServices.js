@@ -19,6 +19,7 @@ export const getAllUsers = () => {
   return axios.get(`${baseURL}api/Account/GetAllUsers`);
 };
 
+// ایجاد پروژه
 export const createProject = (postData) => {
   return axios.post(`${baseURL}api/ProjectController/CreateProject`, postData);
 };
@@ -27,10 +28,13 @@ export const serviceProjects = () => {
   return axios.get(`${baseURL}api/ProjectController/Projects`);
 };
 
+// حذف پروژه
 export const serDeleteProjects = (projectid) => {
   return axios.delete(`${baseURL}api/ProjectController/DeleteProject?projectid=${projectid}`);
 };
 
+
+// ویرایش پروژه
 export const serViceEditProject = (postData) => {
   return axios.get(`${baseURL}api/ProjectController/EditProject?projectid=${postData}`);
 };
@@ -48,6 +52,7 @@ export const serCreateBoardGet = (id) => {
 export const serCreateBoardPost = (postData) => {
   return axios.post(`${baseURL}api/BoardController/CreateBoard`, postData);
 };
+
 
 // دریافت تمامی بوردهای مخصوص کاربر
 export const serGetBoards = (postData) => {

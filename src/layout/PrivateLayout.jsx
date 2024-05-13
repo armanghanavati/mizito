@@ -21,9 +21,9 @@ import Btn from '../components/Btn';
 import { useMediaQuery } from 'react-responsive';
 
 const PrivateLayout = ({ children }) => {
-  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 1200px)' });
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const { main } = useSelector((state) => state);
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
@@ -37,8 +37,6 @@ const PrivateLayout = ({ children }) => {
       dispatch(RsetAllEnums({ priorityList, projectRole, projectStatus, projectType }));
     }
   });
-
-
 
   const handleGetUserRole = asyncWrapper(async () => {
     const res = await getUserRole();
@@ -77,16 +75,13 @@ const PrivateLayout = ({ children }) => {
             <Sidebar />
           </Col>
         } */}
-        <Collapse in={isOpen} dimension="width">
-          <Col id="example-collapse-text" className="bg-white shadow-lg" xxl="2" md="6">
+        <Collapse in={isOpen} dimension="width" className="col-8 col-lg-2">
+          <Col id="example-collapse-text" className="bg-white shadow-lg" xxl="2" md="8" sm="6">
             <Sidebar />
           </Col>
         </Collapse>
-        <Col xxl={`${isOpen ? "12" : "10"}`} className=" bg-whit-100">
-          <Header
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-          />
+        <Col xxl={`${isOpen ? '10' : '12'}`} className="position-relative bg-whit-100">
+          <Header isOpen={isOpen} setIsOpen={setIsOpen} />
           <div className="my-3">{children}</div>
         </Col>
       </div>
@@ -105,19 +100,6 @@ export default PrivateLayout;
 //     </Col>
 //   </>
 // )}
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, { useState } from 'react'
 // import { Button, Col, Collapse, Container, Row } from 'react-bootstrap';

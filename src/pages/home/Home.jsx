@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 const Home = () => {
   const { main } = useSelector((state) => state);
 
-
   return (
     <>
       <Container fluid className="d-flex">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import { Col } from 'react-bootstrap';
+import { Col, Collapse } from 'react-bootstrap';
 import { getAllUsers, getUserRole, serAllEnums } from '../services/masterServices';
 import { useDispatch, useSelector } from 'react-redux';
 import main, {
@@ -17,9 +17,13 @@ import StringHelpers from '../helpers/StringHelpers';
 import asyncWrapper from '../utils/asyncWrapper';
 import MessageAlert from '../components/MessageAlert';
 import DeleteModal from '../common/DeleteModal';
+import Btn from '../components/Btn';
+import { useMediaQuery } from 'react-responsive';
 
 const PrivateLayout = ({ children }) => {
+  const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
   const dispatch = useDispatch();
+  const [isOpen, setIsOpen] = useState(true);
   const { main } = useSelector((state) => state);
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
@@ -33,6 +37,8 @@ const PrivateLayout = ({ children }) => {
       dispatch(RsetAllEnums({ priorityList, projectRole, projectStatus, projectType }));
     }
   });
+
+
 
   const handleGetUserRole = asyncWrapper(async () => {
     const res = await getUserRole();
@@ -54,14 +60,33 @@ const PrivateLayout = ({ children }) => {
     handleProjectRole();
   }, []);
 
+  console.log(isOpen);
+
   return (
     <>
-      <div className="v-100 d-flex">
-        <Col className="bg-white shadow-lg" xxl="2" md="2">
-          <Sidebar />
-        </Col>
-        <Col xxl="10" className=" bg-whit-100">
-          <Header />
+      <div className="d-flex">
+        {/* {isSmallScreen ?
+          <Btn
+            className='d'
+            variant="primary"
+            title='ییی'
+            onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+          />
+          : <Col id="example-collapse-text" className="bg-white shadow-lg" xxl="2" md="6">
+            <Sidebar />
+          </Col>
+        } */}
+        <Collapse in={isOpen} dimension="width">
+          <Col id="example-collapse-text" className="bg-white shadow-lg" xxl="2" md="6">
+            <Sidebar />
+          </Col>
+        </Collapse>
+        <Col xxl={`${isOpen ? "12" : "10"}`} className=" bg-whit-100">
+          <Header
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
           <div className="my-3">{children}</div>
         </Col>
       </div>
@@ -72,3 +97,164 @@ const PrivateLayout = ({ children }) => {
 };
 
 export default PrivateLayout;
+
+// {isSmallScreen && (
+//   <>
+//     <Col xl="5" className='showIcon sitShowSideIcon bg-success rounded-start-4 mt-4'>
+//       <i onClick={() => setShowSide(!showSide)} className='px-2 py-4 bg-success cursorPointer bi  bi-chevron-double-right text-white font20  rounded-start-4  ' />
+//     </Col>
+//   </>
+// )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from 'react'
+// import { Button, Col, Collapse, Container, Row } from 'react-bootstrap';
+// import { Link } from 'react-router-dom';
+// import { useMediaQuery } from "react-responsive";
+
+// const Header: React.FC = () => {
+//   const [openBurger, setOpenBurger] = useState < boolean > (false)
+
+//   const isSmallScreen = useMediaQuery({ query: "(max-width: 1200px)" });
+
+//   return (
+//     <header className=''>
+//       <Container fluid className='fitHeader bg-white justify-content-between shadow py-3 mb-4 w-100 '>
+//         <Container className='' >
+//           {/* <ul className='dropdown-menu'>
+//                             <li> <a className='dropdown-item' >  </a> </li>
+//                         </ul> */}
+//           {isSmallScreen ? (
+//             <>
+//               <Row className='d-flex' >
+//                 <Col className=''>
+//                   <i aria-expanded={openBurger} aria-controls="example-collapse-text" className="bi cursorPointer me-4 bi-justify font25" onClick={() => setOpenBurger(!openBurger)} />
+//                 </Col>
+//                 <Col xs="6" sm="4" md="3" lg="2" className=''>
+//                   <Link to="/logIn" >
+//                     <button className='signUpBtn rounded-3 ' > ورود / ثبت نام </button>
+//                   </Link>
+//                 </Col>
+//               </Row>
+//             </>
+//           ) :
+//             <>
+//               <Row className=' d-flex justify-content-between'>
+//                 <Col sm="8" md="6" xl="5" className='ms-4 d-flex justify-content-start'>
+//                   <Link
+//                     className="py-2 textPrimary headerHover navbar-brand"
+//                     to="/"
+//                   >
+//                     صفحه اصلی
+//                   </Link >
+//                   <Link
+//                     className="p-2 textPrimary headerHover me-4 navbar-brand  "
+//                     to="/tax"
+//                   >
+//                     خدمات
+//                   </Link>
+//                   <Link
+//                     className="p-2 textPrimary headerHover me-4 navbar-brand  "
+//                     to="/"
+//                   >
+//                     راهنما
+//                   </Link>
+//                   <Link
+//                     className="p-2 textPrimary headerHover me-4 navbar-brand "
+//                     to="/aboutUs"
+//                   >
+//                     درباره ما
+//                   </Link>
+//                   <Link
+//                     className="p-2 textPrimary headerHover me-4 navbar-brand "
+//                     to="/overTime"
+//                   >
+//                     تماس با ما
+//                   </Link>
+//                   <Link
+//                     className="p-2 textPrimary headerHover me-4 navbar-brand "
+//                     to='/questions'
+//                   >
+//                     سوالات متداول
+//                   </Link>
+
+//                 </Col>
+//                 <Col sm="4" md="6" xl="3" className=' d-flex justify-content-end'>
+//                   <Link to="/logIn" >
+//                     <button className='signUpBtn rounded-3 ' > ورود / ثبت نام </button>
+//                   </Link>
+//                 </Col>
+//               </Row>
+//             </>
+//           }
+//           {isSmallScreen && openBurger ? (
+//             <>
+//               <Col sm="6" >
+//                 <Collapse in={openBurger}>
+//                   <Row className="d-flex row  rounded-4 mx-2 pb-4" >
+//                     <Col sm="6" md="6" id="example-collapse-text" className='d-flex p-2  rounded-4 justify-content-sm-start justify-content-xl-center justify-content-md-center'>
+//                       <Link
+//                         id="example-collapse-text"
+//                         className="textPrimary navbar-brand"
+//                         to="/"
+//                       >
+//                         صفحه اصلی
+//                       </Link >
+//                     </Col>
+//                     <hr className='text-success' />
+//                     <Col sm="6" md="6" id="example-collapse-text" className=' d-flex p-2 rounded-4 justify-content-sm-start justify-content-xl-center justify-content-md-center'>
+//                       <Link
+//                         id="example-collapse-text"
+//                         className="textPrimary navbar-brand  "
+//                         to="/tax"
+//                       >
+//                         خدمات
+//                       </Link>
+//                     </Col>
+//                     <hr className='text-success' />
+//                     <Col sm="6" md="6" id="example-collapse-text" className=' d-flex p-2 rounded-4 justify-content-sm-start justify-content-xl-center justify-content-md-center'>
+//                       <Link
+//                         id="example-collapse-text"
+//                         className="textPrimary navbar-brand  "
+//                         to="/tax"
+//                       >
+//                         درباره ما
+//                       </Link>
+//                     </Col>
+//                     <hr className='text-success' />
+//                     <Col sm="6" md="6" id="example-collapse-text" className=' d-flex p-2 rounded-4 justify-content-sm-start justify-content-xl-center justify-content-md-center'>
+//                       <Link
+//                         id="example-collapse-text"
+//                         className="textPrimary navbar-brand  "
+//                         to="/tax"
+//                       >
+//                         تماس با ما
+//                       </Link>
+//                     </Col>
+//                     <hr className='text-success' />
+//                   </Row>
+//                 </Collapse>
+//               </Col>
+//             </>
+//           ) : null}
+
+//         </Container>
+//       </Container>
+
+//     </header >
+//   )
+// };
+
+// export default Header;

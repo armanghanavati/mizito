@@ -478,3 +478,9 @@ body::-webkit-scrollbar-thumb {
   border-radius: 50%;
   transform: scale(-1, 1);
 }
+
+.fixed_Bottom_Side {
+  position: sticky;
+  bottom: 0;
+  position: -webkit-sticky;
+}

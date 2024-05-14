@@ -158,11 +158,11 @@ const Board = () => {
         {allWorkFlow?.map((wf, wfIndex) => {
           return (
             <>
-              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2" xs="4">
+              <Col className="bg-light rounded-1 m-2 justify-content-center" xxl="2" xl="2" lg="4" xs="5">
                 <Col
                   style={{ backgroundColor: wf?.color || 'blue' }}
                   xxl="12"
-                  className="d-flex rounded-top-1  align-items-center justify-content-between text-white px-2 py-1">
+                  className="d-flex rounded-top-1 align-items-center justify-content-between text-white px-2 py-1">
                   <span>{wf?.name}</span>
                   <div className="d-flex gap-2">
                     <i

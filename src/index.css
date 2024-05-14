@@ -427,7 +427,8 @@ body::-webkit-scrollbar-thumb {
 
 .count_WorkFlow {
   overflow-x: scroll !important;
-  height: calc(100vh - 171px);
+  /* height: calc(100vh - 160px); */
+  height: calc(100vh - 160px);
 }
 
 .fit_Count_Projects {
@@ -532,6 +533,28 @@ body::-webkit-scrollbar-thumb {
 
 .fixed_Bottom_Side {
   position: sticky;
-  bottom: 0;
-  position: -webkit-sticky;
+  top: 0;
+  /* position: -webkit-sticky; */
+}
+
+.fixed_Header {
+  z-index: 10;
+  position: fixed;
+}
+
+.mt-8 {
+  margin-top: 90px;
+}
+
+.min_Heaight_100 {
+  min-height: calc(100vh - 125px);
+}
+
+.fixed_Side_Bar {
+  position: absolute;
+  right: 0;
+  z-index: 9;
+  height: 100%;
+  overflow-y: auto;
+  max-height: 100vh;
 }

@@ -21,9 +21,9 @@ import Btn from '../components/Btn';
 import { useMediaQuery } from 'react-responsive';
 
 const PrivateLayout = ({ children }) => {
-  const isSmallScreen = useMediaQuery({ query: '(max-width: 1200px)' });
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 900px)' });
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const { main } = useSelector((state) => state);
   const handleProjectRole = asyncWrapper(async () => {
     const resRole = await serAllEnums();
@@ -58,11 +58,9 @@ const PrivateLayout = ({ children }) => {
     handleProjectRole();
   }, []);
 
-  console.log(isOpen);
-
   return (
     <>
-      <div className="d-flex">
+      <div className="d-flex position-relative">
         {/* {isSmallScreen ?
           <Btn
             className='d'
@@ -75,14 +73,16 @@ const PrivateLayout = ({ children }) => {
             <Sidebar />
           </Col>
         } */}
-        <Collapse in={isOpen} dimension="width" className="col-8 col-lg-2">
-          <Col id="example-collapse-text" className="bg-white shadow-lg" xxl="2" md="8" sm="6">
-            <Sidebar />
+        <Header isOpen={isOpen} setIsOpen={setIsOpen} />
+        <Col xl="12" xxl="12" className="d-flex bg-whit-100 mt-8">
+          <Collapse in={isOpen} dimension="width" className="col-8 col-lg-2">
+            <Col id="example-collapse-text" className={isSmallScreen ? "bg-white fixed_Side_Bar shadow-lg" : "bg-white shadow-lg"} xxl="2" lg="3" md="4" xs="6">
+              <Sidebar />
+            </Col>
+          </Collapse>
+          <Col>
+            <div className="my-3 min_Heaight_100">{children}</div>
           </Col>
-        </Collapse>
-        <Col xxl={`${isOpen ? '10' : '12'}`} className="position-relative bg-whit-100">
-          <Header isOpen={isOpen} setIsOpen={setIsOpen} />
-          <div className="my-3">{children}</div>
         </Col>
       </div>
       {!!main?.messageModal?.value && <MessageAlert />}

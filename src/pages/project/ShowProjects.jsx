@@ -110,7 +110,7 @@ const ShowProjects = () => {
 
   return (
     <>
-      <Container className=" mt-2">
+      <Container fluid className=" mt-2">
         <div className="shadow-sm border bg-white border rounded">
           <MainTitle title="لیست پروژه‌ها" />
           <div className="m-2 row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4">

@@ -6,7 +6,7 @@ const Input = ({
   label = '',
   maxLength,
   checkedClickToShow = false,
-  onChangeClickToShow = () => {},
+  onChangeClickToShow = () => { },
   clickToShow = false,
   validTrue = false,
   showCharacter,
@@ -96,28 +96,25 @@ const Input = ({
                         !currency &&
                         (e.target.value = e.target.value.replace(/[^\d.]/g, ''));
                     }}
-                    className={`input-form ${ltr ? ' dir-ltr ' : ''} ${className} ${
-                      errors?.[name] && 'border border-danger'
-                    } `}
+                    className={`input-form ${ltr ? ' dir-ltr ' : ''} ${className} ${errors?.[name] && 'border border-danger'
+                      } `}
                   />
                   {addProps && (
                     <span className="fitShowPass d-flex">
                       <i
-                        className={` ms-2 ${
-                          deleteStyle
-                            ? ' test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill fa-disabled'
-                            : 'cursorPointer'
-                        }  test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill `}
+                        className={` ms-2 ${deleteStyle
+                          ? ' test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill fa-disabled'
+                          : 'cursorPointer'
+                          }  test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill `}
                         onClick={setDeleteStyle}
                         aria-disabled
                       />
                       <i
                         onClick={setEditStyle}
-                        className={` ms-2 ${
-                          editStyle
-                            ? ' test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill bi bi-plus-circle-fill '
-                            : 'bi bi-pencil-square cursorPointer'
-                        } test-white d-flex  align-items-center justify-content-start font20 fw-bold cursorPointer  rounded-pill`}
+                        className={` ms-2 ${editStyle
+                          ? ' test-white d-flex align-items-center justify-content-start font20 fw-bold bi bi-dash-circle-fill rounded-pill bi bi-plus-circle-fill '
+                          : 'bi bi-pencil-square cursorPointer'
+                          } test-white d-flex  align-items-center justify-content-start font20 fw-bold cursorPointer  rounded-pill`}
                       />
                     </span>
                   )}
@@ -135,11 +132,10 @@ const Input = ({
                     <>
                       <span className="fitShowPass d-flex">
                         <i
-                          className={` ms-2 ${
-                            editStyle
-                              ? ' test-white bi bi-eye-fill d-flex align-items-center justify-content-start font20 cursorPointer fw-bold  rounded-pill'
-                              : 'cursorPointer'
-                          }  test-white d-flex align-items-center justify-content-start font20 fw-bold rounded-pill `}
+                          className={` ms-2 ${editStyle
+                            ? ' test-white bi bi-eye-fill d-flex align-items-center justify-content-start font20 cursorPointer fw-bold  rounded-pill'
+                            : 'cursorPointer'
+                            }  test-white d-flex align-items-center justify-content-start font20 fw-bold rounded-pill `}
                           onClick={setEditStyle}
                         />
                       </span>

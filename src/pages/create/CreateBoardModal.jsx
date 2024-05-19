@@ -23,6 +23,7 @@ import ColorPicker from '../../components/ColorPicker';
 
 const CreateBoardModal = ({
   showCreateBoardModal,
+  isEditField,
   editFiledsBoard,
   setShowCreateBoardModal,
   itemBoard
@@ -50,7 +51,7 @@ const CreateBoardModal = ({
     };
   });
 
-  const usersAssigned = editFiledsBoard?.projectAssignedUsersViewModel?.map((item) => {
+  const usersAssigned = (editFiledsBoard?.boardUsersViewModel || editFiledsBoard?.projectAssignedUsersViewModel)?.map((item) => {
     return {
       id: item?.userId,
       title: item?.fullName
@@ -62,8 +63,8 @@ const CreateBoardModal = ({
     const fixUsersId = data?.usersAssigned?.map((item) => item?.id);
     const fixWorkFlowsId = data?.boardWorkFlowsId?.map((item) => item?.id);
     setShowCreateBoardModal(false);
-    console.log(!!editFiledsBoard?.id);
-    if (!!editFiledsBoard?.id) {
+    console.log(editFiledsBoard?.id);
+    if (isEditField) {
       const postData = {
         id: itemBoard?.id,
         name: data?.boardName,

@@ -35,7 +35,7 @@ const AllBoard = () => {
   const getIdProject = location?.pathname?.split(':')?.[1];
   const [itemBoard, setItemBoard] = useState({});
   const [deleteBoard, setDeleteBoard] = useState({});
-
+  const [isEditField, setIsEditField] = useState(false);
   const [editFiledsBoard, setEditFiledsBoard] = useState({});
   const [showCreateBoardModal, setShowCreateBoardModal] = useState(false);
 
@@ -50,9 +50,11 @@ const AllBoard = () => {
     setShowCreateBoardModal(true);
     dispatch(RsetShowLoading({ value: true }));
     const response = await serCreateBoardGet(getIdProject);
+    console.log(response);
     dispatch(RsetShowLoading({ value: false }));
     if (response?.data?.code === 1) {
       console.log(response?.data);
+      setIsEditField(false)
       setEditFiledsBoard(response?.data?.data);
       const fixUserCombo = StringHelpers.convertComboBox(
         response?.data?.data?.projectAssignedUsersViewModel
@@ -73,6 +75,7 @@ const AllBoard = () => {
     console.log(responseEditBoard);
     RsetShowLoading({ value: false });
     if (responseEditBoard?.data?.code === 1) {
+      setIsEditField(true)
       setEditFiledsBoard(responseEditBoard?.data?.data);
     }
     console.log(console.log(data, index));
@@ -165,10 +168,9 @@ const AllBoard = () => {
                     <div className="d-flex gap-3 mt-2">
                       {item?.boardUsersViewModel?.map((userInfo, index) => {
                         const imgaeLocation = userInfo?.imagePath;
-                        console.log(imgaeLocation);
                         return (
                           <div>
-                            { (
+                            {(
                               <img
                                 className="rounded-pill c"
                                 src={imgaeLocation}
@@ -196,6 +198,7 @@ const AllBoard = () => {
       )} */}
       {showCreateBoardModal && (
         <CreateBoardModal
+          isEditField={isEditField}
           setEditFiledsBoard={setEditFiledsBoard}
           editFiledsBoard={editFiledsBoard}
           handleGetBoards={handleGetBoards}

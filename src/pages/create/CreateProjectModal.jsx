@@ -93,7 +93,7 @@ const CreateProjectModal = ({
         projectPriority: data?.projectPriority?.id,
         projectStatus: data?.projectStatus?.id,
         projectType: data?.projectType?.id,
-        sprintNumber: data?.sprintNumber,
+        sprintNumber: sprintNum,
         projectAssignedUsersViewModel: handleUsersAssgin,
         attachmentsCreateViewModel: []
       };
@@ -140,7 +140,6 @@ const CreateProjectModal = ({
 
   useEffect(() => {
     handleEditFields();
-    console.log(editProjectFields?.sprintNumber);
     setSprintNum(editProjectFields?.sprintNumber);
   }, [editProjectFields]);
 
@@ -163,7 +162,7 @@ const CreateProjectModal = ({
           <Form>
             <Container fluid className="mb-3">
               <Row className="">
-                <Input xl={6} label="نام پروژه:" name="name" control={control} />
+                <Input xl={6} className='mb-4' label="نام پروژه:" name="name" control={control} />
                 {/* <Controller
                   name="attachmentsCreateViewModel"
                   control={control}
@@ -177,29 +176,32 @@ const CreateProjectModal = ({
                   )}
                 /> */}
                 <ComboBox
+                  className='mb-4'
                   options={main?.allEnums?.priorityList}
                   name="projectPriority"
                   control={control}
                   label="اولویت:"
                 />
                 <ComboBox
+                  className='mb-4'
                   options={main?.allEnums?.projectStatus}
                   name="projectStatus"
                   control={control}
                   label="وضعیت:"
                 />
                 <ComboBox
-                  validate={() => {}}
+                  className='mb-4'
+                  validate={() => { }}
                   options={main?.allEnums?.projectType}
                   name="projectType"
                   control={control}
                   label="نوع:"
                 />
-                <Row className="mt-4">
+                <Row className="mb-4">
                   {`سرعت پروژه: ${watch('projectType')?.id === 0 ? 0 : sprintNum || 0}`}
                   <Form.Label> </Form.Label>
                   <Form.Range
-                    disabled={watch('projectType')?.id === 0 ? true : false}
+                    disabled={watch('projectType')?.id === 0 ?? editProjectFields?.sprintNumber === 0 ? true : false}
                     type="range"
                     value={sprintNum}
                     onChecked={true}
@@ -212,7 +214,7 @@ const CreateProjectModal = ({
                     range
                   />
                 </Row>
-                <Row>
+                <Row className='d-flex align-items-start'>
                   {/* <Input
                     name="projectCreatorFullName"
                     xl={6}
@@ -220,7 +222,7 @@ const CreateProjectModal = ({
                     control={control}
                   /> */}
                   <ComboBox
-                    className="mt-2"
+                    className="mb-4"
                     isMulti
                     name="projectAssignedUsersViewModel"
                     options={addUsersFilter}
@@ -235,7 +237,7 @@ const CreateProjectModal = ({
                   control={control}
                   render={({ field }) => (
                     <>
-                      <Form.Label className="mt-4 d-flex ">توضیحات:</Form.Label>
+                      <Form.Label className="d-flex mt-2">توضیحات:</Form.Label>
                       <Form.Control {...field} name="description" as="textarea" rows={3} />
                     </>
                   )}
